@@ -21,20 +21,34 @@ st.set_page_config(
     page_title="투자 도우미", 
     layout="wide", 
     initial_sidebar_state="collapsed",
-    page_icon="💰"
+    page_icon="$"
 )
+
+# --- SVG Icons (Lucide-style) ---
+ICONS = {
+    "dollar": '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>',
+    "trending_up": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>',
+    "trending_down": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>',
+    "sun": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>',
+    "cloud": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>',
+    "cloud_rain": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"></line><line x1="8" y1="13" x2="8" y2="21"></line><line x1="12" y1="15" x2="12" y2="23"></line><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path></svg>',
+    "settings": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>',
+    "bar_chart": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="20" x2="12" y2="10"></line><line x1="18" y1="20" x2="18" y2="4"></line><line x1="6" y1="20" x2="6" y2="16"></line></svg>',
+    "briefcase": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>',
+    "search": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>',
+    "help": '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>',
+    "check": '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+    "x": '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>',
+    "minus": '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>',
+}
 
 # --- Modern CSS ---
 st.markdown("""
 <style>
-    /* Import Google Font */
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
     
-    * {
-        font-family: 'Noto Sans KR', sans-serif;
-    }
+    * { font-family: 'Noto Sans KR', sans-serif; }
     
-    /* Clean layout */
     .main .block-container {
         padding: 1rem 2rem 2rem 2rem;
         max-width: 1200px;
@@ -51,9 +65,10 @@ st.markdown("""
         box-shadow: 0 10px 40px rgba(0,0,0,0.2);
     }
     .hero-card h1 {
-        font-size: 2.5rem;
+        font-size: 1.5rem;
         margin: 0;
-        font-weight: 700;
+        font-weight: 500;
+        opacity: 0.9;
     }
     .hero-amount {
         font-size: 4rem;
@@ -64,32 +79,25 @@ st.markdown("""
         margin: 0.5rem 0;
     }
     .hero-subtitle {
-        font-size: 1.1rem;
-        opacity: 0.9;
+        font-size: 1rem;
+        opacity: 0.8;
         margin-top: 0.5rem;
     }
     
-    /* Weather badge */
-    .weather-badge {
-        display: inline-block;
-        padding: 0.5rem 1.5rem;
+    /* Status badge */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 0.5rem 1.2rem;
         border-radius: 50px;
         font-weight: 600;
-        font-size: 1rem;
+        font-size: 0.9rem;
         margin: 0.5rem;
     }
-    .weather-sunny {
-        background: linear-gradient(135deg, #11998e, #38ef7d);
-        color: white;
-    }
-    .weather-cloudy {
-        background: linear-gradient(135deg, #f093fb, #f5576c);
-        color: white;
-    }
-    .weather-rainy {
-        background: linear-gradient(135deg, #4facfe, #00f2fe);
-        color: white;
-    }
+    .status-good { background: #10b981; color: white; }
+    .status-normal { background: #f59e0b; color: white; }
+    .status-caution { background: #6366f1; color: white; }
     
     /* Stock cards */
     .stock-card {
@@ -133,17 +141,15 @@ st.markdown("""
         padding: 0.2rem 0.5rem;
         border-radius: 6px;
     }
-    .change-up { background: #e8f5e9; color: #2e7d32; }
-    .change-down { background: #ffebee; color: #c62828; }
+    .change-up { background: #dcfce7; color: #166534; }
+    .change-down { background: #fee2e2; color: #991b1b; }
     
     /* RSI bar */
-    .rsi-container {
-        margin-top: 0.8rem;
-    }
+    .rsi-container { margin-top: 0.8rem; }
     .rsi-bar {
         height: 8px;
         border-radius: 4px;
-        background: linear-gradient(to right, #38ef7d 0%, #38ef7d 30%, #ffd93d 30%, #ffd93d 70%, #ff6b6b 70%, #ff6b6b 100%);
+        background: linear-gradient(to right, #10b981 0%, #10b981 30%, #fbbf24 30%, #fbbf24 70%, #ef4444 70%, #ef4444 100%);
         position: relative;
         margin: 0.5rem 0;
     }
@@ -167,19 +173,21 @@ st.markdown("""
     
     /* Action badge */
     .action-badge {
-        display: inline-block;
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
         padding: 0.4rem 0.8rem;
         border-radius: 8px;
         font-weight: 600;
         font-size: 0.85rem;
     }
-    .action-buy { background: #e8f5e9; color: #2e7d32; }
-    .action-sell { background: #ffebee; color: #c62828; }
+    .action-buy { background: #dcfce7; color: #166534; }
+    .action-sell { background: #fee2e2; color: #991b1b; }
     .action-hold { background: #f5f5f5; color: #666; }
     
     /* Section headers */
     .section-header {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
         font-weight: 700;
         color: #1a1a2e;
         margin: 1.5rem 0 1rem 0;
@@ -187,14 +195,14 @@ st.markdown("""
         border-bottom: 2px solid #eee;
     }
     
-    /* Info tooltip */
-    .info-tip {
-        background: #f8f9fa;
-        border-left: 4px solid #3a7bd5;
+    /* Info box */
+    .info-box {
+        background: #f8fafc;
+        border-left: 4px solid #3b82f6;
         padding: 0.8rem 1rem;
         border-radius: 0 8px 8px 0;
         font-size: 0.9rem;
-        color: #555;
+        color: #475569;
         margin: 0.5rem 0;
     }
     
@@ -210,7 +218,7 @@ st.markdown("""
     }
     .quick-stat-label {
         font-size: 0.85rem;
-        color: #888;
+        color: #64748b;
         margin-top: 0.3rem;
     }
     
@@ -219,7 +227,6 @@ st.markdown("""
     footer {visibility: hidden;}
     .stDeployButton {display: none;}
     
-    /* Better buttons */
     .stButton > button {
         border-radius: 10px;
         font-weight: 600;
@@ -227,10 +234,7 @@ st.markdown("""
         padding: 0.5rem 1.5rem;
     }
     
-    /* Tabs styling */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-    }
+    .stTabs [data-baseweb="tab-list"] { gap: 8px; }
     .stTabs [data-baseweb="tab"] {
         border-radius: 10px;
         padding: 0.5rem 1rem;
@@ -242,36 +246,35 @@ st.markdown("""
 if "lang" not in st.session_state:
     st.session_state["lang"] = "한국어"
 
-# Sidebar for settings
 with st.sidebar:
-    st.header("⚙️ 설정")
-    lang = st.radio("언어", ["한국어", "English"], index=0)
+    st.markdown(f'<span style="display:flex;align-items:center;gap:8px;">{ICONS["settings"]} 설정</span>', unsafe_allow_html=True)
+    lang = st.radio("언어", ["한국어", "English"], index=0, label_visibility="collapsed")
     st.session_state["lang"] = lang
     
 lang = st.session_state["lang"]
 is_kr = lang == "한국어"
 
-# --- Company Data ---
+# --- Company Data (no emojis) ---
 company_info = {
-    "TSLA": {"name": "Tesla", "emoji": "🚗", "kr": "전기차 1위. 전기차, 에너지 저장, 태양광", "en": "#1 EV maker. Electric vehicles, energy storage, solar", "sector": "전기차" if is_kr else "EV"},
-    "NVDA": {"name": "NVIDIA", "emoji": "🎮", "kr": "AI 반도체 1위. AI 학습용 GPU 칩", "en": "#1 AI chips. GPUs for AI training", "sector": "반도체" if is_kr else "Chips"},
-    "COIN": {"name": "Coinbase", "emoji": "🪙", "kr": "미국 최대 암호화폐 거래소", "en": "Largest US crypto exchange", "sector": "암호화폐" if is_kr else "Crypto"},
-    "PLTR": {"name": "Palantir", "emoji": "🔍", "kr": "빅데이터 분석 소프트웨어", "en": "Big data analytics software", "sector": "소프트웨어" if is_kr else "Software"},
-    "ISRG": {"name": "Intuitive Surgical", "emoji": "🏥", "kr": "수술 로봇 1위 (다빈치)", "en": "#1 surgical robotics (da Vinci)", "sector": "의료" if is_kr else "Medical"},
-    "AMD": {"name": "AMD", "emoji": "💻", "kr": "CPU/GPU 제조 (인텔 경쟁사)", "en": "CPU/GPU maker (Intel competitor)", "sector": "반도체" if is_kr else "Chips"},
-    "AMZN": {"name": "Amazon", "emoji": "📦", "kr": "이커머스 + 클라우드(AWS) 1위", "en": "#1 e-commerce + cloud (AWS)", "sector": "이커머스" if is_kr else "E-commerce"},
-    "GOOGL": {"name": "Google", "emoji": "🔎", "kr": "검색 1위. 광고, 유튜브, 클라우드", "en": "#1 search. Ads, YouTube, cloud", "sector": "광고" if is_kr else "Ads"},
-    "MSFT": {"name": "Microsoft", "emoji": "🪟", "kr": "윈도우, 오피스, Azure 클라우드", "en": "Windows, Office, Azure cloud", "sector": "소프트웨어" if is_kr else "Software"},
-    "META": {"name": "Meta", "emoji": "👥", "kr": "페이스북, 인스타그램, 왓츠앱", "en": "Facebook, Instagram, WhatsApp", "sector": "SNS" if is_kr else "Social"},
-    "SHOP": {"name": "Shopify", "emoji": "🛒", "kr": "온라인 쇼핑몰 구축 플랫폼", "en": "E-commerce platform builder", "sector": "이커머스" if is_kr else "E-commerce"},
-    "UBER": {"name": "Uber", "emoji": "🚕", "kr": "차량 공유 + 음식 배달", "en": "Ride-sharing + food delivery", "sector": "모빌리티" if is_kr else "Mobility"},
-    "SQ": {"name": "Block", "emoji": "💳", "kr": "결제 서비스 + 캐시앱", "en": "Payment services + Cash App", "sector": "핀테크" if is_kr else "Fintech"},
-    "PYPL": {"name": "PayPal", "emoji": "💰", "kr": "온라인 결제 (벤모 포함)", "en": "Online payments (incl. Venmo)", "sector": "핀테크" if is_kr else "Fintech"},
-    "HOOD": {"name": "Robinhood", "emoji": "📱", "kr": "무료 주식거래 앱", "en": "Commission-free trading app", "sector": "핀테크" if is_kr else "Fintech"},
-    "CRSP": {"name": "CRISPR", "emoji": "🧬", "kr": "유전자 가위 치료제 개발", "en": "Gene editing therapeutics", "sector": "바이오" if is_kr else "Biotech"},
-    "RKLB": {"name": "Rocket Lab", "emoji": "🚀", "kr": "소형 로켓 발사 서비스", "en": "Small rocket launch service", "sector": "우주" if is_kr else "Space"},
-    "OKLO": {"name": "Oklo", "emoji": "⚛️", "kr": "소형 원자로 개발", "en": "Small nuclear reactors", "sector": "에너지" if is_kr else "Energy"},
-    "NET": {"name": "Cloudflare", "emoji": "☁️", "kr": "인터넷 보안/성능 서비스", "en": "Internet security/performance", "sector": "클라우드" if is_kr else "Cloud"},
+    "TSLA": {"name": "Tesla", "kr": "전기차 1위. 전기차, 에너지 저장, 태양광", "en": "#1 EV maker. Electric vehicles, energy storage, solar", "sector": "전기차" if is_kr else "EV"},
+    "NVDA": {"name": "NVIDIA", "kr": "AI 반도체 1위. AI 학습용 GPU 칩", "en": "#1 AI chips. GPUs for AI training", "sector": "반도체" if is_kr else "Chips"},
+    "COIN": {"name": "Coinbase", "kr": "미국 최대 암호화폐 거래소", "en": "Largest US crypto exchange", "sector": "암호화폐" if is_kr else "Crypto"},
+    "PLTR": {"name": "Palantir", "kr": "빅데이터 분석 소프트웨어", "en": "Big data analytics software", "sector": "소프트웨어" if is_kr else "Software"},
+    "ISRG": {"name": "Intuitive Surgical", "kr": "수술 로봇 1위 (다빈치)", "en": "#1 surgical robotics (da Vinci)", "sector": "의료" if is_kr else "Medical"},
+    "AMD": {"name": "AMD", "kr": "CPU/GPU 제조 (인텔 경쟁사)", "en": "CPU/GPU maker (Intel competitor)", "sector": "반도체" if is_kr else "Chips"},
+    "AMZN": {"name": "Amazon", "kr": "이커머스 + 클라우드(AWS) 1위", "en": "#1 e-commerce + cloud (AWS)", "sector": "이커머스" if is_kr else "E-commerce"},
+    "GOOGL": {"name": "Google", "kr": "검색 1위. 광고, 유튜브, 클라우드", "en": "#1 search. Ads, YouTube, cloud", "sector": "광고" if is_kr else "Ads"},
+    "MSFT": {"name": "Microsoft", "kr": "윈도우, 오피스, Azure 클라우드", "en": "Windows, Office, Azure cloud", "sector": "소프트웨어" if is_kr else "Software"},
+    "META": {"name": "Meta", "kr": "페이스북, 인스타그램, 왓츠앱", "en": "Facebook, Instagram, WhatsApp", "sector": "SNS" if is_kr else "Social"},
+    "SHOP": {"name": "Shopify", "kr": "온라인 쇼핑몰 구축 플랫폼", "en": "E-commerce platform builder", "sector": "이커머스" if is_kr else "E-commerce"},
+    "UBER": {"name": "Uber", "kr": "차량 공유 + 음식 배달", "en": "Ride-sharing + food delivery", "sector": "모빌리티" if is_kr else "Mobility"},
+    "SQ": {"name": "Block", "kr": "결제 서비스 + 캐시앱", "en": "Payment services + Cash App", "sector": "핀테크" if is_kr else "Fintech"},
+    "PYPL": {"name": "PayPal", "kr": "온라인 결제 (벤모 포함)", "en": "Online payments (incl. Venmo)", "sector": "핀테크" if is_kr else "Fintech"},
+    "HOOD": {"name": "Robinhood", "kr": "무료 주식거래 앱", "en": "Commission-free trading app", "sector": "핀테크" if is_kr else "Fintech"},
+    "CRSP": {"name": "CRISPR", "kr": "유전자 가위 치료제 개발", "en": "Gene editing therapeutics", "sector": "바이오" if is_kr else "Biotech"},
+    "RKLB": {"name": "Rocket Lab", "kr": "소형 로켓 발사 서비스", "en": "Small rocket launch service", "sector": "우주" if is_kr else "Space"},
+    "OKLO": {"name": "Oklo", "kr": "소형 원자로 개발", "en": "Small nuclear reactors", "sector": "에너지" if is_kr else "Energy"},
+    "NET": {"name": "Cloudflare", "kr": "인터넷 보안/성능 서비스", "en": "Internet security/performance", "sector": "클라우드" if is_kr else "Cloud"},
 }
 
 core_tickers = ["TSLA", "NVDA", "COIN", "PLTR", "ISRG"]
@@ -316,12 +319,11 @@ def get_stock_data(tickers):
             high_52 = info.get('fiftyTwoWeekHigh', price)
             drawdown = ((price - high_52) / high_52) * 100
             
-            company = company_info.get(ticker, {"name": ticker, "emoji": "📈", "kr": "", "en": "", "sector": ""})
+            company = company_info.get(ticker, {"name": ticker, "kr": "", "en": "", "sector": ""})
             
             data.append({
                 "ticker": ticker,
                 "name": company["name"],
-                "emoji": company["emoji"],
                 "desc": company["kr"] if is_kr else company["en"],
                 "sector": company["sector"],
                 "price": price,
@@ -336,25 +338,24 @@ def get_stock_data(tickers):
 # --- Sidebar Settings ---
 with st.sidebar:
     st.markdown("---")
-    st.subheader("📊 포트폴리오" if is_kr else "📊 Portfolio")
+    st.markdown(f'<span style="display:flex;align-items:center;gap:8px;">{ICONS["bar_chart"]} {"포트폴리오" if is_kr else "Portfolio"}</span>', unsafe_allow_html=True)
     
     selected_tickers = st.multiselect(
         "종목 선택" if is_kr else "Select Stocks",
         options=sorted(all_tickers),
         default=core_tickers,
-        format_func=lambda x: f"{company_info.get(x, {}).get('emoji', '')} {x}"
+        format_func=lambda x: f"{x} - {company_info.get(x, {}).get('name', x)}"
     )
     
     st.markdown("---")
     monthly_budget = st.number_input(
-        "💵 월 투자금 ($)" if is_kr else "💵 Monthly Budget ($)",
+        "월 투자금 ($)" if is_kr else "Monthly Budget ($)",
         min_value=100,
         max_value=100000,
         value=1000,
         step=100
     )
     
-    # Simple equal weight allocation
     if selected_tickers:
         weight_per_stock = 100 // len(selected_tickers)
         portfolio_weights = {t: weight_per_stock for t in selected_tickers}
@@ -362,26 +363,27 @@ with st.sidebar:
         portfolio_weights = {}
 
 # --- Main Content ---
-
-# Get data
 fed_rate, m2_growth = get_macro_data()
 stock_data = get_stock_data(selected_tickers) if selected_tickers else []
 
-# Determine market weather
+# Determine market status
 if fed_rate > 4.5 or m2_growth < 0:
-    weather = "rainy"
-    weather_text = "🌧️ 조심" if is_kr else "🌧️ Caution"
+    weather = "caution"
+    weather_icon = ICONS["cloud_rain"]
+    weather_text = "조심" if is_kr else "Caution"
     weather_desc = "금리가 높아요. 신중하게 투자하세요." if is_kr else "High rates. Invest carefully."
 elif fed_rate > 3.5:
-    weather = "cloudy"
-    weather_text = "⛅ 보통" if is_kr else "⛅ Normal"
+    weather = "normal"
+    weather_icon = ICONS["cloud"]
+    weather_text = "보통" if is_kr else "Normal"
     weather_desc = "평소대로 투자하세요." if is_kr else "Continue regular investing."
 else:
-    weather = "sunny"
-    weather_text = "☀️ 좋음" if is_kr else "☀️ Good"
+    weather = "good"
+    weather_icon = ICONS["sun"]
+    weather_text = "좋음" if is_kr else "Good"
     weather_desc = "투자하기 좋은 환경이에요!" if is_kr else "Good environment for investing!"
 
-# Calculate total suggested investment
+# Calculate recommendations
 total_suggested = 0
 buy_recommendations = []
 
@@ -389,7 +391,6 @@ for stock in stock_data:
     weight = portfolio_weights.get(stock["ticker"], 0)
     base_amount = monthly_budget * (weight / 100)
     
-    # Adjust based on RSI
     if stock["rsi"] < 35:
         multiplier = 1.3
         action = "buy"
@@ -413,10 +414,10 @@ for stock in stock_data:
 # === HERO SECTION ===
 st.markdown(f"""
 <div class="hero-card">
-    <h1>{"💰 이번 주 투자 금액" if is_kr else "💰 This Week's Investment"}</h1>
+    <h1>{"이번 주 투자 금액" if is_kr else "This Week's Investment"}</h1>
     <div class="hero-amount">${total_suggested:,.0f}</div>
     <div>
-        <span class="weather-badge weather-{weather}">{weather_text}</span>
+        <span class="status-badge status-{weather}">{weather_icon} {weather_text}</span>
     </div>
     <p class="hero-subtitle">{weather_desc}</p>
 </div>
@@ -439,16 +440,16 @@ with col1:
 with col2:
     st.markdown(f"""
     <div class="quick-stat">
-        <div class="quick-stat-value" style="color: #2e7d32;">{oversold_count}</div>
-        <div class="quick-stat-label">{"🟢 세일 중" if is_kr else "🟢 On Sale"}</div>
+        <div class="quick-stat-value" style="color: #16a34a;">{oversold_count}</div>
+        <div class="quick-stat-label">{"세일 중" if is_kr else "On Sale"}</div>
     </div>
     """, unsafe_allow_html=True)
 
 with col3:
     st.markdown(f"""
     <div class="quick-stat">
-        <div class="quick-stat-value" style="color: #c62828;">{overbought_count}</div>
-        <div class="quick-stat-label">{"🔴 비쌈" if is_kr else "🔴 Expensive"}</div>
+        <div class="quick-stat-value" style="color: #dc2626;">{overbought_count}</div>
+        <div class="quick-stat-label">{"비쌈" if is_kr else "Expensive"}</div>
     </div>
     """, unsafe_allow_html=True)
 
@@ -464,40 +465,41 @@ st.markdown("---")
 
 # === MAIN TABS ===
 tab1, tab2, tab3 = st.tabs([
-    "📊 " + ("매수 계획" if is_kr else "Buy Plan"),
-    "💼 " + ("종목 상세" if is_kr else "Stock Details"),
-    "🔍 " + ("세일 찾기" if is_kr else "Find Sales")
+    ("매수 계획" if is_kr else "Buy Plan"),
+    ("종목 상세" if is_kr else "Stock Details"),
+    ("세일 찾기" if is_kr else "Find Sales")
 ])
 
 # --- TAB 1: Buy Plan ---
 with tab1:
-    st.markdown(f'<div class="section-header">{"🧮 이번 주 매수 계획" if is_kr else "🧮 This Week\'s Buy Plan"}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">{"이번 주 매수 계획" if is_kr else "This Week\'s Buy Plan"}</div>', unsafe_allow_html=True)
     
     if buy_recommendations:
-        # Sort by action priority (buy first)
         sorted_recs = sorted(buy_recommendations, key=lambda x: (x["action"] != "buy", x["action"] != "hold"))
         
         for rec in sorted_recs:
             action_class = f"action-{rec['action']}"
+            action_icon = ICONS["check"] if rec["action"] == "buy" else (ICONS["x"] if rec["action"] == "sell" else ICONS["minus"])
             action_text = {
-                "buy": "🟢 더 사세요" if is_kr else "🟢 BUY MORE",
-                "sell": "🔴 덜 사세요" if is_kr else "🔴 BUY LESS",
-                "hold": "⚪ 평소대로" if is_kr else "⚪ NORMAL"
+                "buy": "더 사세요" if is_kr else "BUY MORE",
+                "sell": "덜 사세요" if is_kr else "BUY LESS",
+                "hold": "평소대로" if is_kr else "NORMAL"
             }[rec["action"]]
             
             col1, col2, col3, col4 = st.columns([3, 2, 2, 2])
             
             with col1:
-                st.markdown(f"**{rec['emoji']} {rec['name']}** `{rec['ticker']}`")
+                st.markdown(f"**{rec['name']}** `{rec['ticker']}`")
                 st.caption(rec['desc'])
             
             with col2:
+                delta_text = "세일!" if rec['rsi'] < 35 else ("비쌈" if rec['rsi'] > 70 else None)
                 st.metric("RSI", f"{rec['rsi']:.0f}", 
-                         delta="세일!" if rec['rsi'] < 35 else ("비쌈" if rec['rsi'] > 70 else None),
+                         delta=delta_text,
                          delta_color="normal" if rec['rsi'] < 35 else "inverse")
             
             with col3:
-                st.markdown(f"<span class='action-badge {action_class}'>{action_text}</span>", unsafe_allow_html=True)
+                st.markdown(f"<span class='action-badge {action_class}'>{action_icon} {action_text}</span>", unsafe_allow_html=True)
             
             with col4:
                 st.metric("매수액" if is_kr else "Buy", f"${rec['suggested']:.0f}")
@@ -508,41 +510,40 @@ with tab1:
 
 # --- TAB 2: Stock Details ---
 with tab2:
-    st.markdown(f'<div class="section-header">{"💼 종목 상세 정보" if is_kr else "💼 Stock Details"}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">{"종목 상세 정보" if is_kr else "Stock Details"}</div>', unsafe_allow_html=True)
     
     if stock_data:
         cols = st.columns(2)
         
         for idx, stock in enumerate(stock_data):
             with cols[idx % 2]:
-                # RSI status
                 if stock["rsi"] < 30:
-                    rsi_status = "🟢 세일!" if is_kr else "🟢 On Sale!"
-                    rsi_color = "#2e7d32"
+                    rsi_status = "세일!" if is_kr else "On Sale!"
+                    rsi_color = "#16a34a"
                 elif stock["rsi"] > 70:
-                    rsi_status = "🔴 비쌈" if is_kr else "🔴 Expensive"
-                    rsi_color = "#c62828"
+                    rsi_status = "비쌈" if is_kr else "Expensive"
+                    rsi_color = "#dc2626"
                 else:
-                    rsi_status = "⚪ 적정가" if is_kr else "⚪ Fair"
-                    rsi_color = "#666"
+                    rsi_status = "적정가" if is_kr else "Fair"
+                    rsi_color = "#64748b"
                 
-                # Drawdown badge
                 dd_class = "change-up" if stock["drawdown"] > -10 else "change-down"
+                dd_label = "고점대비" if is_kr else "From High"
                 
                 st.markdown(f"""
                 <div class="stock-card">
                     <div class="stock-header">
-                        <span class="stock-name">{stock['emoji']} {stock['name']}</span>
+                        <span class="stock-name">{stock['name']}</span>
                         <span class="stock-ticker">{stock['ticker']}</span>
                     </div>
-                    <div style="color: #888; font-size: 0.85rem; margin-bottom: 0.8rem;">{stock['desc']}</div>
+                    <div style="color: #64748b; font-size: 0.85rem; margin-bottom: 0.8rem;">{stock['desc']}</div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span class="stock-price">${stock['price']:.2f}</span>
-                        <span class="stock-change {dd_class}">고점대비 {stock['drawdown']:.1f}%</span>
+                        <span class="stock-change {dd_class}">{dd_label} {stock['drawdown']:.1f}%</span>
                     </div>
                     <div class="rsi-container">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 0.85rem; color: #888;">RSI: {stock['rsi']:.0f}</span>
+                            <span style="font-size: 0.85rem; color: #64748b;">RSI: {stock['rsi']:.0f}</span>
                             <span style="font-size: 0.85rem; color: {rsi_color}; font-weight: 600;">{rsi_status}</span>
                         </div>
                         <div class="rsi-bar">
@@ -561,9 +562,8 @@ with tab2:
 
 # --- TAB 3: Find Sales ---
 with tab3:
-    st.markdown(f'<div class="section-header">{"🔍 관심 종목 중 세일 찾기" if is_kr else "🔍 Find Sales in Watchlist"}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-header">{"관심 종목 중 세일 찾기" if is_kr else "Find Sales in Watchlist"}</div>', unsafe_allow_html=True)
     
-    # Scan watchlist for opportunities
     watchlist_to_scan = [t for t in all_tickers if t not in selected_tickers]
     
     if watchlist_to_scan:
@@ -572,13 +572,13 @@ with tab3:
             sales = [s for s in watchlist_data if s["rsi"] < 35]
         
         if sales:
-            st.success(f"{'🎉 ' + str(len(sales)) + '개 종목이 세일 중!' if is_kr else '🎉 ' + str(len(sales)) + ' stocks on sale!'}")
+            st.success(f"{len(sales)}{'개 종목이 세일 중!' if is_kr else ' stocks on sale!'}")
             
             for stock in sorted(sales, key=lambda x: x["rsi"]):
                 col1, col2, col3 = st.columns([4, 2, 2])
                 
                 with col1:
-                    st.markdown(f"**{stock['emoji']} {stock['name']}** `{stock['ticker']}`")
+                    st.markdown(f"**{stock['name']}** `{stock['ticker']}`")
                     st.caption(stock['desc'])
                 
                 with col2:
@@ -596,18 +596,17 @@ with tab3:
 # === FOOTER ===
 st.markdown("---")
 
-# Help section
-with st.expander("❓ " + ("도움말: RSI가 뭐예요?" if is_kr else "Help: What is RSI?")):
+with st.expander(("도움말: RSI가 뭐예요?" if is_kr else "Help: What is RSI?")):
     st.markdown(f"""
-    <div class="info-tip">
+    <div class="info-box">
     <strong>RSI (상대강도지수)</strong>{"는 주식이 '세일 중'인지 '비싼지' 알려주는 지표예요." if is_kr else " tells you if a stock is 'on sale' or 'expensive'."}
     <br><br>
-    • <strong style="color: #2e7d32;">RSI 30 이하</strong>: {"세일 중! 🟢 더 사기 좋은 타이밍" if is_kr else "On sale! 🟢 Good time to buy more"}
+    <span style="color: #16a34a; font-weight: 600;">RSI 30 이하</span>: {"세일 중! 더 사기 좋은 타이밍" if is_kr else "On sale! Good time to buy more"}
     <br>
-    • <strong>RSI 30-70</strong>: {"적정 가격 ⚪ 평소대로 투자" if is_kr else "Fair price ⚪ Normal investing"}
+    <span style="font-weight: 600;">RSI 30-70</span>: {"적정 가격. 평소대로 투자" if is_kr else "Fair price. Normal investing"}
     <br>
-    • <strong style="color: #c62828;">RSI 70 이상</strong>: {"비쌈! 🔴 덜 사는 게 좋아요" if is_kr else "Expensive! 🔴 Consider buying less"}
+    <span style="color: #dc2626; font-weight: 600;">RSI 70 이상</span>: {"비쌈! 덜 사는 게 좋아요" if is_kr else "Expensive! Consider buying less"}
     </div>
     """, unsafe_allow_html=True)
 
-st.caption("📊 " + ("데이터: Yahoo Finance, FRED | 투자 조언이 아닙니다" if is_kr else "Data: Yahoo Finance, FRED | Not financial advice"))
+st.caption("데이터: Yahoo Finance, FRED | 투자 조언이 아닙니다" if is_kr else "Data: Yahoo Finance, FRED | Not financial advice")
