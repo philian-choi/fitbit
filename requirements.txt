@@ -4,3 +4,6 @@ yfinance
 fredapi
 plotly
 feedparser
+newspaper3k
+nltk
+lxml[html_clean]
