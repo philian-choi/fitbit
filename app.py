@@ -83,7 +83,9 @@ text = {
         "normal": "NORMAL",
         "footer": "Data Sources: Yahoo Finance, FRED API. This is for informational purposes only.",
         "news_header": "📰 Latest News & Policy Updates",
-        "no_news": "No recent news found."
+        "no_news": "No recent news found.",
+        "discovery_header": "🔍 Hidden Gem Finder (Opportunity Scanner)",
+        "discovery_desc": "Scanning watchlist for oversold opportunities (RSI < 30)..."
     },
     "한국어": {
         "title": "📅 주간 DCA 투자 리포트",
@@ -112,7 +114,9 @@ text = {
         "normal": "정량 매수",
         "footer": "데이터 출처: Yahoo Finance, FRED API. 이 정보는 투자 참고용입니다.",
         "news_header": "📰 최신 뉴스 및 정책 업데이트",
-        "no_news": "최근 관련 뉴스가 없습니다."
+        "no_news": "최근 관련 뉴스가 없습니다.",
+        "discovery_header": "🔍 숨겨진 보석 찾기 (기회 스캐너)",
+        "discovery_desc": "관심 종목 중 과매도(RSI < 30) 상태인 종목을 스캔합니다..."
     }
 }
 
@@ -286,6 +290,55 @@ portfolio_input = {
 }
 monthly_investment = st.sidebar.number_input("Monthly DCA Amount ($)", value=1000)
 
+# --- Watchlist for Discovery ---
+# ARK Big Ideas 2026 Related Tickers + High Growth Tech
+watchlist = [
+    "AMD", "AMZN", "GOOGL", "MSFT", "META", # Big Tech / AI Infra
+    "SHOP", "UBER", "SQ", "PYPL", "HOOD", # Fintech / Consumer
+    "CRSP", "NTLA", "BEAM", "RXRX", "DNA", # Multiomics
+    "RKLB", "OKLO", "FLNC", "TMUS", "ASTS", # Space / Energy
+    "U", "NET", "PATH", "DKNG", "ROKU" # High Growth Software
+]
+
+def scan_market_opportunities(watchlist):
+    opportunities = []
+    for t in watchlist:
+        try:
+            stock = yf.Ticker(t)
+            # Use fast_info for speed
+            price = stock.fast_info.last_price
+            
+            # Get history for RSI (Need 14 days)
+            hist = stock.history(period="1mo")
+            
+            if len(hist) > 14:
+                delta = hist['Close'].diff()
+                gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
+                loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
+                rs = gain / loss
+                rsi = 100 - (100 / (1 + rs)).iloc[-1]
+                
+                # Condition 1: Oversold (RSI < 30) - Deep Value
+                if rsi < 30:
+                    opportunities.append({
+                        "Ticker": t,
+                        "Price": price,
+                        "RSI": round(rsi, 2),
+                        "Reason": "Oversold (RSI < 30)"
+                    })
+                
+                # Condition 2: Momentum Breakout (RSI crossed 50 from below? - Simplified to RSI > 50 & < 60 for now)
+                # Or maybe just check 52w low?
+                
+                # Check 52w High Drawdown
+                # Note: fast_info doesn't always have 52w high, might need info
+                # To keep it fast, let's stick to RSI for the scanner
+                
+        except:
+            continue
+            
+    return pd.DataFrame(opportunities)
+
 # --- 3. Main Dashboard ---
 st.title(t["title"])
 st.markdown(f"**{t['date']}:** {datetime.now().strftime('%Y-%m-%d')} | **{t['strategy']}**")
@@ -374,7 +427,20 @@ if not df.empty:
 
     st.table(pd.DataFrame(rebalance_plan))
 
-    # Section 4: News (New Feature)
+    # Section 4: Discovery (New Feature)
+    st.header(t["discovery_header"])
+    st.write(t["discovery_desc"])
+    
+    with st.spinner("Scanning..."):
+        opportunities = scan_market_opportunities(watchlist)
+        
+    if not opportunities.empty:
+        st.success(f"Found {len(opportunities)} opportunities!")
+        st.dataframe(opportunities, use_container_width=True)
+    else:
+        st.info("No oversold opportunities found in the watchlist at the moment. Market is healthy.")
+
+    # Section 5: News
     st.header(t["news_header"])
     
     # Create tabs for each ticker
