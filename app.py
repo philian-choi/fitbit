@@ -7,6 +7,14 @@ import plotly.graph_objects as go
 import os
 import feedparser
 import time
+from newspaper import Article
+import nltk
+
+# Download NLTK data (required for summarization)
+try:
+    nltk.data.find('tokenizers/punkt')
+except LookupError:
+    nltk.download('punkt')
 
 # --- Configuration ---
 st.set_page_config(page_title="Weekly DCA Report", layout="wide", initial_sidebar_state="collapsed")
@@ -138,6 +146,17 @@ def get_macro_data():
         return 3.72, 4.6 # Fallback to last known values
 
 @st.cache_data(ttl=3600)
+def get_article_summary(url):
+    try:
+        article = Article(url)
+        article.download()
+        article.parse()
+        article.nlp()
+        return article.summary
+    except:
+        return "Summary unavailable. (Access denied or paywall)"
+
+@st.cache_data(ttl=3600)
 def get_news(ticker):
     # Multiple RSS Sources for Better Coverage
     rss_urls = [
@@ -182,6 +201,7 @@ def get_news(ticker):
                     
                 # 2. Include Only Key Events
                 if any(k in title for k in keywords):
+                    # Get summary on demand (lazy loading in UI)
                     news_items.append({
                         "title": title,
                         "link": entry.link,
@@ -352,8 +372,13 @@ if not df.empty:
             if news_items:
                 for news in news_items:
                     source_badge = f"[{news['source']}]"
-                    st.markdown(f"**{source_badge} [{news['title']}]({news['link']})**")
-                    st.caption(f"{news['published']}")
+                    with st.expander(f"{source_badge} {news['title']}"):
+                        st.caption(f"Published: {news['published']}")
+                        
+                        # Fetch summary only when expanded to save time
+                        summary = get_article_summary(news['link'])
+                        st.write(summary)
+                        st.markdown(f"[Read Full Article]({news['link']})")
             else:
                 st.info(t["no_news"])
 
