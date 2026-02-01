@@ -5,82 +5,11 @@ from fredapi import Fred
 from datetime import datetime
 import plotly.graph_objects as go
 import os
+import feedparser
+import time
 
 # --- Configuration ---
 st.set_page_config(page_title="Weekly DCA Report", layout="wide", initial_sidebar_state="collapsed")
-
-# Get API Key from Environment Variable (Best Practice for Vercel)
-# If not found, try to use the hardcoded one (fallback) or show warning
-FRED_API_KEY = os.environ.get('FRED_API_KEY')
-if not FRED_API_KEY:
-    # Fallback for local testing if env var not set, but warn user
-    FRED_API_KEY = '10b52d62b316f7f27fd58a6111c80adf' 
-    # In production, it's better not to hardcode keys in code.
-    # On Vercel, you will set FRED_API_KEY in the Environment Variables settings.
-
-# --- 1. Data Fetching Functions ---
-@st.cache_data(ttl=3600) # Cache data for 1 hour
-def get_macro_data():
-    if not FRED_API_KEY:
-        return 3.72, 4.6 # Mock data if no key
-        
-    try:
-        fred = Fred(api_key=FRED_API_KEY)
-        # Fetch latest available data (with a buffer for reporting lag)
-        fed_funds = fred.get_series('FEDFUNDS', observation_start='2024-01-01').iloc[-1]
-        m2 = fred.get_series('M2SL', observation_start='2024-01-01').iloc[-1]
-        last_m2 = fred.get_series('M2SL', observation_start='2023-01-01').iloc[-13] # YoY comparison
-        m2_growth = ((m2 - last_m2) / last_m2) * 100
-        return fed_funds, m2_growth
-    except Exception as e:
-        st.error(f"Error fetching macro data: {e}")
-        return 3.72, 4.6 # Fallback to last known values
-
-def get_stock_data(tickers):
-    data = []
-    for t in tickers:
-        try:
-            stock = yf.Ticker(t)
-            # Use fast_info if available or fallback to info (slower)
-            # yfinance recent versions use fast_info for price
-            price = stock.fast_info.last_price
-            
-            # Get history for RSI
-            hist = stock.history(period="2mo") # Need enough data for 14d RSI
-            
-            if len(hist) > 14:
-                # Calculate RSI
-                delta = hist['Close'].diff()
-                gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
-                loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
-                rs = gain / loss
-                rsi = 100 - (100 / (1 + rs)).iloc[-1]
-            else:
-                rsi = 50 # Default if not enough data
-            
-            # Get 52w high from info (might be slower, can optimize later)
-            # For speed in Vercel (serverless), we might want to skip heavy 'info' calls if possible
-            # But let's try to get it.
-            info = stock.info
-            high_52 = info.get('fiftyTwoWeekHigh', price)
-            
-            # Moat Logic (Simplified for demo)
-            moat_score = "Strong"
-            if info.get('grossMargins', 0) < 0.4 and info.get('revenueGrowth', 0) < 0.1:
-                moat_score = "Watch"
-                
-            data.append({
-                "Ticker": t,
-                "Price": price,
-                "RSI": round(rsi, 2),
-                "Moat Status": moat_score,
-                "52W High": high_52,
-                "Drawdown": round((price - high_52) / high_52 * 100, 2)
-            })
-        except Exception as e:
-            st.warning(f"Could not fetch data for {t}: {e}")
-            
-    return pd.DataFrame(data)
 
 # --- Password Protection ---
 def check_password():
@@ -144,7 +73,9 @@ text = {
         "buy_more": "BUY MORE (Cheap)",
         "buy_less": "BUY LESS (Expensive)",
         "normal": "NORMAL",
-        "footer": "Data Sources: Yahoo Finance, FRED API. This is for informational purposes only."
+        "footer": "Data Sources: Yahoo Finance, FRED API. This is for informational purposes only.",
+        "news_header": "📰 Latest News & Policy Updates",
+        "no_news": "No recent news found."
     },
     "한국어": {
         "title": "📅 주간 DCA 투자 리포트",
@@ -171,11 +102,103 @@ text = {
         "buy_more": "더 사세요 (저평가)",
         "buy_less": "덜 사세요 (고평가)",
         "normal": "정량 매수",
-        "footer": "데이터 출처: Yahoo Finance, FRED API. 이 정보는 투자 참고용입니다."
+        "footer": "데이터 출처: Yahoo Finance, FRED API. 이 정보는 투자 참고용입니다.",
+        "news_header": "📰 최신 뉴스 및 정책 업데이트",
+        "no_news": "최근 관련 뉴스가 없습니다."
     }
 }
 
 t = text[lang]
+
+# Get API Key from Environment Variable (Best Practice for Vercel)
+# If not found, try to use the hardcoded one (fallback) or show warning
+FRED_API_KEY = os.environ.get('FRED_API_KEY')
+if not FRED_API_KEY:
+    # Fallback for local testing if env var not set, but warn user
+    FRED_API_KEY = '10b52d62b316f7f27fd58a6111c80adf' 
+    # In production, it's better not to hardcode keys in code.
+    # On Vercel, you will set FRED_API_KEY in the Environment Variables settings.
+
+# --- 1. Data Fetching Functions ---
+@st.cache_data(ttl=3600) # Cache data for 1 hour
+def get_macro_data():
+    if not FRED_API_KEY:
+        return 3.72, 4.6 # Mock data if no key
+        
+    try:
+        fred = Fred(api_key=FRED_API_KEY)
+        # Fetch latest available data (with a buffer for reporting lag)
+        fed_funds = fred.get_series('FEDFUNDS', observation_start='2024-01-01').iloc[-1]
+        m2 = fred.get_series('M2SL', observation_start='2024-01-01').iloc[-1]
+        last_m2 = fred.get_series('M2SL', observation_start='2023-01-01').iloc[-13] # YoY comparison
+        m2_growth = ((m2 - last_m2) / last_m2) * 100
+        return fed_funds, m2_growth
+    except Exception as e:
+        # st.error(f"Error fetching macro data: {e}")
+        return 3.72, 4.6 # Fallback to last known values
+
+@st.cache_data(ttl=3600)
+def get_news(ticker):
+    # Yahoo Finance RSS Feed
+    rss_url = f"https://finance.yahoo.com/rss/headline?s={ticker}"
+    try:
+        feed = feedparser.parse(rss_url)
+        news_items = []
+        for entry in feed.entries[:3]: # Top 3 news
+            news_items.append({
+                "title": entry.title,
+                "link": entry.link,
+                "published": entry.published
+            })
+        return news_items
+    except:
+        return []
+
+def get_stock_data(tickers):
+    data = []
+    for t in tickers:
+        try:
+            stock = yf.Ticker(t)
+            # Use fast_info if available or fallback to info (slower)
+            # yfinance recent versions use fast_info for price
+            price = stock.fast_info.last_price
+            
+            # Get history for RSI
+            hist = stock.history(period="2mo") # Need enough data for 14d RSI
+            
+            if len(hist) > 14:
+                # Calculate RSI
+                delta = hist['Close'].diff()
+                gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
+                loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
+                rs = gain / loss
+                rsi = 100 - (100 / (1 + rs)).iloc[-1]
+            else:
+                rsi = 50 # Default if not enough data
+            
+            # Get 52w high from info (might be slower, can optimize later)
+            # For speed in Vercel (serverless), we might want to skip heavy 'info' calls if possible
+            # But let's try to get it.
+            info = stock.info
+            high_52 = info.get('fiftyTwoWeekHigh', price)
+            
+            # Moat Logic (Simplified for demo)
+            moat_score = "Strong"
+            if info.get('grossMargins', 0) < 0.4 and info.get('revenueGrowth', 0) < 0.1:
+                moat_score = "Watch"
+                
+            data.append({
+                "Ticker": t,
+                "Price": price,
+                "RSI": round(rsi, 2),
+                "Moat Status": moat_score,
+                "52W High": high_52,
+                "Drawdown": round((price - high_52) / high_52 * 100, 2)
+            })
+        except Exception as e:
+            st.warning(f"Could not fetch data for {t}: {e}")
+            
+    return pd.DataFrame(data)
 
 # --- 2. Sidebar: Portfolio Settings ---
 st.sidebar.header("💼 My Portfolio Settings")
@@ -275,6 +298,22 @@ if not df.empty:
             })
 
     st.table(pd.DataFrame(rebalance_plan))
+
+    # Section 4: News (New Feature)
+    st.header(t["news_header"])
+    
+    # Create tabs for each ticker
+    tabs = st.tabs(list(portfolio_input.keys()))
+    
+    for i, ticker in enumerate(portfolio_input.keys()):
+        with tabs[i]:
+            news_items = get_news(ticker)
+            if news_items:
+                for news in news_items:
+                    st.markdown(f"**[{news['title']}]({news['link']})**")
+                    st.caption(f"{news['published']}")
+            else:
+                st.info(t["no_news"])
 
 else:
     st.error("Failed to load stock data. Please try again later.")
