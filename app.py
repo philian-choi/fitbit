@@ -211,12 +211,16 @@ def get_news(ticker):
                     
                 # 2. Include Only Key Events
                 if any(k in title for k in keywords):
-                    # Get summary on demand (lazy loading in UI)
+                    # Clean up summary (remove HTML tags if any)
+                    raw_summary = entry.get('summary', entry.get('description', ''))
+                    clean_summary = raw_summary.split('<')[0] if '<' in raw_summary else raw_summary
+                    
                     news_items.append({
                         "title": title,
                         "link": entry.link,
                         "published": entry.get('published', 'Recent'),
-                        "source": "Yahoo" if "yahoo" in url else "Seeking Alpha" if "seekingalpha" in url else "MarketWatch"
+                        "source": "Yahoo" if "yahoo" in url else "Seeking Alpha" if "seekingalpha" in url else "MarketWatch",
+                        "rss_summary": clean_summary
                     })
         except:
             continue
@@ -387,7 +391,14 @@ if not df.empty:
                         
                         # Fetch summary only when expanded to save time
                         summary = get_article_summary(news['link'])
-                        st.write(summary)
+                        
+                        # Fallback to RSS summary if scraping fails
+                        if "요약 정보를 가져올 수 없습니다" in summary and news.get('rss_summary'):
+                            st.warning("🔒 원문 접근이 제한되어 뉴스 피드 요약본을 표시합니다.")
+                            st.write(news['rss_summary'])
+                        else:
+                            st.write(summary)
+                            
                         st.markdown(f"[Read Full Article]({news['link']})")
             else:
                 st.info(t["no_news"])
