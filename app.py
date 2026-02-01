@@ -247,7 +247,7 @@ company_info = {
     "NET": {"name": "Cloudflare", "kr": "인터넷 보안", "en": "Internet security"},
 }
 
-core_tickers = ["TSLA", "NVDA", "COIN", "PLTR", "ISRG"]
+default_tickers = ["TSLA", "NVDA", "COIN"]  # 기본 3종목
 all_tickers = list(company_info.keys())
 
 # --- API ---
@@ -304,9 +304,12 @@ def get_stock_data(tickers, lang="한국어"):
 if "lang" not in st.session_state:
     st.session_state["lang"] = "한국어"
 if "selected" not in st.session_state:
-    st.session_state["selected"] = core_tickers
+    st.session_state["selected"] = default_tickers
 if "budget" not in st.session_state:
     st.session_state["budget"] = 1000
+if "weights" not in st.session_state:
+    # 기본 비중: 균등 배분
+    st.session_state["weights"] = {t: 100 // len(default_tickers) for t in default_tickers}
 
 # === MAIN UI (No Sidebar!) ===
 
@@ -326,6 +329,7 @@ is_kr = lang == "한국어"
 
 # Settings in main area (collapsible)
 with st.expander("설정" if is_kr else "Settings", expanded=False):
+    # 종목 선택
     selected = st.multiselect(
         "종목 선택" if is_kr else "Select Stocks",
         options=all_tickers,
@@ -334,8 +338,18 @@ with st.expander("설정" if is_kr else "Settings", expanded=False):
     )
     if selected != st.session_state["selected"]:
         st.session_state["selected"] = selected
+        # 새 종목 추가 시 비중 초기화
+        new_weights = {}
+        for t in selected:
+            new_weights[t] = st.session_state["weights"].get(t, 0)
+        # 비중 합이 100이 아니면 균등 배분
+        if sum(new_weights.values()) != 100:
+            equal_weight = 100 // len(selected) if selected else 0
+            new_weights = {t: equal_weight for t in selected}
+        st.session_state["weights"] = new_weights
         st.rerun()
     
+    # 월 투자금
     budget = st.slider(
         "월 투자금 ($)" if is_kr else "Monthly Budget ($)",
         min_value=100,
@@ -345,7 +359,43 @@ with st.expander("설정" if is_kr else "Settings", expanded=False):
     )
     if budget != st.session_state["budget"]:
         st.session_state["budget"] = budget
-        st.rerun()
+    
+    # 비중 설정
+    if selected:
+        st.markdown("---")
+        st.markdown(f"**{'비중 설정 (%)' if is_kr else 'Allocation (%)'}**")
+        
+        weights_changed = False
+        new_weights = {}
+        total_weight = 0
+        
+        cols = st.columns(len(selected)) if len(selected) <= 4 else st.columns(4)
+        
+        for i, ticker in enumerate(selected):
+            col_idx = i % len(cols)
+            with cols[col_idx]:
+                current_weight = st.session_state["weights"].get(ticker, 0)
+                new_weight = st.number_input(
+                    ticker,
+                    min_value=0,
+                    max_value=100,
+                    value=current_weight,
+                    step=5,
+                    key=f"weight_{ticker}"
+                )
+                new_weights[ticker] = new_weight
+                total_weight += new_weight
+                if new_weight != current_weight:
+                    weights_changed = True
+        
+        # 비중 합계 표시
+        if total_weight == 100:
+            st.success(f"{'합계' if is_kr else 'Total'}: {total_weight}%")
+        else:
+            st.warning(f"{'합계' if is_kr else 'Total'}: {total_weight}% ({'100%가 되어야 해요' if is_kr else 'Should be 100%'})")
+        
+        if weights_changed:
+            st.session_state["weights"] = new_weights
 
 # Get data
 fed_rate = get_macro_data()
@@ -368,10 +418,12 @@ else:
 # Calculate recommendations
 total_suggested = 0
 recommendations = []
-weight = 100 // len(selected_tickers) if selected_tickers else 0
+weights = st.session_state["weights"]
 
 for stock in stock_data:
-    base = monthly_budget * (weight / 100)
+    ticker_weight = weights.get(stock["ticker"], 0)
+    base = monthly_budget * (ticker_weight / 100)
+    
     if stock["rsi"] < 35:
         mult, action = 1.3, "buy"
     elif stock["rsi"] > 70:
@@ -381,7 +433,7 @@ for stock in stock_data:
     
     suggested = base * mult
     total_suggested += suggested
-    recommendations.append({**stock, "suggested": suggested, "action": action})
+    recommendations.append({**stock, "suggested": suggested, "action": action, "weight": ticker_weight})
 
 oversold = len([s for s in stock_data if s["rsi"] < 35])
 overbought = len([s for s in stock_data if s["rsi"] > 70])
@@ -428,6 +480,7 @@ if recommendations:
         action_class = f"action-{rec['action']}"
         action_icon = ICONS["check"] if rec["action"] == "buy" else (ICONS["x"] if rec["action"] == "sell" else ICONS["minus"])
         action_text = {"buy": "더 사기" if is_kr else "BUY+", "sell": "덜 사기" if is_kr else "BUY-", "hold": "유지" if is_kr else "HOLD"}[rec["action"]]
+        weight_text = f"{rec['weight']}%"
         
         st.markdown(f"""
         <div class="stock-item">
@@ -435,6 +488,7 @@ if recommendations:
                 <div>
                     <span class="stock-name">{rec['name']}</span>
                     <span class="stock-ticker">{rec['ticker']}</span>
+                    <span class="stock-ticker">{weight_text}</span>
                 </div>
                 <span class="buy-amount">${rec['suggested']:.0f}</span>
             </div>
