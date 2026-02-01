@@ -120,7 +120,7 @@ text = {
     }
 }
 
-t = text[lang]
+t = text.get(lang, text["English"]) # Safer access with default
 
 # Get API Key from Environment Variable (Best Practice for Vercel)
 # If not found, try to use the hardcoded one (fallback) or show warning
