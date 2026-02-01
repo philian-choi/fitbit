@@ -298,12 +298,26 @@ def get_macro_data():
         return 4.33, 3.5
 
 @st.cache_data(ttl=1800)
-def get_stock_data(tickers):
+def get_stock_data(tickers, language="한국어"):
+    """Fetch stock data for given tickers"""
+    is_korean = language == "한국어"
     data = []
+    
     for ticker in tickers:
         try:
             stock = yf.Ticker(ticker)
-            price = stock.fast_info.last_price
+            
+            # Get price
+            try:
+                price = stock.fast_info.last_price
+            except:
+                hist = stock.history(period="5d")
+                if len(hist) > 0:
+                    price = hist['Close'].iloc[-1]
+                else:
+                    continue
+            
+            # Get history for RSI
             hist = stock.history(period="2mo")
             
             if len(hist) > 14:
@@ -315,8 +329,13 @@ def get_stock_data(tickers):
             else:
                 rsi = 50
             
-            info = stock.info
-            high_52 = info.get('fiftyTwoWeekHigh', price)
+            # Get 52w high
+            try:
+                info = stock.info
+                high_52 = info.get('fiftyTwoWeekHigh', price)
+            except:
+                high_52 = price
+            
             drawdown = ((price - high_52) / high_52) * 100
             
             company = company_info.get(ticker, {"name": ticker, "kr": "", "en": "", "sector": ""})
@@ -324,15 +343,17 @@ def get_stock_data(tickers):
             data.append({
                 "ticker": ticker,
                 "name": company["name"],
-                "desc": company["kr"] if is_kr else company["en"],
-                "sector": company["sector"],
+                "desc": company["kr"] if is_korean else company["en"],
+                "sector": company.get("sector", ""),
                 "price": price,
                 "rsi": round(rsi, 1),
                 "drawdown": round(drawdown, 1),
                 "high_52": high_52
             })
         except Exception as e:
+            # Skip failed tickers silently
             continue
+    
     return data
 
 # --- Sidebar Settings ---
@@ -364,7 +385,7 @@ with st.sidebar:
 
 # --- Main Content ---
 fed_rate, m2_growth = get_macro_data()
-stock_data = get_stock_data(selected_tickers) if selected_tickers else []
+stock_data = get_stock_data(tuple(selected_tickers), lang) if selected_tickers else []
 
 # Determine market status
 if fed_rate > 4.5 or m2_growth < 0:
@@ -568,7 +589,7 @@ with tab3:
     
     if watchlist_to_scan:
         with st.spinner("스캔 중..." if is_kr else "Scanning..."):
-            watchlist_data = get_stock_data(watchlist_to_scan)
+            watchlist_data = get_stock_data(tuple(watchlist_to_scan), lang)
             sales = [s for s in watchlist_data if s["rsi"] < 35]
         
         if sales:
