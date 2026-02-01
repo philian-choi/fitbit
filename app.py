@@ -139,49 +139,61 @@ def get_macro_data():
 
 @st.cache_data(ttl=3600)
 def get_news(ticker):
-    # Yahoo Finance RSS Feed
-    rss_url = f"https://finance.yahoo.com/rss/headline?s={ticker}"
-    try:
-        feed = feedparser.parse(rss_url)
-        news_items = []
-        
-        # Strict Filtering Keywords (High Impact)
-        keywords = [
-            "Earnings", "Revenue", "Profit", "Guidance", # Financials
-            "SEC", "Regulation", "Lawsuit", "Approval", "FDA", # Regulatory
-            "Acquisition", "Merger", "Partnership", "Contract", # Corporate Action
-            "Launch", "Release", "Unveil", "Patent", # Product/Tech
-            "Upgrade", "Downgrade", "Target Price" # Analyst Action
-        ]
-        
-        # Noise Keywords to Exclude
-        noise = [
-            "Why", "Here's", "What to know", "3 reasons", "5 stocks", # Clickbait
-            "Prediction", "Could", "Might", "Opinion", "Think" # Speculation
-        ]
+    # Multiple RSS Sources for Better Coverage
+    rss_urls = [
+        f"https://finance.yahoo.com/rss/headline?s={ticker}", # Yahoo Finance
+        f"https://seekingalpha.com/api/1.0/rss/symbol/{ticker}", # Seeking Alpha (Analysis)
+        f"https://feeds.content.dowjones.com/public/rss/mw/ticker/{ticker}" # MarketWatch (News)
+    ]
+    
+    news_items = []
+    seen_titles = set() # To remove duplicates
+    
+    # Strict Filtering Keywords (High Impact)
+    keywords = [
+        "Earnings", "Revenue", "Profit", "Guidance", "Quarter", # Financials
+        "SEC", "Regulation", "Lawsuit", "Approval", "FDA", "Ban", # Regulatory
+        "Acquisition", "Merger", "Partnership", "Contract", "Deal", # Corporate Action
+        "Launch", "Release", "Unveil", "Patent", "Breakthrough", # Product/Tech
+        "Upgrade", "Downgrade", "Target Price", "Buy", "Sell" # Analyst Action
+    ]
+    
+    # Noise Keywords to Exclude
+    noise = [
+        "Why", "Here's", "What to know", "3 reasons", "5 stocks", "10 stocks", # Clickbait
+        "Prediction", "Could", "Might", "Opinion", "Think", "Maybe", # Speculation
+        "Motley Fool", "Zacks" # Subscription Bait
+    ]
 
-        for entry in feed.entries:
-            title = entry.title
+    for url in rss_urls:
+        try:
+            feed = feedparser.parse(url)
+            for entry in feed.entries:
+                title = entry.title
+                
+                # 0. Deduplication
+                if title in seen_titles:
+                    continue
+                seen_titles.add(title)
+
+                # 1. Exclude Noise
+                if any(n in title for n in noise):
+                    continue
+                    
+                # 2. Include Only Key Events
+                if any(k in title for k in keywords):
+                    news_items.append({
+                        "title": title,
+                        "link": entry.link,
+                        "published": entry.get('published', 'Recent'),
+                        "source": "Yahoo" if "yahoo" in url else "Seeking Alpha" if "seekingalpha" in url else "MarketWatch"
+                    })
+        except:
+            continue
             
-            # 1. Exclude Noise
-            if any(n in title for n in noise):
-                continue
-                
-            # 2. Include Only Key Events
-            if any(k in title for k in keywords):
-                news_items.append({
-                    "title": title,
-                    "link": entry.link,
-                    "published": entry.published
-                })
-                
-            # Limit to top 3 relevant news
-            if len(news_items) >= 3:
-                break
-                
-        return news_items
-    except:
-        return []
+    # Sort by published date (if available) or just take top 5
+    # Simple sort by list order (latest usually first in RSS)
+    return news_items[:5]
 
 def get_stock_data(tickers):
     data = []
@@ -339,7 +351,8 @@ if not df.empty:
             news_items = get_news(ticker)
             if news_items:
                 for news in news_items:
-                    st.markdown(f"**[{news['title']}]({news['link']})**")
+                    source_badge = f"[{news['source']}]"
+                    st.markdown(f"**{source_badge} [{news['title']}]({news['link']})**")
                     st.caption(f"{news['published']}")
             else:
                 st.info(t["no_news"])
