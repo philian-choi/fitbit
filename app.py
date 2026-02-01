@@ -144,12 +144,41 @@ def get_news(ticker):
     try:
         feed = feedparser.parse(rss_url)
         news_items = []
-        for entry in feed.entries[:3]: # Top 3 news
-            news_items.append({
-                "title": entry.title,
-                "link": entry.link,
-                "published": entry.published
-            })
+        
+        # Strict Filtering Keywords (High Impact)
+        keywords = [
+            "Earnings", "Revenue", "Profit", "Guidance", # Financials
+            "SEC", "Regulation", "Lawsuit", "Approval", "FDA", # Regulatory
+            "Acquisition", "Merger", "Partnership", "Contract", # Corporate Action
+            "Launch", "Release", "Unveil", "Patent", # Product/Tech
+            "Upgrade", "Downgrade", "Target Price" # Analyst Action
+        ]
+        
+        # Noise Keywords to Exclude
+        noise = [
+            "Why", "Here's", "What to know", "3 reasons", "5 stocks", # Clickbait
+            "Prediction", "Could", "Might", "Opinion", "Think" # Speculation
+        ]
+
+        for entry in feed.entries:
+            title = entry.title
+            
+            # 1. Exclude Noise
+            if any(n in title for n in noise):
+                continue
+                
+            # 2. Include Only Key Events
+            if any(k in title for k in keywords):
+                news_items.append({
+                    "title": title,
+                    "link": entry.link,
+                    "published": entry.published
+                })
+                
+            # Limit to top 3 relevant news
+            if len(news_items) >= 3:
+                break
+                
         return news_items
     except:
         return []
