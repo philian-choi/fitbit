@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import os
 import feedparser
 import time
-from newspaper import Article
+from newspaper import Article, Config
 import nltk
 
 # Download NLTK data (required for summarization)
@@ -145,16 +145,26 @@ def get_macro_data():
         # st.error(f"Error fetching macro data: {e}")
         return 3.72, 4.6 # Fallback to last known values
 
+from newspaper import Article, Config
+
+# ... (existing imports)
+
 @st.cache_data(ttl=3600)
 def get_article_summary(url):
     try:
-        article = Article(url)
+        # User-Agent spoofing to bypass simple anti-bot protections
+        user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        config = Config()
+        config.browser_user_agent = user_agent
+        config.request_timeout = 10
+
+        article = Article(url, config=config)
         article.download()
         article.parse()
         article.nlp()
         return article.summary
-    except:
-        return "Summary unavailable. (Access denied or paywall)"
+    except Exception:
+        return "요약 정보를 가져올 수 없습니다. (보안 정책 또는 페이월)"
 
 @st.cache_data(ttl=3600)
 def get_news(ticker):
