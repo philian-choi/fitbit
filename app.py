@@ -281,24 +281,49 @@ def get_stock_data(tickers):
 
 # --- 2. Sidebar: Portfolio Settings ---
 st.sidebar.header("💼 My Portfolio Settings")
-portfolio_input = {
-    "TSLA": st.sidebar.number_input("Tesla (TSLA) Target %", value=30),
-    "NVDA": st.sidebar.number_input("Nvidia (NVDA) Target %", value=25),
-    "COIN": st.sidebar.number_input("Coinbase (COIN) Target %", value=25),
-    "PLTR": st.sidebar.number_input("Palantir (PLTR) Target %", value=10),
-    "ISRG": st.sidebar.number_input("Intuitive Surgical (ISRG) Target %", value=10)
-}
+
+# Define available tickers (Core + Watchlist)
+core_tickers = ["TSLA", "NVDA", "COIN", "PLTR", "ISRG"]
+watchlist_tickers = [
+    "AMD", "AMZN", "GOOGL", "MSFT", "META", # Big Tech
+    "SHOP", "UBER", "SQ", "PYPL", "HOOD", # Fintech
+    "CRSP", "NTLA", "BEAM", "RXRX", "DNA", # Bio
+    "RKLB", "OKLO", "FLNC", "TMUS", "ASTS", # Space/Energy
+    "U", "NET", "PATH", "DKNG", "ROKU" # Growth
+]
+all_tickers = list(set(core_tickers + watchlist_tickers)) # Unique list
+
+# Multiselect widget to add/remove tickers
+selected_tickers = st.sidebar.multiselect(
+    "Select Tickers / 종목 선택",
+    options=sorted(all_tickers),
+    default=core_tickers
+)
+
+portfolio_input = {}
+total_allocation = 0
+
+st.sidebar.markdown("---")
+st.sidebar.subheader("Target Allocation (%)")
+
+for t in selected_tickers:
+    # Default weight logic: 100 / count (simple start)
+    default_weight = 20 if t in core_tickers else 0
+    weight = st.sidebar.number_input(f"{t} %", min_value=0, max_value=100, value=default_weight, key=f"weight_{t}")
+    portfolio_input[t] = weight
+    total_allocation += weight
+
+# Warning if allocation != 100%
+if total_allocation != 100:
+    st.sidebar.warning(f"Total: {total_allocation}% (Should be 100%)")
+else:
+    st.sidebar.success(f"Total: {total_allocation}%")
+
 monthly_investment = st.sidebar.number_input("Monthly DCA Amount ($)", value=1000)
 
 # --- Watchlist for Discovery ---
-# ARK Big Ideas 2026 Related Tickers + High Growth Tech
-watchlist = [
-    "AMD", "AMZN", "GOOGL", "MSFT", "META", # Big Tech / AI Infra
-    "SHOP", "UBER", "SQ", "PYPL", "HOOD", # Fintech / Consumer
-    "CRSP", "NTLA", "BEAM", "RXRX", "DNA", # Multiomics
-    "RKLB", "OKLO", "FLNC", "TMUS", "ASTS", # Space / Energy
-    "U", "NET", "PATH", "DKNG", "ROKU" # High Growth Software
-]
+# Use the same list for discovery, excluding currently selected portfolio
+watchlist = [t for t in all_tickers if t not in selected_tickers]
 
 def scan_market_opportunities(watchlist):
     opportunities = []
