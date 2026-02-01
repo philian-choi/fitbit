@@ -52,7 +52,8 @@ if not check_password():
     st.stop()  # Do not continue if password is not correct.
 
 # --- Language Settings ---
-lang = st.sidebar.radio("Language / 언어", ["English", "한국어"])
+lang_selection = st.sidebar.radio("Language / 언어", ["English", "한국어"])
+lang = lang_selection if lang_selection else "English" # Fallback if None
 
 # Text Dictionary
 text = {
