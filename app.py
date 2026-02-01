@@ -978,21 +978,27 @@ if not df.empty:
     # Insights - Clear action items
     st.subheader(t["insights"])
     
+    # Use correct column names based on language
+    ticker_col = "티커" if lang == "한국어" else "Symbol"
+    name_col = "종목" if lang == "한국어" else "Ticker"
+    dd_col = "낙폭" if lang == "한국어" else "Drawdown"
+    
     insights_found = False
     for index, row in df.iterrows():
-        ticker = row['Ticker']
+        ticker = row[ticker_col]
+        ticker_name = row[name_col]
         rsi = row['RSI']
-        dd = row['Drawdown']
+        dd = row[dd_col]
         
         if rsi < 35:
-            st.success(f"**{ticker}** (RSI: {rsi:.0f}) - {t['oversold']}")
+            st.success(f"**{ticker_name}** (RSI: {rsi:.0f}) - {t['oversold']}")
             insights_found = True
         elif rsi > 70:
-            st.warning(f"**{ticker}** (RSI: {rsi:.0f}) - {t['overbought']}")
+            st.warning(f"**{ticker_name}** (RSI: {rsi:.0f}) - {t['overbought']}")
             insights_found = True
         
         if dd < -20:
-            st.info(f"**{ticker}** ({dd:.1f}%) - {t['drawdown']}")
+            st.info(f"**{ticker_name}** ({dd:.1f}%) - {t['drawdown']}")
             insights_found = True
     
     if not insights_found:
