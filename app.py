@@ -42,7 +42,7 @@ ICONS = {
     "minus": '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>',
 }
 
-# --- Modern CSS ---
+# --- Modern CSS (Dark Mode Compatible) ---
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
@@ -54,33 +54,32 @@ st.markdown("""
         max-width: 1200px;
     }
     
-    /* Hero section */
+    /* Hero section - works on both light/dark */
     .hero-card {
-        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 50%, #1e40af 100%);
         padding: 2rem;
         border-radius: 20px;
-        color: white;
+        color: white !important;
         text-align: center;
         margin-bottom: 1.5rem;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
     }
     .hero-card h1 {
         font-size: 1.5rem;
         margin: 0;
         font-weight: 500;
-        opacity: 0.9;
+        color: rgba(255,255,255,0.9) !important;
     }
     .hero-amount {
         font-size: 4rem;
         font-weight: 700;
-        background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #ffffff !important;
         margin: 0.5rem 0;
+        text-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
     .hero-subtitle {
         font-size: 1rem;
-        opacity: 0.8;
+        color: rgba(255,255,255,0.85) !important;
         margin-top: 0.5rem;
     }
     
@@ -95,23 +94,24 @@ st.markdown("""
         font-size: 0.9rem;
         margin: 0.5rem;
     }
-    .status-good { background: #10b981; color: white; }
-    .status-normal { background: #f59e0b; color: white; }
-    .status-caution { background: #6366f1; color: white; }
+    .status-good { background: #10b981; color: white !important; }
+    .status-normal { background: #f59e0b; color: white !important; }
+    .status-caution { background: #8b5cf6; color: white !important; }
     
-    /* Stock cards */
+    /* Stock cards - dark mode compatible */
     .stock-card {
-        background: white;
+        background: rgba(255,255,255,0.05);
         border-radius: 16px;
         padding: 1.2rem;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        border: 1px solid #eee;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255,255,255,0.1);
         margin-bottom: 1rem;
         transition: transform 0.2s, box-shadow 0.2s;
     }
     .stock-card:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        background: rgba(255,255,255,0.08);
     }
     .stock-header {
         display: flex;
@@ -122,27 +122,32 @@ st.markdown("""
     .stock-name {
         font-size: 1.1rem;
         font-weight: 600;
-        color: #1a1a2e;
+        color: #e2e8f0 !important;
     }
     .stock-ticker {
         font-size: 0.85rem;
-        color: #666;
-        background: #f5f5f5;
+        color: #94a3b8 !important;
+        background: rgba(255,255,255,0.1);
         padding: 0.2rem 0.6rem;
         border-radius: 6px;
     }
     .stock-price {
         font-size: 1.5rem;
         font-weight: 700;
-        color: #1a1a2e;
+        color: #f1f5f9 !important;
     }
     .stock-change {
         font-size: 0.9rem;
         padding: 0.2rem 0.5rem;
         border-radius: 6px;
     }
-    .change-up { background: #dcfce7; color: #166534; }
-    .change-down { background: #fee2e2; color: #991b1b; }
+    .change-up { background: rgba(16, 185, 129, 0.2); color: #34d399 !important; }
+    .change-down { background: rgba(239, 68, 68, 0.2); color: #f87171 !important; }
+    .stock-desc {
+        color: #94a3b8 !important;
+        font-size: 0.85rem;
+        margin-bottom: 0.8rem;
+    }
     
     /* RSI bar */
     .rsi-container { margin-top: 0.8rem; }
@@ -158,18 +163,29 @@ st.markdown("""
         top: -4px;
         width: 16px;
         height: 16px;
-        background: #1a1a2e;
+        background: #ffffff;
         border-radius: 50%;
-        border: 2px solid white;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        border: 3px solid #1e40af;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.4);
         transform: translateX(-50%);
     }
     .rsi-labels {
         display: flex;
         justify-content: space-between;
         font-size: 0.75rem;
-        color: #888;
+        color: #94a3b8 !important;
     }
+    .rsi-info {
+        font-size: 0.85rem;
+        color: #94a3b8 !important;
+    }
+    .rsi-status {
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+    .rsi-status-sale { color: #34d399 !important; }
+    .rsi-status-fair { color: #94a3b8 !important; }
+    .rsi-status-high { color: #f87171 !important; }
     
     /* Action badge */
     .action-badge {
@@ -181,28 +197,28 @@ st.markdown("""
         font-weight: 600;
         font-size: 0.85rem;
     }
-    .action-buy { background: #dcfce7; color: #166534; }
-    .action-sell { background: #fee2e2; color: #991b1b; }
-    .action-hold { background: #f5f5f5; color: #666; }
+    .action-buy { background: rgba(16, 185, 129, 0.2); color: #34d399 !important; }
+    .action-sell { background: rgba(239, 68, 68, 0.2); color: #f87171 !important; }
+    .action-hold { background: rgba(148, 163, 184, 0.2); color: #94a3b8 !important; }
     
     /* Section headers */
     .section-header {
         font-size: 1.2rem;
         font-weight: 700;
-        color: #1a1a2e;
+        color: #e2e8f0 !important;
         margin: 1.5rem 0 1rem 0;
         padding-bottom: 0.5rem;
-        border-bottom: 2px solid #eee;
+        border-bottom: 2px solid rgba(255,255,255,0.1);
     }
     
     /* Info box */
     .info-box {
-        background: #f8fafc;
+        background: rgba(59, 130, 246, 0.1);
         border-left: 4px solid #3b82f6;
         padding: 0.8rem 1rem;
         border-radius: 0 8px 8px 0;
         font-size: 0.9rem;
-        color: #475569;
+        color: #cbd5e1 !important;
         margin: 0.5rem 0;
     }
     
@@ -210,15 +226,17 @@ st.markdown("""
     .quick-stat {
         text-align: center;
         padding: 1rem;
+        background: rgba(255,255,255,0.03);
+        border-radius: 12px;
     }
     .quick-stat-value {
         font-size: 1.8rem;
         font-weight: 700;
-        color: #1a1a2e;
+        color: #f1f5f9 !important;
     }
     .quick-stat-label {
         font-size: 0.85rem;
-        color: #64748b;
+        color: #94a3b8 !important;
         margin-top: 0.3rem;
     }
     
@@ -540,13 +558,13 @@ with tab2:
             with cols[idx % 2]:
                 if stock["rsi"] < 30:
                     rsi_status = "세일!" if is_kr else "On Sale!"
-                    rsi_color = "#16a34a"
+                    rsi_status_class = "rsi-status-sale"
                 elif stock["rsi"] > 70:
                     rsi_status = "비쌈" if is_kr else "Expensive"
-                    rsi_color = "#dc2626"
+                    rsi_status_class = "rsi-status-high"
                 else:
                     rsi_status = "적정가" if is_kr else "Fair"
-                    rsi_color = "#64748b"
+                    rsi_status_class = "rsi-status-fair"
                 
                 dd_class = "change-up" if stock["drawdown"] > -10 else "change-down"
                 dd_label = "고점대비" if is_kr else "From High"
@@ -557,15 +575,15 @@ with tab2:
                         <span class="stock-name">{stock['name']}</span>
                         <span class="stock-ticker">{stock['ticker']}</span>
                     </div>
-                    <div style="color: #64748b; font-size: 0.85rem; margin-bottom: 0.8rem;">{stock['desc']}</div>
+                    <div class="stock-desc">{stock['desc']}</div>
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <span class="stock-price">${stock['price']:.2f}</span>
                         <span class="stock-change {dd_class}">{dd_label} {stock['drawdown']:.1f}%</span>
                     </div>
                     <div class="rsi-container">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <span style="font-size: 0.85rem; color: #64748b;">RSI: {stock['rsi']:.0f}</span>
-                            <span style="font-size: 0.85rem; color: {rsi_color}; font-weight: 600;">{rsi_status}</span>
+                            <span class="rsi-info">RSI: {stock['rsi']:.0f}</span>
+                            <span class="rsi-status {rsi_status_class}">{rsi_status}</span>
                         </div>
                         <div class="rsi-bar">
                             <div class="rsi-marker" style="left: {stock['rsi']}%;"></div>
