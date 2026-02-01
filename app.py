@@ -4,6 +4,7 @@ import yfinance as yf
 from fredapi import Fred
 from datetime import datetime
 import os
+import feedparser
 
 # --- Page Config (NO SIDEBAR) ---
 st.set_page_config(
@@ -39,38 +40,6 @@ st.markdown("""
         padding: 1rem 1rem 2rem 1rem;
         max-width: 800px;
     }
-    
-    /* Hero card */
-    .hero-card {
-        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-        padding: 1.5rem;
-        border-radius: 16px;
-        color: white !important;
-        text-align: center;
-        margin-bottom: 1rem;
-    }
-    .hero-title {
-        font-size: 1rem;
-        margin: 0;
-        color: rgba(255,255,255,0.85) !important;
-    }
-    .hero-amount {
-        font-size: 3rem;
-        font-weight: 700;
-        color: #ffffff !important;
-        margin: 0.3rem 0;
-    }
-    .hero-badge {
-        display: inline-block;
-        padding: 0.3rem 0.8rem;
-        border-radius: 20px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        margin-top: 0.3rem;
-    }
-    .badge-good { background: #10b981; color: white !important; }
-    .badge-normal { background: #f59e0b; color: white !important; }
-    .badge-caution { background: #8b5cf6; color: white !important; }
     
     /* Stats row */
     .stats-row {
@@ -300,6 +269,23 @@ def get_stock_data(tickers, lang="한국어"):
             continue
     return data
 
+@st.cache_data(ttl=3600)
+def get_news(ticker):
+    """Fetch news for a ticker from Yahoo Finance RSS"""
+    try:
+        url = f"https://finance.yahoo.com/rss/headline?s={ticker}"
+        feed = feedparser.parse(url)
+        news_items = []
+        for entry in feed.entries[:3]:  # 최대 3개
+            news_items.append({
+                "title": entry.title,
+                "link": entry.link,
+                "published": entry.get('published', '')[:16] if entry.get('published') else ''
+            })
+        return news_items
+    except:
+        return []
+
 # --- Session State ---
 if "lang" not in st.session_state:
     st.session_state["lang"] = "한국어"
@@ -438,16 +424,7 @@ for stock in stock_data:
 oversold = len([s for s in stock_data if s["rsi"] < 35])
 overbought = len([s for s in stock_data if s["rsi"] > 70])
 
-# === HERO ===
-st.markdown(f"""
-<div class="hero-card">
-    <div class="hero-title">{"이번 주 투자 금액" if is_kr else "This Week's Investment"}</div>
-    <div class="hero-amount">${total_suggested:,.0f}</div>
-    <span class="hero-badge badge-{weather}">{weather_text}</span>
-</div>
-""", unsafe_allow_html=True)
-
-# === STATS ===
+# === STATS (compact) ===
 st.markdown(f"""
 <div class="stats-row">
     <div class="stat-box">
@@ -506,6 +483,30 @@ if recommendations:
         """, unsafe_allow_html=True)
 else:
     st.info("설정에서 종목을 선택하세요." if is_kr else "Select stocks in Settings.")
+
+# === NEWS ===
+if recommendations:
+    st.markdown(f'<div class="section-title">{"뉴스" if is_kr else "News"}</div>', unsafe_allow_html=True)
+    
+    # 탭으로 종목별 뉴스 표시
+    if len(recommendations) > 0:
+        tabs = st.tabs([rec["ticker"] for rec in recommendations])
+        
+        for i, rec in enumerate(recommendations):
+            with tabs[i]:
+                news_items = get_news(rec["ticker"])
+                if news_items:
+                    for news in news_items:
+                        st.markdown(f"""
+                        <div style="padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
+                            <a href="{news['link']}" target="_blank" style="color: #60a5fa; text-decoration: none; font-size: 0.9rem;">
+                                {news['title']}
+                            </a>
+                            <div style="font-size: 0.75rem; color: #64748b; margin-top: 0.2rem;">{news['published']}</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                else:
+                    st.caption("뉴스 없음" if is_kr else "No news")
 
 # === HELP ===
 with st.expander("RSI란?" if is_kr else "What is RSI?"):
