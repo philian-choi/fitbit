@@ -244,9 +244,9 @@ def get_news(ticker):
 
 def get_stock_data(tickers):
     data = []
-    for t in tickers:
+    for ticker_symbol in tickers:
         try:
-            stock = yf.Ticker(t)
+            stock = yf.Ticker(ticker_symbol)
             # Use fast_info if available or fallback to info (slower)
             # yfinance recent versions use fast_info for price
             price = stock.fast_info.last_price
@@ -276,7 +276,7 @@ def get_stock_data(tickers):
                 moat_score = "Watch"
                 
             data.append({
-                "Ticker": t,
+                "Ticker": ticker_symbol,
                 "Price": price,
                 "RSI": round(rsi, 2),
                 "Moat Status": moat_score,
@@ -284,7 +284,7 @@ def get_stock_data(tickers):
                 "Drawdown": round((price - high_52) / high_52 * 100, 2)
             })
         except Exception as e:
-            st.warning(f"Could not fetch data for {t}: {e}")
+            st.warning(f"Could not fetch data for {ticker_symbol}: {e}")
             
     return pd.DataFrame(data)
 
@@ -315,11 +315,11 @@ total_allocation = 0
 st.sidebar.markdown("---")
 st.sidebar.subheader("Target Allocation (%)")
 
-for t in selected_tickers:
+for ticker in selected_tickers:
     # Default weight logic: 100 / count (simple start)
-    default_weight = 20 if t in core_tickers else 0
-    weight = st.sidebar.number_input(f"{t} %", min_value=0, max_value=100, value=default_weight, key=f"weight_{t}")
-    portfolio_input[t] = weight
+    default_weight = 20 if ticker in core_tickers else 0
+    weight = st.sidebar.number_input(f"{ticker} %", min_value=0, max_value=100, value=default_weight, key=f"weight_{ticker}")
+    portfolio_input[ticker] = weight
     total_allocation += weight
 
 # Warning if allocation != 100%
@@ -332,13 +332,13 @@ monthly_investment = st.sidebar.number_input("Monthly DCA Amount ($)", value=100
 
 # --- Watchlist for Discovery ---
 # Use the same list for discovery, excluding currently selected portfolio
-watchlist = [t for t in all_tickers if t not in selected_tickers]
+watchlist = [ticker for ticker in all_tickers if ticker not in selected_tickers]
 
-def scan_market_opportunities(watchlist):
+def scan_market_opportunities(watchlist_tickers):
     opportunities = []
-    for t in watchlist:
+    for ticker_symbol in watchlist_tickers:
         try:
-            stock = yf.Ticker(t)
+            stock = yf.Ticker(ticker_symbol)
             # Use fast_info for speed
             price = stock.fast_info.last_price
             
@@ -355,7 +355,7 @@ def scan_market_opportunities(watchlist):
                 # Condition 1: Oversold (RSI < 30) - Deep Value
                 if rsi < 30:
                     opportunities.append({
-                        "Ticker": t,
+                        "Ticker": ticker_symbol,
                         "Price": price,
                         "RSI": round(rsi, 2),
                         "Reason": "Oversold (RSI < 30)"
