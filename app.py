@@ -350,12 +350,12 @@ with st.expander("설정" if is_kr else "Settings", expanded=False):
         st.rerun()
     
     # 월 투자금
-    budget = st.slider(
+    budget = st.number_input(
         "월 투자금 ($)" if is_kr else "Monthly Budget ($)",
-        min_value=100,
-        max_value=5000,
+        min_value=10,
+        max_value=1000000,
         value=st.session_state["budget"],
-        step=100
+        step=50
     )
     if budget != st.session_state["budget"]:
         st.session_state["budget"] = budget
