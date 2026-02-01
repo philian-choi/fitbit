@@ -451,7 +451,7 @@ def get_news(ticker):
             
     return news_items[:5]
 
-def get_stock_data(tickers):
+def get_stock_data(tickers, include_description=False):
     data = []
     for ticker_symbol in tickers:
         try:
@@ -475,15 +475,23 @@ def get_stock_data(tickers):
             moat_score = "Strong"
             if info.get('grossMargins', 0) < 0.4 and info.get('revenueGrowth', 0) < 0.1:
                 moat_score = "Watch"
-                
-            data.append({
-                "Ticker": ticker_symbol,
-                "Price": price,
+            
+            # Get company info
+            company = company_info.get(ticker_symbol, {})
+            company_name = f"{company.get('emoji', '')} {company.get('name', ticker_symbol)}"
+            sector = company.get('sector', '')
+            
+            row_data = {
+                "종목" if lang == "한국어" else "Ticker": company_name,
+                "티커" if lang == "한국어" else "Symbol": ticker_symbol,
+                "섹터" if lang == "한국어" else "Sector": sector,
+                "가격" if lang == "한국어" else "Price": price,
                 "RSI": round(rsi, 2),
-                "Moat Status": moat_score,
-                "52W High": high_52,
-                "Drawdown": round((price - high_52) / high_52 * 100, 2)
-            })
+                "52주 최고" if lang == "한국어" else "52W High": high_52,
+                "낙폭" if lang == "한국어" else "Drawdown": round((price - high_52) / high_52 * 100, 2)
+            }
+            
+            data.append(row_data)
         except Exception as e:
             st.warning(f"Could not fetch data for {ticker_symbol}: {e}")
             
@@ -506,11 +514,19 @@ def scan_market_opportunities(watchlist_tickers):
                 rsi = 100 - (100 / (1 + rs)).iloc[-1]
                 
                 if rsi < 30:
+                    # Get company info
+                    company = company_info.get(ticker_symbol, {})
+                    company_name = f"{company.get('emoji', '')} {company.get('name', ticker_symbol)}"
+                    desc = company.get("kr" if lang == "한국어" else "en", "")
+                    sector = company.get("sector", "")
+                    
                     opportunities.append({
-                        "Ticker": ticker_symbol,
-                        "Price": price,
+                        "종목" if lang == "한국어" else "Stock": company_name,
+                        "티커" if lang == "한국어" else "Ticker": ticker_symbol,
+                        "섹터" if lang == "한국어" else "Sector": sector,
+                        "가격" if lang == "한국어" else "Price": f"${price:.2f}",
                         "RSI": round(rsi, 2),
-                        "Reason": "🟢 세일 중! (RSI < 30)" if lang == "한국어" else "🟢 On Sale! (RSI < 30)"
+                        "설명" if lang == "한국어" else "Description": desc[:50] + "..." if len(desc) > 50 else desc
                     })
                 
         except:
@@ -520,6 +536,233 @@ def scan_market_opportunities(watchlist_tickers):
 
 # --- 2. Sidebar: Portfolio Settings ---
 st.sidebar.header("⚙️ 설정" if lang == "한국어" else "⚙️ Settings")
+
+# Define available tickers
+# --- Company Information Dictionary ---
+# 각 종목에 대한 설명 (초보자용)
+company_info = {
+    # Core Holdings
+    "TSLA": {
+        "name": "Tesla",
+        "emoji": "🚗",
+        "kr": "전기차 1위 기업. 전기차, 에너지 저장장치, 태양광 패널 판매로 수익 창출",
+        "en": "World's #1 EV maker. Revenue from electric vehicles, energy storage, and solar panels",
+        "sector": "전기차/에너지" if lang == "한국어" else "EV/Energy"
+    },
+    "NVDA": {
+        "name": "NVIDIA",
+        "emoji": "🎮",
+        "kr": "AI 반도체 1위. GPU(그래픽카드) 판매, 특히 AI 학습용 칩으로 대박",
+        "en": "#1 AI chip maker. Revenue from GPUs, especially AI training chips",
+        "sector": "반도체" if lang == "한국어" else "Semiconductors"
+    },
+    "COIN": {
+        "name": "Coinbase",
+        "emoji": "🪙",
+        "kr": "미국 최대 암호화폐 거래소. 비트코인/이더리움 거래 수수료로 수익",
+        "en": "Largest US crypto exchange. Revenue from trading fees on Bitcoin/Ethereum",
+        "sector": "암호화폐" if lang == "한국어" else "Crypto"
+    },
+    "PLTR": {
+        "name": "Palantir",
+        "emoji": "🔍",
+        "kr": "빅데이터 분석 전문. 정부/기업에 데이터 분석 소프트웨어 판매",
+        "en": "Big data analytics. Sells data analysis software to governments & enterprises",
+        "sector": "소프트웨어" if lang == "한국어" else "Software"
+    },
+    "ISRG": {
+        "name": "Intuitive Surgical",
+        "emoji": "🏥",
+        "kr": "수술 로봇 1위. 다빈치 로봇 판매 및 수술 도구 소모품으로 수익",
+        "en": "#1 surgical robotics. Revenue from da Vinci robots & surgical consumables",
+        "sector": "의료기기" if lang == "한국어" else "Medical Devices"
+    },
+    
+    # Big Tech
+    "AMD": {
+        "name": "AMD",
+        "emoji": "💻",
+        "kr": "CPU/GPU 제조사. 인텔의 경쟁자, 컴퓨터/서버용 칩 판매",
+        "en": "CPU/GPU maker. Intel competitor, sells chips for PCs and servers",
+        "sector": "반도체" if lang == "한국어" else "Semiconductors"
+    },
+    "AMZN": {
+        "name": "Amazon",
+        "emoji": "📦",
+        "kr": "세계 최대 이커머스 + 클라우드(AWS) 1위. 쇼핑몰과 서버 임대로 수익",
+        "en": "World's largest e-commerce + #1 cloud (AWS). Revenue from shopping & server rental",
+        "sector": "이커머스/클라우드" if lang == "한국어" else "E-commerce/Cloud"
+    },
+    "GOOGL": {
+        "name": "Google (Alphabet)",
+        "emoji": "🔎",
+        "kr": "검색엔진 1위. 구글 검색 광고, 유튜브 광고, 클라우드로 수익",
+        "en": "#1 search engine. Revenue from Google/YouTube ads and cloud services",
+        "sector": "광고/클라우드" if lang == "한국어" else "Ads/Cloud"
+    },
+    "MSFT": {
+        "name": "Microsoft",
+        "emoji": "🪟",
+        "kr": "윈도우, 오피스, 클라우드(Azure). 소프트웨어 구독료와 클라우드로 수익",
+        "en": "Windows, Office, Azure cloud. Revenue from software subscriptions & cloud",
+        "sector": "소프트웨어/클라우드" if lang == "한국어" else "Software/Cloud"
+    },
+    "META": {
+        "name": "Meta (Facebook)",
+        "emoji": "👥",
+        "kr": "페이스북, 인스타그램, 왓츠앱 운영. SNS 광고로 대부분 수익",
+        "en": "Facebook, Instagram, WhatsApp. Most revenue from social media ads",
+        "sector": "소셜미디어" if lang == "한국어" else "Social Media"
+    },
+    
+    # Fintech
+    "SHOP": {
+        "name": "Shopify",
+        "emoji": "🛒",
+        "kr": "온라인 쇼핑몰 구축 플랫폼. 소상공인이 쉽게 쇼핑몰 만들게 해줌",
+        "en": "E-commerce platform. Helps small businesses create online stores easily",
+        "sector": "이커머스" if lang == "한국어" else "E-commerce"
+    },
+    "UBER": {
+        "name": "Uber",
+        "emoji": "🚕",
+        "kr": "차량 공유 + 음식 배달. 우버 택시와 우버이츠 수수료로 수익",
+        "en": "Ride-sharing + food delivery. Revenue from Uber rides & Uber Eats fees",
+        "sector": "모빌리티" if lang == "한국어" else "Mobility"
+    },
+    "SQ": {
+        "name": "Block (Square)",
+        "emoji": "💳",
+        "kr": "결제 서비스 + 캐시앱. 소상공인 카드결제 수수료와 송금 서비스",
+        "en": "Payment services + Cash App. Revenue from merchant fees & money transfers",
+        "sector": "핀테크" if lang == "한국어" else "Fintech"
+    },
+    "PYPL": {
+        "name": "PayPal",
+        "emoji": "💰",
+        "kr": "온라인 결제 서비스. 인터넷 결제 수수료로 수익 (벤모 포함)",
+        "en": "Online payment service. Revenue from internet payment fees (incl. Venmo)",
+        "sector": "핀테크" if lang == "한국어" else "Fintech"
+    },
+    "HOOD": {
+        "name": "Robinhood",
+        "emoji": "📱",
+        "kr": "무료 주식거래 앱. 주문 흐름 판매와 프리미엄 구독으로 수익",
+        "en": "Commission-free trading app. Revenue from order flow & premium subscriptions",
+        "sector": "핀테크" if lang == "한국어" else "Fintech"
+    },
+    
+    # Biotech
+    "CRSP": {
+        "name": "CRISPR Therapeutics",
+        "emoji": "🧬",
+        "kr": "유전자 가위 기술 회사. 유전병 치료제 개발 중 (아직 초기 단계)",
+        "en": "Gene editing company. Developing treatments for genetic diseases (early stage)",
+        "sector": "바이오" if lang == "한국어" else "Biotech"
+    },
+    "NTLA": {
+        "name": "Intellia Therapeutics",
+        "emoji": "🧬",
+        "kr": "유전자 편집 치료제 개발. 체내에서 직접 유전자 수정하는 기술",
+        "en": "Gene editing therapeutics. Technology to edit genes directly inside the body",
+        "sector": "바이오" if lang == "한국어" else "Biotech"
+    },
+    "BEAM": {
+        "name": "Beam Therapeutics",
+        "emoji": "🧬",
+        "kr": "정밀 유전자 편집. DNA 한 글자만 정확히 수정하는 기술 개발",
+        "en": "Precision gene editing. Developing tech to edit single DNA letters precisely",
+        "sector": "바이오" if lang == "한국어" else "Biotech"
+    },
+    "RXRX": {
+        "name": "Recursion Pharma",
+        "emoji": "🤖",
+        "kr": "AI 신약 개발. 인공지능으로 신약 후보물질 발굴",
+        "en": "AI drug discovery. Using AI to find new drug candidates",
+        "sector": "바이오/AI" if lang == "한국어" else "Biotech/AI"
+    },
+    "DNA": {
+        "name": "Ginkgo Bioworks",
+        "emoji": "🦠",
+        "kr": "합성생물학 플랫폼. 미생물을 프로그래밍해서 유용한 물질 생산",
+        "en": "Synthetic biology platform. Programs microbes to produce useful materials",
+        "sector": "바이오" if lang == "한국어" else "Biotech"
+    },
+    
+    # Space/Energy
+    "RKLB": {
+        "name": "Rocket Lab",
+        "emoji": "🚀",
+        "kr": "소형 로켓 발사 회사. 인공위성을 우주로 쏘아 올려주는 서비스",
+        "en": "Small rocket launch company. Service to send satellites into space",
+        "sector": "우주항공" if lang == "한국어" else "Space"
+    },
+    "OKLO": {
+        "name": "Oklo",
+        "emoji": "⚛️",
+        "kr": "소형 원자로 개발. 깨끗하고 안전한 차세대 원자력 발전",
+        "en": "Small nuclear reactors. Clean and safe next-gen nuclear power",
+        "sector": "에너지" if lang == "한국어" else "Energy"
+    },
+    "FLNC": {
+        "name": "Fluence Energy",
+        "emoji": "🔋",
+        "kr": "대용량 에너지 저장. 태양광/풍력 전기를 저장하는 배터리 시스템",
+        "en": "Grid-scale energy storage. Battery systems to store solar/wind power",
+        "sector": "에너지" if lang == "한국어" else "Energy"
+    },
+    "TMUS": {
+        "name": "T-Mobile",
+        "emoji": "📶",
+        "kr": "미국 2위 통신사. 휴대폰 요금제와 인터넷 서비스로 수익",
+        "en": "#2 US telecom. Revenue from mobile plans and internet services",
+        "sector": "통신" if lang == "한국어" else "Telecom"
+    },
+    "ASTS": {
+        "name": "AST SpaceMobile",
+        "emoji": "📡",
+        "kr": "위성 직접 통신. 일반 스마트폰이 위성과 직접 통신하는 기술",
+        "en": "Direct-to-phone satellite. Tech for regular smartphones to connect to satellites",
+        "sector": "우주통신" if lang == "한국어" else "Space/Telecom"
+    },
+    
+    # Growth Tech
+    "U": {
+        "name": "Unity",
+        "emoji": "🎮",
+        "kr": "게임 엔진 회사. 모바일 게임 개발 도구와 광고 플랫폼",
+        "en": "Game engine company. Mobile game development tools and ad platform",
+        "sector": "게임/소프트웨어" if lang == "한국어" else "Gaming/Software"
+    },
+    "NET": {
+        "name": "Cloudflare",
+        "emoji": "☁️",
+        "kr": "인터넷 보안/성능. 웹사이트를 빠르고 안전하게 만들어주는 서비스",
+        "en": "Internet security/performance. Makes websites faster and more secure",
+        "sector": "클라우드/보안" if lang == "한국어" else "Cloud/Security"
+    },
+    "PATH": {
+        "name": "UiPath",
+        "emoji": "🤖",
+        "kr": "업무 자동화(RPA). 반복적인 사무 업무를 로봇이 대신 처리",
+        "en": "Robotic Process Automation. Robots handle repetitive office tasks",
+        "sector": "소프트웨어" if lang == "한국어" else "Software"
+    },
+    "DKNG": {
+        "name": "DraftKings",
+        "emoji": "🏈",
+        "kr": "스포츠 베팅 플랫폼. 미국 스포츠 도박 합법화 수혜주",
+        "en": "Sports betting platform. Benefits from US sports gambling legalization",
+        "sector": "도박/엔터" if lang == "한국어" else "Gaming/Entertainment"
+    },
+    "ROKU": {
+        "name": "Roku",
+        "emoji": "📺",
+        "kr": "스트리밍 TV 플랫폼. TV에서 넷플릭스 등 볼 수 있게 해주는 기기/서비스",
+        "en": "Streaming TV platform. Devices/services to watch Netflix etc. on TV",
+        "sector": "미디어" if lang == "한국어" else "Media"
+    }
+}
 
 # Define available tickers
 core_tickers = ["TSLA", "NVDA", "COIN", "PLTR", "ISRG"]
@@ -532,10 +775,30 @@ watchlist_tickers = [
 ]
 all_tickers = list(set(core_tickers + watchlist_tickers))
 
+def get_company_description(ticker):
+    """Get company description for a ticker"""
+    info = company_info.get(ticker, {})
+    if not info:
+        return ticker, "", ""
+    
+    emoji = info.get("emoji", "")
+    name = info.get("name", ticker)
+    desc = info.get("kr" if lang == "한국어" else "en", "")
+    sector = info.get("sector", "")
+    return f"{emoji} {name}", desc, sector
+
+# Format ticker options with company names for better UX
+def format_ticker_option(ticker):
+    info = company_info.get(ticker, {})
+    emoji = info.get("emoji", "")
+    name = info.get("name", ticker)
+    return f"{emoji} {ticker} ({name})"
+
 selected_tickers = st.sidebar.multiselect(
     "종목 선택" if lang == "한국어" else "Select Tickers",
     options=sorted(all_tickers),
-    default=core_tickers
+    default=core_tickers,
+    format_func=format_ticker_option
 )
 
 portfolio_input = {}
@@ -633,43 +896,84 @@ with st.spinner(t["fetching"]):
     df = get_stock_data(portfolio_input.keys())
 
 if not df.empty:
-    # RSI Gauges - Visual representation
-    st.subheader("📊 RSI " + ("게이지" if lang == "한국어" else "Gauges") + " - " + ("세일 감지기" if lang == "한국어" else "Sale Detector"))
+    # Company Cards with RSI Gauges
+    st.subheader("📊 " + ("내 종목 현황" if lang == "한국어" else "My Stocks Status"))
     
-    # Create columns for RSI gauges
+    # Create cards for each stock
     num_stocks = len(df)
-    cols_per_row = min(5, num_stocks)
+    cols_per_row = min(3, num_stocks)  # 3 cards per row for better readability
+    
+    ticker_col = "티커" if lang == "한국어" else "Symbol"
+    name_col = "종목" if lang == "한국어" else "Ticker"
+    sector_col = "섹터" if lang == "한국어" else "Sector"
+    price_col = "가격" if lang == "한국어" else "Price"
+    high_col = "52주 최고" if lang == "한국어" else "52W High"
+    dd_col = "낙폭" if lang == "한국어" else "Drawdown"
     
     for i in range(0, num_stocks, cols_per_row):
         cols = st.columns(cols_per_row)
         for j, col in enumerate(cols):
             if i + j < num_stocks:
                 row = df.iloc[i + j]
+                ticker_symbol = row[ticker_col]
+                company = company_info.get(ticker_symbol, {})
+                
                 with col:
-                    fig = create_rsi_gauge(row['RSI'], row['Ticker'])
-                    st.plotly_chart(fig, use_container_width=True)
+                    # Company info card
+                    with st.container():
+                        st.markdown(f"### {row[name_col]}")
+                        st.caption(f"**{row[sector_col]}** | {ticker_symbol}")
+                        
+                        # Company description
+                        desc = company.get("kr" if lang == "한국어" else "en", "")
+                        if desc:
+                            st.info(f"💡 {desc}")
+                        
+                        # Price info
+                        price = row[price_col]
+                        high_52 = row[high_col]
+                        drawdown = row[dd_col]
+                        
+                        price_col1, price_col2 = st.columns(2)
+                        with price_col1:
+                            st.metric("현재가" if lang == "한국어" else "Price", f"${price:.2f}")
+                        with price_col2:
+                            dd_color = "🟢" if drawdown < -15 else "🔴" if drawdown > -5 else "⚪"
+                            st.metric("고점대비" if lang == "한국어" else "From High", f"{drawdown:.1f}%", delta=dd_color)
+                        
+                        # RSI Gauge
+                        fig = create_rsi_gauge(row['RSI'], ticker_symbol)
+                        st.plotly_chart(fig, use_container_width=True)
+                    
+                    st.markdown("---")
 
-    # Data Table with better formatting
-    st.subheader("📋 " + ("상세 데이터" if lang == "한국어" else "Detailed Data"))
-    
-    # Style the dataframe
-    def style_rsi(val):
-        if val < 30:
-            return 'background-color: #d4edda; color: #155724; font-weight: bold'
-        elif val > 70:
-            return 'background-color: #f8d7da; color: #721c24; font-weight: bold'
-        return ''
-    
-    def style_drawdown(val):
-        if val < -20:
-            return 'background-color: #d4edda; color: #155724'
-        return ''
-    
-    styled_df = df.style.applymap(style_rsi, subset=['RSI'])\
-                       .applymap(style_drawdown, subset=['Drawdown'])\
-                       .format({"Price": "${:.2f}", "52W High": "${:.2f}", "Drawdown": "{:.1f}%", "RSI": "{:.0f}"})
-    
-    st.dataframe(styled_df, use_container_width=True, hide_index=True)
+    # Summary Data Table
+    with st.expander("📋 " + ("전체 데이터 보기" if lang == "한국어" else "View All Data")):
+        # Style the dataframe
+        def style_rsi(val):
+            if val < 30:
+                return 'background-color: #d4edda; color: #155724; font-weight: bold'
+            elif val > 70:
+                return 'background-color: #f8d7da; color: #721c24; font-weight: bold'
+            return ''
+        
+        def style_drawdown(val):
+            if val < -20:
+                return 'background-color: #d4edda; color: #155724'
+            return ''
+        
+        format_dict = {
+            price_col: "${:.2f}", 
+            high_col: "${:.2f}", 
+            dd_col: "{:.1f}%", 
+            "RSI": "{:.0f}"
+        }
+        
+        styled_df = df.style.applymap(style_rsi, subset=['RSI'])\
+                           .applymap(style_drawdown, subset=[dd_col])\
+                           .format(format_dict)
+        
+        st.dataframe(styled_df, use_container_width=True, hide_index=True)
 
     # Insights - Clear action items
     st.subheader(t["insights"])
@@ -703,8 +1007,10 @@ if not df.empty:
     rebalance_plan = []
     total_suggested = 0
     
+    ticker_col = "티커" if lang == "한국어" else "Symbol"
+    
     for ticker, target_pct in portfolio_input.items():
-        ticker_data = df[df['Ticker'] == ticker]
+        ticker_data = df[df[ticker_col] == ticker]
         if not ticker_data.empty:
             rsi = ticker_data['RSI'].values[0]
             adjusted_weight = target_pct
@@ -720,8 +1026,13 @@ if not df.empty:
             amount = monthly_investment * (adjusted_weight / 100)
             total_suggested += amount
             
+            # Get company info
+            company = company_info.get(ticker, {})
+            company_name = f"{company.get('emoji', '')} {company.get('name', ticker)}"
+            
             rebalance_plan.append({
-                "종목" if lang == "한국어" else "Ticker": ticker,
+                "종목" if lang == "한국어" else "Stock": company_name,
+                "티커" if lang == "한국어" else "Ticker": ticker,
                 "목표 비중" if lang == "한국어" else "Target": f"{target_pct}%",
                 "RSI": f"{rsi:.0f}",
                 "추천" if lang == "한국어" else "Action": action,
