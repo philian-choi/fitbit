@@ -1,0 +1,189 @@
+import streamlit as st
+import pandas as pd
+import yfinance as yf
+from fredapi import Fred
+from datetime import datetime
+import plotly.graph_objects as go
+import os
+
+# --- Configuration ---
+st.set_page_config(page_title="Weekly DCA Report", layout="wide")
+
+# Get API Key from Environment Variable (Best Practice for Vercel)
+# If not found, try to use the hardcoded one (fallback) or show warning
+FRED_API_KEY = os.environ.get('FRED_API_KEY')
+if not FRED_API_KEY:
+    # Fallback for local testing if env var not set, but warn user
+    FRED_API_KEY = '10b52d62b316f7f27fd58a6111c80adf' 
+    # In production, it's better not to hardcode keys in code.
+    # On Vercel, you will set FRED_API_KEY in the Environment Variables settings.
+
+# --- 1. Data Fetching Functions ---
+@st.cache_data(ttl=3600) # Cache data for 1 hour
+def get_macro_data():
+    if not FRED_API_KEY:
+        return 3.72, 4.6 # Mock data if no key
+        
+    try:
+        fred = Fred(api_key=FRED_API_KEY)
+        # Fetch latest available data (with a buffer for reporting lag)
+        fed_funds = fred.get_series('FEDFUNDS', observation_start='2024-01-01').iloc[-1]
+        m2 = fred.get_series('M2SL', observation_start='2024-01-01').iloc[-1]
+        last_m2 = fred.get_series('M2SL', observation_start='2023-01-01').iloc[-13] # YoY comparison
+        m2_growth = ((m2 - last_m2) / last_m2) * 100
+        return fed_funds, m2_growth
+    except Exception as e:
+        st.error(f"Error fetching macro data: {e}")
+        return 3.72, 4.6 # Fallback to last known values
+
+def get_stock_data(tickers):
+    data = []
+    for t in tickers:
+        try:
+            stock = yf.Ticker(t)
+            # Use fast_info if available or fallback to info (slower)
+            # yfinance recent versions use fast_info for price
+            price = stock.fast_info.last_price
+            
+            # Get history for RSI
+            hist = stock.history(period="2mo") # Need enough data for 14d RSI
+            
+            if len(hist) > 14:
+                # Calculate RSI
+                delta = hist['Close'].diff()
+                gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
+                loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
+                rs = gain / loss
+                rsi = 100 - (100 / (1 + rs)).iloc[-1]
+            else:
+                rsi = 50 # Default if not enough data
+            
+            # Get 52w high from info (might be slower, can optimize later)
+            # For speed in Vercel (serverless), we might want to skip heavy 'info' calls if possible
+            # But let's try to get it.
+            info = stock.info
+            high_52 = info.get('fiftyTwoWeekHigh', price)
+            
+            # Moat Logic (Simplified for demo)
+            moat_score = "Strong"
+            if info.get('grossMargins', 0) < 0.4 and info.get('revenueGrowth', 0) < 0.1:
+                moat_score = "Watch"
+                
+            data.append({
+                "Ticker": t,
+                "Price": price,
+                "RSI": round(rsi, 2),
+                "Moat Status": moat_score,
+                "52W High": high_52,
+                "Drawdown": round((price - high_52) / high_52 * 100, 2)
+            })
+        except Exception as e:
+            st.warning(f"Could not fetch data for {t}: {e}")
+            
+    return pd.DataFrame(data)
+
+# --- 2. Sidebar: Portfolio Settings ---
+st.sidebar.header("💼 My Portfolio Settings")
+portfolio_input = {
+    "TSLA": st.sidebar.number_input("Tesla (TSLA) Target %", value=30),
+    "NVDA": st.sidebar.number_input("Nvidia (NVDA) Target %", value=25),
+    "COIN": st.sidebar.number_input("Coinbase (COIN) Target %", value=25),
+    "PLTR": st.sidebar.number_input("Palantir (PLTR) Target %", value=10),
+    "ISRG": st.sidebar.number_input("Intuitive Surgical (ISRG) Target %", value=10)
+}
+monthly_investment = st.sidebar.number_input("Monthly DCA Amount ($)", value=1000)
+
+# --- 3. Main Dashboard ---
+st.title(f"📅 Weekly DCA Investment Report")
+st.markdown(f"**Date:** {datetime.now().strftime('%Y-%m-%d')} | **Strategy:** Wide Moat & Long-term Growth")
+
+# Section 1: Macro Environment
+st.header("1. Macro Environment (Investment Weather)")
+fed_rate, m2_growth = get_macro_data()
+
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.metric("Fed Funds Rate", f"{fed_rate:.2f}%", "Target Range")
+with col2:
+    st.metric("M2 Money Supply (YoY)", f"+{m2_growth:.2f}%", "Liquidity Trend")
+with col3:
+    status = "🟢 GREEN (Aggressive)"
+    if fed_rate > 4.5 or m2_growth < 0: status = "🔴 RED (Defensive)"
+    elif fed_rate > 3.0: status = "🟡 YELLOW (Balanced)"
+    st.info(f"**Current Stance:** {status}")
+
+# Section 2: Portfolio Health
+st.header("2. Portfolio Health Check")
+
+if st.button("🔄 Refresh Data"):
+    st.cache_data.clear()
+
+with st.spinner('Fetching latest market data...'):
+    df = get_stock_data(portfolio_input.keys())
+
+if not df.empty:
+    # Styling
+    def color_rsi(val):
+        if val > 70: return 'color: red; font-weight: bold'
+        elif val < 35: return 'color: green; font-weight: bold'
+        return ''
+
+    st.dataframe(df.style.applymap(color_rsi, subset=['RSI'])
+                 .format({"Price": "${:.2f}", "52W High": "${:.2f}", "Drawdown": "{:.2f}%"}), 
+                 use_container_width=True)
+
+    # Insights Generation
+    st.subheader("💡 Key Insights")
+    for index, row in df.iterrows():
+        ticker = row['Ticker']
+        rsi = row['RSI']
+        dd = row['Drawdown']
+        
+        if rsi < 35:
+            st.success(f"**{ticker}**: RSI is {rsi} (Oversold). Strong Buy signal for DCA.")
+        elif rsi > 70:
+            st.warning(f"**{ticker}**: RSI is {rsi} (Overbought). Consider reducing buy amount this week.")
+        
+        if dd < -20:
+            st.info(f"**{ticker}**: Trading {dd}% below highs. Good accumulation zone for long-term.")
+
+    # Section 3: Rebalancing Calculator
+    st.header("3. Smart DCA Calculator")
+    st.write(f"Based on your monthly budget of **${monthly_investment}** and current market conditions:")
+
+    rebalance_plan = []
+    for ticker, target_pct in portfolio_input.items():
+        # Simple logic: Adjust allocation based on RSI (Buy more when cheap)
+        # Find RSI for this ticker
+        ticker_data = df[df['Ticker'] == ticker]
+        if not ticker_data.empty:
+            rsi = ticker_data['RSI'].values[0]
+            adjusted_weight = target_pct
+            
+            action = "NORMAL"
+            if rsi < 40: 
+                adjusted_weight *= 1.2 # Buy 20% more if cheap
+                action = "BUY MORE (Cheap)"
+            elif rsi > 70: 
+                adjusted_weight *= 0.8 # Buy 20% less if expensive
+                action = "BUY LESS (Expensive)"
+            
+            # Normalize weights later or just show suggested amount
+            amount = monthly_investment * (adjusted_weight / 100)
+            
+            rebalance_plan.append({
+                "Ticker": ticker,
+                "Base Target": f"{target_pct}%",
+                "RSI": f"{rsi}",
+                "Action": action,
+                "Suggested Buy ($)": round(amount, 2)
+            })
+
+    st.table(pd.DataFrame(rebalance_plan))
+
+else:
+    st.error("Failed to load stock data. Please try again later.")
+
+# Footer
+st.markdown("---")
+st.caption("Data Sources: Yahoo Finance, FRED API. This is for informational purposes only.")

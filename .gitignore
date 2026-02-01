@@ -1,0 +1,10 @@
+# Virtual environment
+venv/
+__pycache__/
+*.pyc
+
+# Environment variables (API Keys)
+.env
+
+# OS specific
+.DS_Store

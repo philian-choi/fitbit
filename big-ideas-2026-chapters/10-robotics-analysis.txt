@@ -1,0 +1,45 @@
+================================================================================
+ARK Big Ideas 2026 - Chapter 10: Robotics (Analysis & Data)
+페이지: 83-89
+================================================================================
+
+## 1. 핵심 투자 인사이트 (Key Investment Insights)
+
+*   **범용 로봇(Generalizable Robots)의 부상**: 기존의 고정된 작업만 수행하는 특수 로봇(Specialized Robots)에서, 인간처럼 다양한 작업을 수행할 수 있는 범용 휴머노이드 로봇으로 패러다임 전환.
+*   **거대한 시장 기회**: 자동화가 가능한 잠재 시장 규모는 **$26 Trillion** (약 3.6경원)에 달함. (가사 노동 $13T + 제조 $13T).
+*   **복잡성의 극복**: 휴머노이드 로봇은 로보택시보다 제어 복잡도가 훨씬 높음(관절 자유도, 균형, 다양한 작업 등). 하지만 AI 컴퓨팅 파워의 기하급수적 증가로 2028년경 인간 수준의 성능(Optimus) 도달 예상.
+*   **생산성 혁명**: 로봇 밀도(Robot Density)가 높은 기업(Amazon 등)과 국가(한국, 중국 등)가 제조업 경쟁력을 주도.
+
+## 2. 관련 기업 및 티커 (Companies & Tickers)
+
+**[휴머노이드 및 로보틱스 - Public & Private]**
+*   **Tesla (TSLA)**: 'Optimus' 휴머노이드 개발 선두. 자율주행(FSD) 데이터를 로봇 제어에 전이 학습(Transfer Learning)하며 개발 가속화.
+*   **Amazon (AMZN)**: 물류 창고 자동화의 선구자. 로봇 밀도 압도적 1위. Agility Robotics(Digit) 투자 및 도입.
+*   **Agility Robotics (Private)**: 이족 보행 물류 로봇 'Digit' 상용화.
+*   **Figure AI (Private)**: OpenAI 등과 협력하여 범용 휴머노이드 개발.
+*   **Boston Dynamics (Hyundai Motor Group)**: Atlas 등 고성능 로봇 기술 보유.
+*   **1X (Private)**: 휴머노이드 'Neo' 개발.
+*   **Sanctuary AI (Private)**: 범용 로봇 개발.
+*   **Unitree (Private)**: 저가형 휴머노이드 개발.
+
+**[산업용 로봇 및 부품 - Public]**
+*   **Teradyne (TDY)**: 협동 로봇(Universal Robots) 보유.
+*   **Fanuc (FANUY)**, **Yaskawa (YASKY)**: 전통 산업용 로봇 강자.
+*   **Symbotic (SYM)**: AI 기반 물류 자동화 솔루션.
+
+## 3. 주요 데이터 및 전망 (Key Data & Forecasts)
+
+| 항목 | 데이터/전망치 | 비고 |
+| :--- | :--- | :--- |
+| **자동화 잠재 시장 (TAM)** | **~$26 Trillion** | 가사 노동 및 제조업 포함 |
+| **휴머노이드 상용화 시점** | **~2028년** | 인간 수준의 작업 능력 도달 예상 (Tesla Optimus 기준) |
+| **로봇 밀도 (Robot Density)** | Amazon: **1,279** | 직원 1만 명당 로봇 수 (자동차 산업 평균 478 대비 2.7배) |
+| **가사 노동 가치** | 연간 **~$13 Trillion** | 전 세계 무급 가사 노동의 50% 가치 |
+
+## 4. 기술 트렌드 (Technology Trends)
+
+*   **Embodied AI (신체화된 AI)**: LLM(거대언어모델)의 인지 능력을 로봇의 물리적 행동과 결합하여, 자연어 명령을 이해하고 복잡한 작업을 수행하는 로봇 등장.
+*   **End-to-End Learning**: 규칙 기반 제어(Rule-based)에서 AI가 비디오 데이터를 보고 동작을 스스로 학습하는 방식으로 진화.
+
+================================================================================
+*본 파일은 ARK Big Ideas 2026 보고서의 Chapter 10 내용을 바탕으로 투자 분석 목적으로 요약 및 재구성한 것입니다.*

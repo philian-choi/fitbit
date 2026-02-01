@@ -1,0 +1,721 @@
+================================================================================
+ARK Big Ideas 2026 - Chapter 01: The Great Acceleration
+페이지: 4-18
+================================================================================
+
+ARK Big Ideas 2026: The Great Acceleration	4
+The Great
+Acceleration
+AI Is The Central Dynamo,
+Accelerating Five Major Innovation
+Platforms And Igniting An Inflection
+In Macroeconomic Growth
+Brett Winton
+Chief Futurist
+
+-- 4 of 111 --
+
+Technological Convergence Is Accelerating
+5
+Neural
+Networks
+Intelligent
+Devices
+Next Gen
+Cloud
+Autonomous
+Mobility
+Distributed
+Energy
+Generation
+Advanced
+Battery
+Technology
+Specialized
+Robots
+Humanoid
+Robots
+Crypto
+currencies
+Smart
+Contracts
+Digital Wallets 	Programmable
+Biology
+Multiomics
+Technology
+Precision
+Therapies
+Reusable
+Rockets
+Five major innovation platforms—AI,
+Public Blockchains, Robotics, Energy
+Storage, and Multiomics—are becoming
+increasingly interdependent as
+performance advances in one platform
+unlock new capabilities in another.
+Reusable Rockets sending Autonomous
+Mobility AI chips to orbit could become
+critical to scaling the Next Gen Cloud.
+Multiomics data permissioned on Digital
+Wallets could power Neural Networks
+that catalyze the development of
+Precision Therapies to cure rare diseases.
+Source: ARK Investment Management LLC, 2026. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular security. Past performance is not
+indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+ARK Big Ideas 2026: The Great Acceleration
+
+-- 5 of 111 --
+
+Technology Platform Growth Rates Are Accelerating And Catalyzing One Another
+6 	ARK Big Ideas 2026: The Great Acceleration
+0
+0.05
+0.1
+0.15
+0.2
+0.25
+0.3
+0.35
+0.4
+AI 	Energy
+Storage
+Public
+Blockchains
+Robotics 	Multiomic
+Sequencing
+Relative Importance As A
+Technological Catalyst
+2023 	2024 	2025
+0
+5
+10
+15
+20
+25
+30
+35
+40
+2023 	2024 	2025
+Convergence Network Strength
+(100 Point Scale)
++20%
++35%
+Disruptive technologies are intermeshing.
+Convergence Network Strength, a measure
+of the degree to which disruptive
+technologies are catalyzing and being
+catalyzed by each other, increased 35% in
+2025.
+AI remains the critical enabling innovation
+platform, the importance of robotics as a
+catalyst inflected in 2025.
+Among major new developments: the
+world's largest robots—reusable rockets—
+could play an extraordinary role in enabling
+AI; energy storage and distributed energy
+systems have become critical enablers of
+next gen cloud build-outs; and smart
+contracts and stablecoins could support a
+global digital monetary ecosystem, allowing
+AI agents to coordinate and direct real-
+world resources.
+Note: Network strength measures the realized weighted strength of each network connection in relation to the maximum possible weighted strength in a fully connected network. Source: ARK Investment Management LLC,
+2026, based on data from Winton 2024. In addition to that source, certain information presented may be the result of ARK's internal analyses, which draw on various additional sources of information. For informational
+purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular security. Past performance is not indicative of future results. Forecasts are inherently limited and
+cannot be relied upon.
+
+-- 6 of 111 --
+
+Convergence Should Lead To Major Increases In Demand
+7 	ARK Big Ideas 2026: The Great Acceleration
+1
+10
+100
+1000
+10000
+100000
+1000000
+10000000
+Total cumulative
+upmass by SpaceX
+through 2025
+Additional upmass
+expected through
+2030 building out the
+Starlink constellation
+Upmass required to
+satisfy 100 GW of AI
+compute
+Tons To Orbit
+(Log Scale)
+Reusable Rocket Demand
+Neural network demand for next gen cloud compute is running into earthly scaling constraints. Reusable rockets could come to the rescue. At a
+competitive cost, space-based AI compute could provide the cloud with the computational power that neural networks need for continued growth.
+AI chip growth could increase demand for reusable rockets 60x relative to our existing model.
+0.5
+5
+14	
+20	
+28	
+40	
+56	
+79	
+112	
+158	
+224	
+316	
+447	
+631	
+891
+1,259	
+1,778	
+2,512	
+3,548	
+5,012	
+7,079	
+10,000
+Terrestrial/Space Ratio (Log Scale)
+Cost Per kg Launch
+(Log Scale)
+Space AI Compute vs Terrestrial AI Compute
+($ Per Token Ratio)
+On current
+launch costs,
+space compute
+would be 30%
+more costly
+than terrestrial
+compute
+On prospective launch
+costs, space based
+compute could prove
+25% less expensive than
+terrestrial compute
+~60x
+~11x
+Note: ARK internal analysis on this emerging opportunity. Source: ARK Investment Management LLC, 2026, based on data from SpaceX 2025a, SpaceX 2025b, Maguire et al. 2025. In addition to those sources, certain
+information presented may be the result of ARK's internal analyses, which draw on various additional sources of information. For informational purposes only and should not be considered investment advice or a
+recommendation to buy, sell, or hold any particular security. Past performance is not indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+Additional upmass
+expected to build
+out the Starlink
+constellation
+through 2030
+
+-- 7 of 111 --
+
+The World Is Entering An Unprecedented Technology Investment Cycle
+8 	ARK Big Ideas 2026: The Great Acceleration
+Note: All Historical lines are US fixed asset annual gross investment as percent of US GDP and derived from the NIPA tables. "Ecommerce" signifies warehouse investments. Data center and Robotaxi are percent of global
+consensus global GDP derived from the IMF as of 12/31/2025. Space data center opportunity derived from SpaceX public statements. Historical investment cycle investment dollars are sourced from ARK Investment
+Management LLC, 2026, based on data from Ulmer 1960, International Monetary Fund 2025, and National Bureau of Economic Research 1958. In addition to those sources, certain information presented may be the result of
+ARK's internal analyses, which draw on various additional sources of information. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular
+security. Past performance is not indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+0%
+1%
+2%
+3%
+4%
+5%
+6%
+7%
+8%
+9%
+1852-2030
+Select Historical Technological Investment Waves
+Capital Expenditures As Percent Of GDP
+Computers And
+Semiconductors
+Railroad
+Telephony
+Electrification
+Cars
+Comms. Equipment
+Ecommerce
+Software
+AI Software
+Terrestrial
+AI Data Centers
+Space
+Robotaxis
+2030
+
+-- 8 of 111 --
+
+Disruptive
+Technology
+Accelerates
+Capital
+Formation
+Increases
+Returns On
+Deployed
+Capital
+Transforms
+Non-Market
+Activity Into
+GDP
+Frees
+Human
+Potential
+For More
+Productive
+Use
+Robotaxis
+Automobile
+Replacement
+Cycle
+8x Increase
+In Miles
+Utilization
+Per Vehicle
+Personal
+Shift From
+Driving
+To Paid
+Service
+Shift In
+Personal
+Drive Time
+To Work Or
+Leisure
+9 	ARK Big Ideas 2026: The Great Acceleration
+Disruptive Technologies Can Catalyze Growth In Multiple Ways
+Source: ARK Investment Management LLC, 2026. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular security. Past performance is not
+indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+
+-- 9 of 111 --
+
+$2,600
+$65,000
+$-
+$20,000
+$40,000
+$60,000
+$80,000
+$100,000
+$120,000
+Paid household
+maintenance and care
+Imputed Labor Cost of
+Maintenance and Care
+Performed by Owner
+Impact Of Home Upkeep
+On GDP Per Year
+Included
+Not included
+Each Disruptive Technology Could Generate Profound Macroeconomic Results,
+Humanoid Robots In The Home, A Good Case In Point
+10 	ARK Big Ideas 2026: The Great Acceleration
+Currently, only $2,600 of the
+~$68,000 average value of
+home upkeep flows through
+to gross domestic product
+(GDP).
+A single household humanoid
+robot could impact GDP by
+$62,000 per year.
+A household humanoid robot
+in each of the 90 million US
+owner occupied homes could
+increase GDP by nearly $6
+trillion, or 20%.
+If humanoids were to
+penetrate 80% of US
+households over five years,
+GDP growth could accelerate
+from 2-3% per year to 5-6%
+per year.
+$20,000 $3,600
+$31,000
+$7,100
+$-
+$20,000
+$40,000
+$60,000
+$80,000
+$100,000
+$120,000
+Amortized 1
+year capital
+expense of a
+robot
+Robot
+Operating Cost
+Displacing Paid
+Services
+Homeowner
+time freed,
+half of which
+devoted to
+paid labor
+Robot
+operating cost
+on on work
+otherwise left
+undone
+Consumer
+surplus
+Impact Of A Single Household Humanoid Robot
+On GDP Per Year
+Included
+$62,000
+Surplus
+Imputed value
+leisure hours
+Better household
+service
+Note: The chart calculations assume that consumers are willing to pay for a durable good at a 25% discount rate and value their unpaid time at half the average wage rate. "Home upkeep" focuses on the labor portion of
+home upkeep. ARK Investment Management LLC, 2026, based on data from U.S. Bureau of Labor Statistics. 2025c, U.S. Bureau of Labor Statistics. 2025d, Tesla 2025. In addition to those sources, certain information
+presented may be the result of ARK's internal analyses, which draw on various additional sources of information. For informational purposes only and should not be considered investment advice or a recommendation to
+buy, sell, or hold any particular security. Past performance is not indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+Paid Household
+Maintenance And Care
+Consumer
+Surplus
+Robot
+Operating Cost
+On Work
+Otherwise Left
+Undone
+Homeowner
+Time Freed,
+Half Of Which
+Devoted To
+Paid Labor
+Amortized 1
+Year Capital
+Expense Of
+A Robot
+Imputed Labor Cost Of
+Maintenance And Care
+Performed By Owners
+
+-- 10 of 111 --
+
+This Technological Revolution
+Should Lead To Another Step
+Change In Real GDP Growth
+ARK Big Ideas 2026: The Great Acceleration
+0.0%
+0.1%
+1.0%
+10.0%
+100.0%
+Log Scale
+Global Real GDP Growth
+Log Years Until 2030
+100,000 BC	
+1
+1000
+1500	
+1900	
+2025
+.037%
+0.14%
+0.3%
+0.6%
+3%
+IMF Forecast
+3.1%
+ARK Forecast
+7.3%
+2030
+Historically, technology paradigm shifts have
+led to structural changes in GDP growth.
+Capital investment alone, catalyzed by disruptive
+innovation platforms, could add 1.9 percentage
+points to annualized real GDP growth this decade.
+The new capital base—robotaxis, next gen data
+centers, and enterprise investments in AI agents—
+should boost returns on invested capital. Realized
+real growth could exceed consensus expectations
+by more than 4 percentage points per year as other
+innovations begin to impact the growth trajectory.
+Each innovation platform—AI, Public Blockchains,
+Robotics, Energy Storage, and Multiomics—should
+provide a structural boost to global growth.
+Source: ARK Investment Management LLC, 2026, based on data from DeLong 1998, Open Philanthropy 2025, and Maddison 2007. In addition to those sources, certain information presented may be the result of ARK's
+internal analyses, which draw on various additional sources of information. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular security.
+Past performance is not indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+11
+
+-- 11 of 111 --
+
+Some Interesting Technologies
+Like Quantum Computing Are
+Unlikely To Be Disruptive For
+20 To 40 Years
+12 	ARK Big Ideas 2026: The Great Acceleration
+0
+10
+20
+30
+40
+50
+60
+70
+80
+90
+100
+2020	
+2027	
+2034	
+2041	
+2048	
+2055	
+2062
+Distance From Cracking RSA 2048
+Projected Progress In Quantum Computing
+Current rate of
+progress (Google):
+doubling qubits and
+reducing error rate by
+40% every 4 years
+Aggressive Case
+Moore's Law
+doubling in qubit
+count and error
+rate reduction
+every 2 years
+Acceleration
+Case
+Doubling
+qubit count
+and error
+reductions
+every 3
+years
+Status Quo
+Case
+Doubling
+qubit count
+and error
+reductions
+every 4
+years
+2044 	2054
+A disruptive technology requires a steep cost
+decline crossing key price-points that open
+compelling unit economics across multiple
+sectors and serves as a platform for additional
+technological innovation.
+Quantum computing's performance
+improvement curve has been slow. Despite
+spending billions in research and development
+(R&D), Google doubled qubits only once in more
+than four years. Even if its performance and
+costs were to improve markedly, achieving
+Moore's Law's pace, quantum computing would
+not be useful for cryptographic decryption until
+the 2040s.
+2063
+Note: A "qubit" (quantum bit) is the fundamental unit of information in a quantum computer. Moore's Law is the empirical observation that the number of transistors on an integrated circuit doubles approximately every
+two years. Source: ARK Investment Management LLC, 2026, based on data from Arute et al. 2019, Gambette 2023, Quantinuum 2024, and Neven 2024. In addition to those sources, certain information presented may be the
+result of ARK's internal analyses, which draw on various additional sources of information. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any
+particular security. Past performance is not indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+100%
+90%
+0%
+10%
+20%
+30%
+40%
+50%
+60%
+70%
+80%
+
+-- 12 of 111 --
+
+0%
+10%
+20%
+30%
+40%
+50%
+60%
+70%
+2000 2005 2010 2015 2020 2025 2030
+Innovation Share
+Of Global Equity Market Capitalization
+(Percent)
+0
+50
+100
+150
+200
+250
+300
+2015
+2.5%
+4.5%
+-0.5%
+2020
+2.6%
+7.8%
+18.0%
+2030E
+9%
+-4%
+35%
+2025
+6.4%
+4.3%
+20.0%
+2000
+5-Year
+Annual
+Growth
+Rates
+2005
+7.0%
+11.0%
+3.6%
+2010
+6.9%
+6.2%
+-2.7%
+Nominal GDP
+Innovation Market Cap
+Non-Innovation Market Cap
+Disruptive Technologies Could Grow To Dominate Global Markets
+Note: Innovation market cap includes non-stablecoin crypto assets. Pre-2015 innovation market cap is tech sector share of global markets. Source: ARK Investment Management LLC, 2026, based on data from International
+Monetary Fund 2025, Crunchbase 2026, World Federation of Exchanges 2026, and Bureau of Labor Statistics 2026, and MSCI Inc. 2026. For informational purposes only and should not be considered investment advice or a
+recommendation to buy, sell, or hold any particular security. Past performance is not indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+ARK Big Ideas 2026: The Great Acceleration
+1870
+Railroad
+Share Of
+US Equity
+Market
+Crypto
+Venture Unicorns
+Public Innovation
+Nominal GDP
+Non-Innovation
+Innovation
+($ Trillions, Nominal)
+2030E
+13
+
+-- 13 of 111 --
+
+14 	ARK Big Ideas 2026: The Great Acceleration
+Artificial Intelligence
+Computational systems and software that evolve with data
+can solve intractable problems, automate knowledge work,
+and accelerate technology's integration into every economic
+sector. The adoption of Neural Networks should prove more
+momentous than electrification and potentially create tens of
+trillions of dollars of value. At scale, these systems will
+require unprecedented computational resources, and AI-
+specific compute hardware should dominate the Next Gen
+Cloud data centers that train and operate AI models. The
+potential for end-users is clear: a constellation of AI-driven
+Intelligent Devices that permeate people's lives, changing the
+way that they spend, work, and play. The adoption of artificial
+intelligence should transform every sector, impact every
+business, and catalyze every innovation platform.
+Source: ARK Investment Management LLC, 2026. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular security. Past performance is not
+indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+
+-- 14 of 111 --
+
+ARK Big Ideas 2026: The Great Acceleration
+Energy Storage
+The declining costs of Advanced Battery Technology should
+cause an explosion in form factors, enabling Autonomous
+Mobility systems that collapse the cost of transportation.
+Electric drivetrain cost declines should unlock micro-mobility
+and aerial systems, including flying taxis, enabling business
+models that transform cities. Autonomy should reduce the
+cost of taxi, delivery, and surveillance by an order of
+magnitude, enabling frictionless transport that will increase
+the velocity of e-commerce and make individual car
+ownership the exception rather than the rule. These
+innovations combined with large-scale stationary batteries
+and Distributed Energy Generation, notably solar and small-
+scale fission, should address surging power demand from AI
+data centers while substituting electricity for liquid fuel and
+increasing system-wide resilience, reliability, and flexibility.
+Source: ARK Investment Management LLC, 2026. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular security. Past performance is not
+indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+15
+
+-- 15 of 111 --
+
+ARK Big Ideas 2026: The Great Acceleration
+Multiomics
+The cost to gather, sequence, and understand digital biological
+data is falling precipitously. Multiomics Technologies provide
+research scientists, therapeutic organizations, and health
+platforms with unprecedented access to DNA, RNA, protein, and
+digital health data. Cancer care should transform with pan-
+cancer blood tests, and molecular diagnostics should begin to
+identify and categorize a panoply of diseases. Fed by rich
+multiomics data and powered by Programmable Biology, AI
+systems running autonomous labs could collapse the cost of
+drug discovery, development, and trials, transforming returns in
+a sector that has stagnated. Biological discoveries should power
+novel Precision Therapies that target and cure rare diseases and
+chronic conditions, unlocking profound economics. Over time,
+the design and synthesis of novel biological constructs will yield
+advances in agriculture, material science, and even computation.
+Source: ARK Investment Management LLC, 2026. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular security. Past performance is not
+indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+16
+
+-- 16 of 111 --
+
+ARK Big Ideas 2026: The Great Acceleration
+Public Blockchains
+Upon large-scale adoption, all money and contracts
+could migrate onto Public Blockchains that enable and
+verify digital scarcity and proof of ownership. The
+financial ecosystem is likely to reconfigure to
+accommodate the rise of Cryptocurrencies—including
+stablecoins that bridge traditional finance and
+decentralized networks—and Smart Contracts. These
+technologies should increase transparency, reduce the
+influence of capital and regulatory controls, and
+collapse the costs of contract execution. In such a
+world, Digital Wallets will become increasingly
+necessary as more assets become money-like and
+corporations and consumers adapt to the new financial
+infrastructure. As these wallets evolve into AI-driven
+purchasing agents, they could become powerful
+distribution platforms for digital services. Corporate
+structures could be called into question.
+Source: ARK Investment Management LLC, 2026. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular security. Past performance is not
+indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+17
+
+-- 17 of 111 --
+
+ARK Big Ideas 2026: The Great Acceleration
+Robotics
+Catalyzed by artificial intelligence, Humanoid Robots should
+operate alongside humans and navigate legacy infrastructure,
+changing the way products are made and sold, and eventually
+the way we live our lives. Specialized Robots—from industrial
+arms to surgical and warehouse systems—should proliferate as
+AI collapses the cost of integration, embedding automation into
+every operational process across manufacturing, logistics,
+healthcare, and the physical world. Meanwhile, Reusable Rockets
+should continue to reduce the cost of launching satellite
+constellations, enable uninterruptible connectivity and earth
+observation, and open the frontier for space-based compute
+infrastructure unconstrained by terrestrial power and cooling
+limitations. A nascent innovation platform, robotics could
+collapse the cost of transporting across distance with
+hypersonic travel, the cost of manufacturing complexity with
+specialized systems, and the cost of physical work with AI-
+guided humanoid robots.
+Source: ARK Investment Management LLC, 2026. For informational purposes only and should not be considered investment advice or a recommendation to buy, sell, or hold any particular security. Past performance is not
+indicative of future results. Forecasts are inherently limited and cannot be relied upon.
+18
+
+-- 18 of 111 --
+
+================================================================================

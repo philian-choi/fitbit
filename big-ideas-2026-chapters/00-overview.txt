@@ -1,0 +1,38 @@
+================================================================================
+ARK Big Ideas 2026 - Executive Summary & Investment Overview
+================================================================================
+
+## 1. 보고서 개요 (Report Overview)
+
+*   **제목**: ARK Big Ideas 2026: The Great Acceleration
+*   **핵심 주제**: AI를 중심으로 한 5대 혁신 플랫폼(AI, 블록체인, 로보틱스, 에너지 저장, 멀티오믹스)의 융합이 거시경제의 폭발적 성장(Step-function change)을 견인.
+*   **경제적 파급력**: 혁신 기술들은 2030년까지 실질 GDP 성장률을 연평균 7% 이상으로 끌어올리고, 주식 시장 내 혁신 기업의 비중을 획기적으로 높일 전망.
+
+## 2. 13대 핵심 아이디어 및 투자 테마 (13 Big Ideas)
+
+| # | 테마 (Theme) | 핵심 내용 및 투자 포인트 | 주요 관련 기업 (Top Picks & Watchlist) |
+|---|---|---|---|
+| 01 | **The Great Acceleration** | 기술 융합으로 인한 경제 성장 가속화. | (거시경제 전반) |
+| 02 | **AI Infrastructure** | AI 인프라 투자 $1.4T 규모로 성장. 추론 비용 99% 하락. | **Nvidia, AMD, Broadcom, TSMC**, Amazon, Google |
+| 03 | **AI Consumer OS** | AI 에이전트가 소비/검색의 주체가 됨. 검색 광고 시장 재편. | **Google, Meta, Apple**, OpenAI, Perplexity, Shopify |
+| 04 | **AI Productivity** | 코딩/지식 노동 비용 '0' 수렴. AI 네이티브 SaaS 폭발적 성장. | **Cursor, OpenAI, Anthropic**, Microsoft |
+| 05 | **Bitcoin** | 국가/기관의 전략적 자산화. '디지털 금'으로서 $28T 시장 조준. | **Bitcoin**, Coinbase, Block, MicroStrategy |
+| 06 | **Tokenized Assets** | 국채, 펀드 등 실물 자산(RWA)의 온체인화. 스테이블코인 결제 급증. | **BlackRock, Circle, Tether**, Ethereum, Solana |
+| 07 | **DeFi Applications** | 금융 앱 매출 사상 최고치. 핀테크와 DeFi의 경계 붕괴. | **Hyperliquid, Aave, Lido**, Coinbase, Robinhood |
+| 08 | **Multiomics** | 유전자 가위로 난치병 '완치' 시대 개막. AI 신약 개발 혁명. | **CRISPR Tx, Intellia, Beam**, Illumina, Recursion |
+| 09 | **Reusable Rockets** | 발사 비용 $100/kg 시대로. 위성 통신 매출 $160B 전망. | **SpaceX**, T-Mobile, Iridium |
+| 10 | **Robotics** | 범용 휴머노이드 로봇 상용화 임박. $26T 노동 시장 자동화. | **Tesla (Optimus), Amazon**, Agility Robotics, Teradyne |
+| 11 | **Distributed Energy** | AI 전력 수요 대응을 위한 ESS 및 소형 원전(SMR) 급성장. | **Tesla (Energy), Fluence**, Oklo, Cameco, NextEra |
+| 12 | **Autonomous Vehicles** | 로보택시 마일당 비용 $0.25로 하락. 플랫폼 기업 승자 독식. | **Tesla (Cybercab), Waymo**, Uber, Baidu |
+| 13 | **Autonomous Logistics** | 드론/로봇 배송 상용화. 물류 비용 90% 이상 절감. | **Amazon, Zipline, Wing**, Aurora, Kodiak |
+
+## 3. 2026년 투자 전략 제언 (Strategic Recommendations)
+
+1.  **AI 인프라 & 하드웨어**: 여전히 강력한 성장세. GPU뿐만 아니라 추론용 ASIC(Broadcom 등)과 전력 인프라(에너지 저장, SMR)로 시야 확대 필요.
+2.  **AI 애플리케이션**: 인프라 투자가 앱 매출로 연결되는 시점. 압도적 생산성을 보여주는 AI 네이티브 소프트웨어(Cursor 등)와 소비자 플랫폼에 주목.
+3.  **비트코인 & 블록체인**: 단순 투기를 넘어선 '제도권 자산' 및 '금융 인프라'로서의 비중 확대 유효.
+4.  **바이오 & 헬스케어**: AI와 결합된 유전자 편집 기술은 가장 저평가된 혁신 분야 중 하나일 가능성 높음.
+5.  **물리적 AI (Physical AI)**: 자율주행(Tesla)과 로보틱스는 AI가 현실 세계의 비용 구조를 파괴하는 가장 거대한 시장임.
+
+================================================================================
+*본 요약본은 ARK Big Ideas 2026 보고서의 전체 내용을 바탕으로 투자자를 위해 핵심 정보만을 추출하여 재구성한 것입니다.*
