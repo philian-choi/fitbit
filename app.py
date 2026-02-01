@@ -7,7 +7,7 @@ import plotly.graph_objects as go
 import os
 
 # --- Configuration ---
-st.set_page_config(page_title="Weekly DCA Report", layout="wide")
+st.set_page_config(page_title="Weekly DCA Report", layout="wide", initial_sidebar_state="collapsed")
 
 # Get API Key from Environment Variable (Best Practice for Vercel)
 # If not found, try to use the hardcoded one (fallback) or show warning
@@ -82,6 +82,69 @@ def get_stock_data(tickers):
             
     return pd.DataFrame(data)
 
+# --- Language Settings ---
+lang = st.sidebar.radio("Language / 언어", ["English", "한국어"])
+
+# Text Dictionary
+text = {
+    "English": {
+        "title": "📅 Weekly DCA Investment Report",
+        "date": "Date",
+        "strategy": "Strategy: Wide Moat & Long-term Growth",
+        "macro_header": "1. Macro Environment (Investment Weather)",
+        "fed_rate": "Fed Funds Rate",
+        "target_range": "Target Range",
+        "m2_growth": "M2 Money Supply (YoY)",
+        "liquidity": "Liquidity Trend",
+        "stance": "Current Stance",
+        "green": "🟢 GREEN (Aggressive)",
+        "red": "🔴 RED (Defensive)",
+        "yellow": "🟡 YELLOW (Balanced)",
+        "portfolio_header": "2. Portfolio Health Check",
+        "refresh": "🔄 Refresh Data",
+        "fetching": "Fetching latest market data...",
+        "insights": "💡 Key Insights",
+        "oversold": "Oversold. Strong Buy signal for DCA.",
+        "overbought": "Overbought. Consider reducing buy amount this week.",
+        "drawdown": "Trading below highs. Good accumulation zone.",
+        "calc_header": "3. Smart DCA Calculator",
+        "calc_desc": "Based on your monthly budget of **${}** and current market conditions:",
+        "buy_more": "BUY MORE (Cheap)",
+        "buy_less": "BUY LESS (Expensive)",
+        "normal": "NORMAL",
+        "footer": "Data Sources: Yahoo Finance, FRED API. This is for informational purposes only."
+    },
+    "한국어": {
+        "title": "📅 주간 DCA 투자 리포트",
+        "date": "날짜",
+        "strategy": "전략: 확실한 해자(Moat) & 장기 성장",
+        "macro_header": "1. 매크로 환경 (투자 날씨)",
+        "fed_rate": "연방기금금리",
+        "target_range": "목표 범위",
+        "m2_growth": "M2 통화량 (전년비)",
+        "liquidity": "유동성 추세",
+        "stance": "현재 포지션",
+        "green": "🟢 초록불 (공격적 투자)",
+        "red": "🔴 빨간불 (방어적 투자)",
+        "yellow": "🟡 노란불 (균형 투자)",
+        "portfolio_header": "2. 포트폴리오 건강 진단",
+        "refresh": "🔄 데이터 새로고침",
+        "fetching": "최신 시장 데이터를 가져오는 중...",
+        "insights": "💡 핵심 인사이트",
+        "oversold": "과매도 구간. 강력한 추가 매수 기회입니다.",
+        "overbought": "과매수 구간. 이번 주 매수량을 줄이는 것을 고려하세요.",
+        "drawdown": "고점 대비 하락 중. 장기 적립하기 좋은 구간입니다.",
+        "calc_header": "3. 스마트 DCA 계산기",
+        "calc_desc": "월 투자금 **${}**와 현재 시장 상황을 반영한 추천 매수액:",
+        "buy_more": "더 사세요 (저평가)",
+        "buy_less": "덜 사세요 (고평가)",
+        "normal": "정량 매수",
+        "footer": "데이터 출처: Yahoo Finance, FRED API. 이 정보는 투자 참고용입니다."
+    }
+}
+
+t = text[lang]
+
 # --- 2. Sidebar: Portfolio Settings ---
 st.sidebar.header("💼 My Portfolio Settings")
 portfolio_input = {
@@ -94,31 +157,31 @@ portfolio_input = {
 monthly_investment = st.sidebar.number_input("Monthly DCA Amount ($)", value=1000)
 
 # --- 3. Main Dashboard ---
-st.title(f"📅 Weekly DCA Investment Report")
-st.markdown(f"**Date:** {datetime.now().strftime('%Y-%m-%d')} | **Strategy:** Wide Moat & Long-term Growth")
+st.title(t["title"])
+st.markdown(f"**{t['date']}:** {datetime.now().strftime('%Y-%m-%d')} | **{t['strategy']}**")
 
 # Section 1: Macro Environment
-st.header("1. Macro Environment (Investment Weather)")
+st.header(t["macro_header"])
 fed_rate, m2_growth = get_macro_data()
 
 col1, col2, col3 = st.columns(3)
 with col1:
-    st.metric("Fed Funds Rate", f"{fed_rate:.2f}%", "Target Range")
+    st.metric(t["fed_rate"], f"{fed_rate:.2f}%", t["target_range"])
 with col2:
-    st.metric("M2 Money Supply (YoY)", f"+{m2_growth:.2f}%", "Liquidity Trend")
+    st.metric(t["m2_growth"], f"+{m2_growth:.2f}%", t["liquidity"])
 with col3:
-    status = "🟢 GREEN (Aggressive)"
-    if fed_rate > 4.5 or m2_growth < 0: status = "🔴 RED (Defensive)"
-    elif fed_rate > 3.0: status = "🟡 YELLOW (Balanced)"
-    st.info(f"**Current Stance:** {status}")
+    status = t["green"]
+    if fed_rate > 4.5 or m2_growth < 0: status = t["red"]
+    elif fed_rate > 3.0: status = t["yellow"]
+    st.info(f"**{t['stance']}:** {status}")
 
 # Section 2: Portfolio Health
-st.header("2. Portfolio Health Check")
+st.header(t["portfolio_header"])
 
-if st.button("🔄 Refresh Data"):
+if st.button(t["refresh"]):
     st.cache_data.clear()
 
-with st.spinner('Fetching latest market data...'):
+with st.spinner(t["fetching"]):
     df = get_stock_data(portfolio_input.keys())
 
 if not df.empty:
@@ -133,23 +196,23 @@ if not df.empty:
                  use_container_width=True)
 
     # Insights Generation
-    st.subheader("💡 Key Insights")
+    st.subheader(t["insights"])
     for index, row in df.iterrows():
         ticker = row['Ticker']
         rsi = row['RSI']
         dd = row['Drawdown']
         
         if rsi < 35:
-            st.success(f"**{ticker}**: RSI is {rsi} (Oversold). Strong Buy signal for DCA.")
+            st.success(f"**{ticker}**: RSI {rsi} - {t['oversold']}")
         elif rsi > 70:
-            st.warning(f"**{ticker}**: RSI is {rsi} (Overbought). Consider reducing buy amount this week.")
+            st.warning(f"**{ticker}**: RSI {rsi} - {t['overbought']}")
         
         if dd < -20:
-            st.info(f"**{ticker}**: Trading {dd}% below highs. Good accumulation zone for long-term.")
+            st.info(f"**{ticker}**: {dd}% {t['drawdown']}")
 
     # Section 3: Rebalancing Calculator
-    st.header("3. Smart DCA Calculator")
-    st.write(f"Based on your monthly budget of **${monthly_investment}** and current market conditions:")
+    st.header(t["calc_header"])
+    st.write(t["calc_desc"].format(monthly_investment))
 
     rebalance_plan = []
     for ticker, target_pct in portfolio_input.items():
@@ -160,13 +223,13 @@ if not df.empty:
             rsi = ticker_data['RSI'].values[0]
             adjusted_weight = target_pct
             
-            action = "NORMAL"
+            action = t["normal"]
             if rsi < 40: 
                 adjusted_weight *= 1.2 # Buy 20% more if cheap
-                action = "BUY MORE (Cheap)"
+                action = t["buy_more"]
             elif rsi > 70: 
                 adjusted_weight *= 0.8 # Buy 20% less if expensive
-                action = "BUY LESS (Expensive)"
+                action = t["buy_less"]
             
             # Normalize weights later or just show suggested amount
             amount = monthly_investment * (adjusted_weight / 100)
@@ -186,4 +249,4 @@ else:
 
 # Footer
 st.markdown("---")
-st.caption("Data Sources: Yahoo Finance, FRED API. This is for informational purposes only.")
+st.caption(t["footer"])
