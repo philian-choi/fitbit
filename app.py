@@ -17,7 +17,105 @@ except LookupError:
     nltk.download('punkt')
 
 # --- Configuration ---
-st.set_page_config(page_title="Weekly DCA Report", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(
+    page_title="Weekly DCA Report", 
+    layout="wide", 
+    initial_sidebar_state="collapsed",
+    page_icon="📈"
+)
+
+# --- Custom CSS for Better UX ---
+st.markdown("""
+<style>
+    /* Main container styling */
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    
+    /* Card styling */
+    .stMetric {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 1rem;
+        border-radius: 12px;
+        color: white;
+    }
+    
+    /* Signal cards */
+    .signal-card {
+        padding: 1.5rem;
+        border-radius: 16px;
+        margin: 0.5rem 0;
+        text-align: center;
+    }
+    .signal-green {
+        background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        color: white;
+    }
+    .signal-yellow {
+        background: linear-gradient(135deg, #F2994A 0%, #F2C94C 100%);
+        color: white;
+    }
+    .signal-red {
+        background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+        color: white;
+    }
+    
+    /* Action card */
+    .action-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 2rem;
+        border-radius: 20px;
+        color: white;
+        text-align: center;
+        margin: 1rem 0;
+    }
+    .action-card h2 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+    .action-card .amount {
+        font-size: 3rem;
+        font-weight: bold;
+        margin: 1rem 0;
+    }
+    
+    /* Tooltip styling */
+    .tooltip {
+        position: relative;
+        display: inline-block;
+        border-bottom: 1px dotted #666;
+        cursor: help;
+    }
+    
+    /* Progress bar for RSI */
+    .rsi-gauge {
+        height: 20px;
+        border-radius: 10px;
+        background: linear-gradient(to right, #38ef7d 0%, #F2C94C 50%, #eb3349 100%);
+        position: relative;
+    }
+    
+    /* Info boxes */
+    .info-box {
+        background: #f0f2f6;
+        padding: 1rem;
+        border-radius: 10px;
+        border-left: 4px solid #667eea;
+        margin: 0.5rem 0;
+    }
+    
+    /* Hide Streamlit branding */
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    
+    /* Better table styling */
+    .dataframe {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+</style>
+""", unsafe_allow_html=True)
 
 # --- Password Protection ---
 def check_password():
@@ -53,119 +151,239 @@ if not check_password():
 
 # --- Language Settings ---
 if "lang" not in st.session_state:
-    st.session_state["lang"] = "English"
+    st.session_state["lang"] = "한국어"
 
 lang_selection = st.sidebar.radio(
     "Language / 언어", 
     ["English", "한국어"],
-    index=0 if st.session_state["lang"] == "English" else 1
+    index=1 if st.session_state["lang"] == "한국어" else 0
 )
-st.session_state["lang"] = lang_selection if lang_selection else "English"
+st.session_state["lang"] = lang_selection if lang_selection else "한국어"
 lang = st.session_state["lang"]
 
-# Text Dictionary
+# Text Dictionary - Enhanced with beginner-friendly explanations
 text = {
     "English": {
-        "title": "📅 Weekly DCA Investment Report",
+        "title": "📈 Weekly Investment Helper",
+        "subtitle": "Your friendly guide to smarter investing",
         "date": "Date",
-        "strategy": "Strategy: Wide Moat & Long-term Growth",
-        "macro_header": "1. Macro Environment (Investment Weather)",
-        "fed_rate": "Fed Funds Rate",
-        "target_range": "Target Range",
-        "m2_growth": "M2 Money Supply (YoY)",
-        "liquidity": "Liquidity Trend",
-        "stance": "Current Stance",
-        "green": "🟢 GREEN (Aggressive)",
-        "red": "🔴 RED (Defensive)",
-        "yellow": "🟡 YELLOW (Balanced)",
-        "portfolio_header": "2. Portfolio Health Check",
+        "strategy": "Strategy: Buy quality stocks regularly",
+        
+        # Beginner Guide
+        "guide_title": "🎓 Quick Start Guide",
+        "guide_dca": "**DCA (Dollar Cost Averaging)**: Instead of timing the market, invest a fixed amount regularly. This reduces risk!",
+        "guide_rsi": "**RSI (Relative Strength Index)**: Think of it as a 'sale detector'. Below 30 = On Sale! Above 70 = Overpriced!",
+        "guide_drawdown": "**Drawdown**: How far the price has fallen from its peak. Bigger drops = bigger discounts!",
+        
+        # Macro Section
+        "macro_header": "🌤️ Market Weather Report",
+        "macro_desc": "Just like checking the weather before going out, check the market conditions before investing!",
+        "fed_rate": "Interest Rate",
+        "fed_rate_help": "Higher rates = harder for companies to borrow = stocks may fall",
+        "m2_growth": "Money Supply Growth",
+        "m2_help": "More money in the economy = good for stocks",
+        "target_range": "Fed Target",
+        "liquidity": "YoY Change",
+        "stance": "Investment Weather",
+        "green": "☀️ SUNNY - Great time to invest more!",
+        "red": "🌧️ RAINY - Be careful, invest less",
+        "yellow": "⛅ CLOUDY - Normal investing is fine",
+        
+        # Portfolio Section
+        "portfolio_header": "💼 Your Portfolio Checkup",
+        "portfolio_desc": "Let's see how your stocks are doing today!",
         "refresh": "🔄 Refresh Data",
-        "fetching": "Fetching latest market data...",
-        "insights": "💡 Key Insights",
-        "oversold": "Oversold. Strong Buy signal for DCA.",
-        "overbought": "Overbought. Consider reducing buy amount this week.",
-        "drawdown": "Trading below highs. Good accumulation zone.",
-        "calc_header": "3. Smart DCA Calculator",
-        "calc_desc": "Based on your monthly budget of **${}** and current market conditions:",
-        "buy_more": "BUY MORE (Cheap)",
-        "buy_less": "BUY LESS (Expensive)",
-        "normal": "NORMAL",
-        "footer": "Data Sources: Yahoo Finance, FRED API. This is for informational purposes only.",
-        "news_header": "📰 Latest News & Policy Updates",
-        "no_news": "No recent news found.",
-        "discovery_header": "🔍 Hidden Gem Finder (Opportunity Scanner)",
-        "discovery_desc": "Scanning watchlist for oversold opportunities (RSI < 30)..."
+        "fetching": "Getting the latest prices...",
+        "insights": "💡 What Should I Do?",
+        "oversold": "🟢 ON SALE! Great time to buy more.",
+        "overbought": "🔴 EXPENSIVE! Maybe buy less this week.",
+        "drawdown": "📉 Price dropped from peak. Could be a good entry point!",
+        
+        # Calculator Section
+        "calc_header": "🧮 This Week's Buy Plan",
+        "calc_desc": "Based on your **${}** monthly budget, here's what I suggest:",
+        "buy_more": "🟢 BUY MORE",
+        "buy_less": "🔴 BUY LESS", 
+        "normal": "⚪ NORMAL",
+        "total_action": "💰 Total to Invest This Week",
+        
+        # Discovery Section
+        "discovery_header": "🔍 Bargain Hunter",
+        "discovery_desc": "Looking for stocks on sale in your watchlist...",
+        "discovery_found": "Found {} stocks on sale!",
+        "discovery_none": "No big sales right now. The market is fairly priced.",
+        
+        # News Section
+        "news_header": "📰 Important News",
+        "no_news": "No major news for this stock.",
+        
+        # Footer
+        "footer": "Data from Yahoo Finance & FRED. This is not financial advice - always do your own research!",
+        
+        # RSI Gauge Labels
+        "rsi_oversold": "On Sale!",
+        "rsi_normal": "Fair Price",
+        "rsi_overbought": "Expensive!",
+        
+        # Action Summary
+        "action_summary": "📋 Today's Action Plan",
+        "action_total": "Total Investment",
+        "action_stocks": "stocks to buy"
     },
     "한국어": {
-        "title": "📅 주간 DCA 투자 리포트",
+        "title": "📈 주간 투자 도우미",
+        "subtitle": "똑똑한 투자를 위한 친절한 가이드",
         "date": "날짜",
-        "strategy": "전략: 확실한 해자(Moat) & 장기 성장",
-        "macro_header": "1. 매크로 환경 (투자 날씨)",
-        "fed_rate": "연방기금금리",
-        "target_range": "목표 범위",
-        "m2_growth": "M2 통화량 (전년비)",
-        "liquidity": "유동성 추세",
-        "stance": "현재 포지션",
-        "green": "🟢 초록불 (공격적 투자)",
-        "red": "🔴 빨간불 (방어적 투자)",
-        "yellow": "🟡 노란불 (균형 투자)",
-        "portfolio_header": "2. 포트폴리오 건강 진단",
-        "refresh": "🔄 데이터 새로고침",
-        "fetching": "최신 시장 데이터를 가져오는 중...",
-        "insights": "💡 핵심 인사이트",
-        "oversold": "과매도 구간. 강력한 추가 매수 기회입니다.",
-        "overbought": "과매수 구간. 이번 주 매수량을 줄이는 것을 고려하세요.",
-        "drawdown": "고점 대비 하락 중. 장기 적립하기 좋은 구간입니다.",
-        "calc_header": "3. 스마트 DCA 계산기",
-        "calc_desc": "월 투자금 **${}**와 현재 시장 상황을 반영한 추천 매수액:",
-        "buy_more": "더 사세요 (저평가)",
-        "buy_less": "덜 사세요 (고평가)",
-        "normal": "정량 매수",
-        "footer": "데이터 출처: Yahoo Finance, FRED API. 이 정보는 투자 참고용입니다.",
-        "news_header": "📰 최신 뉴스 및 정책 업데이트",
-        "no_news": "최근 관련 뉴스가 없습니다.",
-        "discovery_header": "🔍 숨겨진 보석 찾기 (기회 스캐너)",
-        "discovery_desc": "관심 종목 중 과매도(RSI < 30) 상태인 종목을 스캔합니다..."
+        "strategy": "전략: 좋은 주식을 꾸준히 사기",
+        
+        # Beginner Guide
+        "guide_title": "🎓 초보자 가이드",
+        "guide_dca": "**적립식 투자 (DCA)**: 타이밍 맞추려 하지 말고, 매주/매월 일정 금액을 투자하세요. 리스크가 줄어듭니다!",
+        "guide_rsi": "**RSI (상대강도지수)**: '세일 감지기'라고 생각하세요. 30 이하 = 세일 중! 70 이상 = 비쌈!",
+        "guide_drawdown": "**낙폭**: 최고점에서 얼마나 떨어졌는지. 많이 떨어졌다 = 할인 중!",
+        
+        # Macro Section
+        "macro_header": "🌤️ 시장 날씨 리포트",
+        "macro_desc": "외출 전 날씨 확인하듯, 투자 전 시장 상황을 확인하세요!",
+        "fed_rate": "기준금리",
+        "fed_rate_help": "금리가 높으면 → 기업이 돈 빌리기 어려움 → 주가 하락 가능",
+        "m2_growth": "통화량 증가율",
+        "m2_help": "시중에 돈이 많아지면 → 주식에 좋음",
+        "target_range": "연준 목표",
+        "liquidity": "전년 대비",
+        "stance": "투자 날씨",
+        "green": "☀️ 맑음 - 적극 투자 OK!",
+        "red": "🌧️ 비 - 조심! 투자 줄이기",
+        "yellow": "⛅ 흐림 - 평소대로 투자",
+        
+        # Portfolio Section
+        "portfolio_header": "💼 내 포트폴리오 건강검진",
+        "portfolio_desc": "오늘 내 주식들은 어떤 상태일까요?",
+        "refresh": "🔄 새로고침",
+        "fetching": "최신 가격 가져오는 중...",
+        "insights": "💡 지금 뭘 해야 할까요?",
+        "oversold": "🟢 세일 중! 더 사기 좋은 타이밍이에요.",
+        "overbought": "🔴 비싸요! 이번 주는 덜 사는 게 좋겠어요.",
+        "drawdown": "📉 고점 대비 하락 중. 좋은 매수 기회일 수 있어요!",
+        
+        # Calculator Section
+        "calc_header": "🧮 이번 주 매수 계획",
+        "calc_desc": "월 투자금 **${}** 기준, 이번 주 추천 매수액입니다:",
+        "buy_more": "🟢 더 사세요",
+        "buy_less": "🔴 덜 사세요",
+        "normal": "⚪ 평소대로",
+        "total_action": "💰 이번 주 총 투자액",
+        
+        # Discovery Section
+        "discovery_header": "🔍 세일 종목 찾기",
+        "discovery_desc": "관심 종목 중 할인 중인 주식을 찾고 있어요...",
+        "discovery_found": "{}개 종목이 세일 중이에요!",
+        "discovery_none": "지금은 큰 세일이 없어요. 시장이 적정 가격이에요.",
+        
+        # News Section
+        "news_header": "📰 중요 뉴스",
+        "no_news": "이 종목의 주요 뉴스가 없습니다.",
+        
+        # Footer
+        "footer": "데이터 출처: Yahoo Finance, FRED. 투자 조언이 아닙니다 - 항상 본인의 판단으로 투자하세요!",
+        
+        # RSI Gauge Labels
+        "rsi_oversold": "세일!",
+        "rsi_normal": "적정가",
+        "rsi_overbought": "비쌈!",
+        
+        # Action Summary
+        "action_summary": "📋 오늘의 액션 플랜",
+        "action_total": "총 투자금액",
+        "action_stocks": "개 종목 매수"
     }
 }
 
-t = text.get(lang, text["English"]) # Safer access with default
+t = text.get(lang, text["한국어"])
 
-# Get API Key from Environment Variable (Best Practice for Vercel)
-# If not found, try to use the hardcoded one (fallback) or show warning
+# Get API Key from Environment Variable
 FRED_API_KEY = os.environ.get('FRED_API_KEY')
 if not FRED_API_KEY:
-    # Fallback for local testing if env var not set, but warn user
     FRED_API_KEY = '10b52d62b316f7f27fd58a6111c80adf' 
-    # In production, it's better not to hardcode keys in code.
-    # On Vercel, you will set FRED_API_KEY in the Environment Variables settings.
+
+# --- Helper Functions for Visual Elements ---
+def create_rsi_gauge(rsi_value, ticker):
+    """Create a visual RSI gauge using Plotly"""
+    # Determine color based on RSI
+    if rsi_value < 30:
+        color = "#38ef7d"
+        status = t["rsi_oversold"]
+    elif rsi_value > 70:
+        color = "#eb3349"
+        status = t["rsi_overbought"]
+    else:
+        color = "#F2C94C"
+        status = t["rsi_normal"]
+    
+    fig = go.Figure(go.Indicator(
+        mode="gauge+number",
+        value=rsi_value,
+        domain={'x': [0, 1], 'y': [0, 1]},
+        title={'text': f"{ticker}<br><span style='font-size:0.8em;color:{color}'>{status}</span>"},
+        gauge={
+            'axis': {'range': [0, 100], 'tickwidth': 1},
+            'bar': {'color': color},
+            'bgcolor': "white",
+            'borderwidth': 2,
+            'bordercolor': "gray",
+            'steps': [
+                {'range': [0, 30], 'color': 'rgba(56, 239, 125, 0.3)'},
+                {'range': [30, 70], 'color': 'rgba(242, 201, 76, 0.3)'},
+                {'range': [70, 100], 'color': 'rgba(235, 51, 73, 0.3)'}
+            ],
+            'threshold': {
+                'line': {'color': "black", 'width': 4},
+                'thickness': 0.75,
+                'value': rsi_value
+            }
+        }
+    ))
+    fig.update_layout(
+        height=200,
+        margin=dict(l=20, r=20, t=50, b=20),
+        font={'size': 14}
+    )
+    return fig
+
+def get_signal_html(status_type, message):
+    """Generate HTML for signal cards"""
+    class_name = f"signal-{status_type}"
+    return f'<div class="signal-card {class_name}"><h3>{message}</h3></div>'
+
+def get_action_card_html(amount, num_stocks, label):
+    """Generate HTML for action summary card"""
+    return f'''
+    <div class="action-card">
+        <h2>{label}</h2>
+        <div class="amount">${amount:,.0f}</div>
+        <p>{num_stocks} {t["action_stocks"]}</p>
+    </div>
+    '''
 
 # --- 1. Data Fetching Functions ---
-@st.cache_data(ttl=3600) # Cache data for 1 hour
+@st.cache_data(ttl=3600)
 def get_macro_data():
     if not FRED_API_KEY:
-        return 3.72, 4.6 # Mock data if no key
+        return 3.72, 4.6
         
     try:
         fred = Fred(api_key=FRED_API_KEY)
-        # Fetch latest available data (with a buffer for reporting lag)
         fed_funds = fred.get_series('FEDFUNDS', observation_start='2024-01-01').iloc[-1]
         m2 = fred.get_series('M2SL', observation_start='2024-01-01').iloc[-1]
-        last_m2 = fred.get_series('M2SL', observation_start='2023-01-01').iloc[-13] # YoY comparison
+        last_m2 = fred.get_series('M2SL', observation_start='2023-01-01').iloc[-13]
         m2_growth = ((m2 - last_m2) / last_m2) * 100
         return fed_funds, m2_growth
     except Exception as e:
-        # st.error(f"Error fetching macro data: {e}")
-        return 3.72, 4.6 # Fallback to last known values
-
-from newspaper import Article, Config
-
-# ... (existing imports)
+        return 3.72, 4.6
 
 @st.cache_data(ttl=3600)
 def get_article_summary(url):
     try:
-        # User-Agent spoofing to bypass simple anti-bot protections
         user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
         config = Config()
         config.browser_user_agent = user_agent
@@ -181,30 +399,27 @@ def get_article_summary(url):
 
 @st.cache_data(ttl=3600)
 def get_news(ticker):
-    # Multiple RSS Sources for Better Coverage
     rss_urls = [
-        f"https://finance.yahoo.com/rss/headline?s={ticker}", # Yahoo Finance
-        f"https://seekingalpha.com/api/1.0/rss/symbol/{ticker}", # Seeking Alpha (Analysis)
-        f"https://feeds.content.dowjones.com/public/rss/mw/ticker/{ticker}" # MarketWatch (News)
+        f"https://finance.yahoo.com/rss/headline?s={ticker}",
+        f"https://seekingalpha.com/api/1.0/rss/symbol/{ticker}",
+        f"https://feeds.content.dowjones.com/public/rss/mw/ticker/{ticker}"
     ]
     
     news_items = []
-    seen_titles = set() # To remove duplicates
+    seen_titles = set()
     
-    # Strict Filtering Keywords (High Impact)
     keywords = [
-        "Earnings", "Revenue", "Profit", "Guidance", "Quarter", # Financials
-        "SEC", "Regulation", "Lawsuit", "Approval", "FDA", "Ban", # Regulatory
-        "Acquisition", "Merger", "Partnership", "Contract", "Deal", # Corporate Action
-        "Launch", "Release", "Unveil", "Patent", "Breakthrough", # Product/Tech
-        "Upgrade", "Downgrade", "Target Price", "Buy", "Sell" # Analyst Action
+        "Earnings", "Revenue", "Profit", "Guidance", "Quarter",
+        "SEC", "Regulation", "Lawsuit", "Approval", "FDA", "Ban",
+        "Acquisition", "Merger", "Partnership", "Contract", "Deal",
+        "Launch", "Release", "Unveil", "Patent", "Breakthrough",
+        "Upgrade", "Downgrade", "Target Price", "Buy", "Sell"
     ]
     
-    # Noise Keywords to Exclude
     noise = [
-        "Why", "Here's", "What to know", "3 reasons", "5 stocks", "10 stocks", # Clickbait
-        "Prediction", "Could", "Might", "Opinion", "Think", "Maybe", # Speculation
-        "Motley Fool", "Zacks" # Subscription Bait
+        "Why", "Here's", "What to know", "3 reasons", "5 stocks", "10 stocks",
+        "Prediction", "Could", "Might", "Opinion", "Think", "Maybe",
+        "Motley Fool", "Zacks"
     ]
 
     for url in rss_urls:
@@ -213,18 +428,14 @@ def get_news(ticker):
             for entry in feed.entries:
                 title = entry.title
                 
-                # 0. Deduplication
                 if title in seen_titles:
                     continue
                 seen_titles.add(title)
 
-                # 1. Exclude Noise
                 if any(n in title for n in noise):
                     continue
                     
-                # 2. Include Only Key Events
                 if any(k in title for k in keywords):
-                    # Clean up summary (remove HTML tags if any)
                     raw_summary = entry.get('summary', entry.get('description', ''))
                     clean_summary = raw_summary.split('<')[0] if '<' in raw_summary else raw_summary
                     
@@ -238,8 +449,6 @@ def get_news(ticker):
         except:
             continue
             
-    # Sort by published date (if available) or just take top 5
-    # Simple sort by list order (latest usually first in RSS)
     return news_items[:5]
 
 def get_stock_data(tickers):
@@ -247,30 +456,22 @@ def get_stock_data(tickers):
     for ticker_symbol in tickers:
         try:
             stock = yf.Ticker(ticker_symbol)
-            # Use fast_info if available or fallback to info (slower)
-            # yfinance recent versions use fast_info for price
             price = stock.fast_info.last_price
             
-            # Get history for RSI
-            hist = stock.history(period="2mo") # Need enough data for 14d RSI
+            hist = stock.history(period="2mo")
             
             if len(hist) > 14:
-                # Calculate RSI
                 delta = hist['Close'].diff()
                 gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
                 loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
                 rs = gain / loss
                 rsi = 100 - (100 / (1 + rs)).iloc[-1]
             else:
-                rsi = 50 # Default if not enough data
+                rsi = 50
             
-            # Get 52w high from info (might be slower, can optimize later)
-            # For speed in Vercel (serverless), we might want to skip heavy 'info' calls if possible
-            # But let's try to get it.
             info = stock.info
             high_52 = info.get('fiftyTwoWeekHigh', price)
             
-            # Moat Logic (Simplified for demo)
             moat_score = "Strong"
             if info.get('grossMargins', 0) < 0.4 and info.get('revenueGrowth', 0) < 0.1:
                 moat_score = "Watch"
@@ -288,61 +489,13 @@ def get_stock_data(tickers):
             
     return pd.DataFrame(data)
 
-# --- 2. Sidebar: Portfolio Settings ---
-st.sidebar.header("💼 My Portfolio Settings")
-
-# Define available tickers (Core + Watchlist)
-core_tickers = ["TSLA", "NVDA", "COIN", "PLTR", "ISRG"]
-watchlist_tickers = [
-    "AMD", "AMZN", "GOOGL", "MSFT", "META", # Big Tech
-    "SHOP", "UBER", "SQ", "PYPL", "HOOD", # Fintech
-    "CRSP", "NTLA", "BEAM", "RXRX", "DNA", # Bio
-    "RKLB", "OKLO", "FLNC", "TMUS", "ASTS", # Space/Energy
-    "U", "NET", "PATH", "DKNG", "ROKU" # Growth
-]
-all_tickers = list(set(core_tickers + watchlist_tickers)) # Unique list
-
-# Multiselect widget to add/remove tickers
-selected_tickers = st.sidebar.multiselect(
-    "Select Tickers / 종목 선택",
-    options=sorted(all_tickers),
-    default=core_tickers
-)
-
-portfolio_input = {}
-total_allocation = 0
-
-st.sidebar.markdown("---")
-st.sidebar.subheader("Target Allocation (%)")
-
-for ticker in selected_tickers:
-    # Default weight logic: 100 / count (simple start)
-    default_weight = 20 if ticker in core_tickers else 0
-    weight = st.sidebar.number_input(f"{ticker} %", min_value=0, max_value=100, value=default_weight, key=f"weight_{ticker}")
-    portfolio_input[ticker] = weight
-    total_allocation += weight
-
-# Warning if allocation != 100%
-if total_allocation != 100:
-    st.sidebar.warning(f"Total: {total_allocation}% (Should be 100%)")
-else:
-    st.sidebar.success(f"Total: {total_allocation}%")
-
-monthly_investment = st.sidebar.number_input("Monthly DCA Amount ($)", value=1000)
-
-# --- Watchlist for Discovery ---
-# Use the same list for discovery, excluding currently selected portfolio
-watchlist = [ticker for ticker in all_tickers if ticker not in selected_tickers]
-
 def scan_market_opportunities(watchlist_tickers):
     opportunities = []
     for ticker_symbol in watchlist_tickers:
         try:
             stock = yf.Ticker(ticker_symbol)
-            # Use fast_info for speed
             price = stock.fast_info.last_price
             
-            # Get history for RSI (Need 14 days)
             hist = stock.history(period="1mo")
             
             if len(hist) > 14:
@@ -352,89 +505,205 @@ def scan_market_opportunities(watchlist_tickers):
                 rs = gain / loss
                 rsi = 100 - (100 / (1 + rs)).iloc[-1]
                 
-                # Condition 1: Oversold (RSI < 30) - Deep Value
                 if rsi < 30:
                     opportunities.append({
                         "Ticker": ticker_symbol,
                         "Price": price,
                         "RSI": round(rsi, 2),
-                        "Reason": "Oversold (RSI < 30)"
+                        "Reason": "🟢 세일 중! (RSI < 30)" if lang == "한국어" else "🟢 On Sale! (RSI < 30)"
                     })
-                
-                # Condition 2: Momentum Breakout (RSI crossed 50 from below? - Simplified to RSI > 50 & < 60 for now)
-                # Or maybe just check 52w low?
-                
-                # Check 52w High Drawdown
-                # Note: fast_info doesn't always have 52w high, might need info
-                # To keep it fast, let's stick to RSI for the scanner
                 
         except:
             continue
             
     return pd.DataFrame(opportunities)
 
-# --- 3. Main Dashboard ---
-st.title(t["title"])
-st.markdown(f"**{t['date']}:** {datetime.now().strftime('%Y-%m-%d')} | **{t['strategy']}**")
+# --- 2. Sidebar: Portfolio Settings ---
+st.sidebar.header("⚙️ 설정" if lang == "한국어" else "⚙️ Settings")
 
-# Section 1: Macro Environment
+# Define available tickers
+core_tickers = ["TSLA", "NVDA", "COIN", "PLTR", "ISRG"]
+watchlist_tickers = [
+    "AMD", "AMZN", "GOOGL", "MSFT", "META",
+    "SHOP", "UBER", "SQ", "PYPL", "HOOD",
+    "CRSP", "NTLA", "BEAM", "RXRX", "DNA",
+    "RKLB", "OKLO", "FLNC", "TMUS", "ASTS",
+    "U", "NET", "PATH", "DKNG", "ROKU"
+]
+all_tickers = list(set(core_tickers + watchlist_tickers))
+
+selected_tickers = st.sidebar.multiselect(
+    "종목 선택" if lang == "한국어" else "Select Tickers",
+    options=sorted(all_tickers),
+    default=core_tickers
+)
+
+portfolio_input = {}
+total_allocation = 0
+
+st.sidebar.markdown("---")
+st.sidebar.subheader("비중 설정 (%)" if lang == "한국어" else "Allocation (%)")
+
+for ticker in selected_tickers:
+    default_weight = 20 if ticker in core_tickers else 0
+    weight = st.sidebar.number_input(f"{ticker} %", min_value=0, max_value=100, value=default_weight, key=f"weight_{ticker}")
+    portfolio_input[ticker] = weight
+    total_allocation += weight
+
+if total_allocation != 100:
+    st.sidebar.warning(f"합계: {total_allocation}% (100%가 되어야 해요)" if lang == "한국어" else f"Total: {total_allocation}% (Should be 100%)")
+else:
+    st.sidebar.success(f"합계: {total_allocation}% ✓" if lang == "한국어" else f"Total: {total_allocation}% ✓")
+
+monthly_investment = st.sidebar.number_input(
+    "월 투자금 ($)" if lang == "한국어" else "Monthly Budget ($)", 
+    value=1000
+)
+
+watchlist = [ticker for ticker in all_tickers if ticker not in selected_tickers]
+
+# --- 3. Main Dashboard ---
+# Header
+st.title(t["title"])
+st.markdown(f"*{t['subtitle']}*")
+st.markdown(f"**{t['date']}:** {datetime.now().strftime('%Y-%m-%d')} | {t['strategy']}")
+
+# Beginner Guide (Collapsible)
+with st.expander(t["guide_title"], expanded=False):
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.info(t["guide_dca"])
+    with col2:
+        st.info(t["guide_rsi"])
+    with col3:
+        st.info(t["guide_drawdown"])
+
+st.markdown("---")
+
+# Section 1: Market Weather
 st.header(t["macro_header"])
+st.caption(t["macro_desc"])
+
 fed_rate, m2_growth = get_macro_data()
 
-col1, col2, col3 = st.columns(3)
+# Determine market status
+if fed_rate > 4.5 or m2_growth < 0:
+    market_status = "red"
+    status_text = t["red"]
+elif fed_rate > 3.0:
+    market_status = "yellow"
+    status_text = t["yellow"]
+else:
+    market_status = "green"
+    status_text = t["green"]
+
+col1, col2, col3 = st.columns([1, 1, 2])
+
 with col1:
-    st.metric(t["fed_rate"], f"{fed_rate:.2f}%", t["target_range"])
+    st.metric(
+        label=t["fed_rate"],
+        value=f"{fed_rate:.2f}%",
+        delta=t["target_range"],
+        help=t["fed_rate_help"]
+    )
+
 with col2:
-    st.metric(t["m2_growth"], f"+{m2_growth:.2f}%", t["liquidity"])
+    st.metric(
+        label=t["m2_growth"],
+        value=f"+{m2_growth:.2f}%",
+        delta=t["liquidity"],
+        help=t["m2_help"]
+    )
+
 with col3:
-    status = t["green"]
-    if fed_rate > 4.5 or m2_growth < 0: status = t["red"]
-    elif fed_rate > 3.0: status = t["yellow"]
-    st.info(f"**{t['stance']}:** {status}")
+    st.markdown(get_signal_html(market_status, f"{t['stance']}: {status_text}"), unsafe_allow_html=True)
+
+st.markdown("---")
 
 # Section 2: Portfolio Health
 st.header(t["portfolio_header"])
+st.caption(t["portfolio_desc"])
 
-if st.button(t["refresh"]):
-    st.cache_data.clear()
+col_refresh, col_space = st.columns([1, 5])
+with col_refresh:
+    if st.button(t["refresh"], use_container_width=True):
+        st.cache_data.clear()
 
 with st.spinner(t["fetching"]):
     df = get_stock_data(portfolio_input.keys())
 
 if not df.empty:
-    # Styling
-    def color_rsi(val):
-        if val > 70: return 'color: red; font-weight: bold'
-        elif val < 35: return 'color: green; font-weight: bold'
+    # RSI Gauges - Visual representation
+    st.subheader("📊 RSI " + ("게이지" if lang == "한국어" else "Gauges") + " - " + ("세일 감지기" if lang == "한국어" else "Sale Detector"))
+    
+    # Create columns for RSI gauges
+    num_stocks = len(df)
+    cols_per_row = min(5, num_stocks)
+    
+    for i in range(0, num_stocks, cols_per_row):
+        cols = st.columns(cols_per_row)
+        for j, col in enumerate(cols):
+            if i + j < num_stocks:
+                row = df.iloc[i + j]
+                with col:
+                    fig = create_rsi_gauge(row['RSI'], row['Ticker'])
+                    st.plotly_chart(fig, use_container_width=True)
+
+    # Data Table with better formatting
+    st.subheader("📋 " + ("상세 데이터" if lang == "한국어" else "Detailed Data"))
+    
+    # Style the dataframe
+    def style_rsi(val):
+        if val < 30:
+            return 'background-color: #d4edda; color: #155724; font-weight: bold'
+        elif val > 70:
+            return 'background-color: #f8d7da; color: #721c24; font-weight: bold'
         return ''
+    
+    def style_drawdown(val):
+        if val < -20:
+            return 'background-color: #d4edda; color: #155724'
+        return ''
+    
+    styled_df = df.style.applymap(style_rsi, subset=['RSI'])\
+                       .applymap(style_drawdown, subset=['Drawdown'])\
+                       .format({"Price": "${:.2f}", "52W High": "${:.2f}", "Drawdown": "{:.1f}%", "RSI": "{:.0f}"})
+    
+    st.dataframe(styled_df, use_container_width=True, hide_index=True)
 
-    st.dataframe(df.style.applymap(color_rsi, subset=['RSI'])
-                 .format({"Price": "${:.2f}", "52W High": "${:.2f}", "Drawdown": "{:.2f}%"}), 
-                 use_container_width=True)
-
-    # Insights Generation
+    # Insights - Clear action items
     st.subheader(t["insights"])
+    
+    insights_found = False
     for index, row in df.iterrows():
         ticker = row['Ticker']
         rsi = row['RSI']
         dd = row['Drawdown']
         
         if rsi < 35:
-            st.success(f"**{ticker}**: RSI {rsi} - {t['oversold']}")
+            st.success(f"**{ticker}** (RSI: {rsi:.0f}) - {t['oversold']}")
+            insights_found = True
         elif rsi > 70:
-            st.warning(f"**{ticker}**: RSI {rsi} - {t['overbought']}")
+            st.warning(f"**{ticker}** (RSI: {rsi:.0f}) - {t['overbought']}")
+            insights_found = True
         
         if dd < -20:
-            st.info(f"**{ticker}**: {dd}% {t['drawdown']}")
+            st.info(f"**{ticker}** ({dd:.1f}%) - {t['drawdown']}")
+            insights_found = True
+    
+    if not insights_found:
+        st.info("✅ " + ("모든 종목이 적정 가격대에 있어요. 평소대로 투자하세요!" if lang == "한국어" else "All stocks are fairly priced. Continue your regular investment!"))
 
-    # Section 3: Rebalancing Calculator
+    st.markdown("---")
+
+    # Section 3: Smart DCA Calculator
     st.header(t["calc_header"])
     st.write(t["calc_desc"].format(monthly_investment))
 
     rebalance_plan = []
+    total_suggested = 0
+    
     for ticker, target_pct in portfolio_input.items():
-        # Simple logic: Adjust allocation based on RSI (Buy more when cheap)
-        # Find RSI for this ticker
         ticker_data = df[df['Ticker'] == ticker]
         if not ticker_data.empty:
             rsi = ticker_data['RSI'].values[0]
@@ -442,42 +711,50 @@ if not df.empty:
             
             action = t["normal"]
             if rsi < 40: 
-                adjusted_weight *= 1.2 # Buy 20% more if cheap
+                adjusted_weight *= 1.2
                 action = t["buy_more"]
             elif rsi > 70: 
-                adjusted_weight *= 0.8 # Buy 20% less if expensive
+                adjusted_weight *= 0.8
                 action = t["buy_less"]
             
-            # Normalize weights later or just show suggested amount
             amount = monthly_investment * (adjusted_weight / 100)
+            total_suggested += amount
             
             rebalance_plan.append({
-                "Ticker": ticker,
-                "Base Target": f"{target_pct}%",
-                "RSI": f"{rsi}",
-                "Action": action,
-                "Suggested Buy ($)": round(amount, 2)
+                "종목" if lang == "한국어" else "Ticker": ticker,
+                "목표 비중" if lang == "한국어" else "Target": f"{target_pct}%",
+                "RSI": f"{rsi:.0f}",
+                "추천" if lang == "한국어" else "Action": action,
+                "매수액" if lang == "한국어" else "Buy ($)": f"${amount:.0f}"
             })
 
-    st.table(pd.DataFrame(rebalance_plan))
-
-    # Section 4: Discovery (New Feature)
-    st.header(t["discovery_header"])
-    st.write(t["discovery_desc"])
+    # Action Summary Card
+    st.markdown(get_action_card_html(total_suggested, len(rebalance_plan), t["total_action"]), unsafe_allow_html=True)
     
-    with st.spinner("Scanning..."):
+    # Detailed plan table
+    plan_df = pd.DataFrame(rebalance_plan)
+    st.dataframe(plan_df, use_container_width=True, hide_index=True)
+
+    st.markdown("---")
+
+    # Section 4: Bargain Hunter
+    st.header(t["discovery_header"])
+    st.caption(t["discovery_desc"])
+    
+    with st.spinner("🔍 " + ("스캔 중..." if lang == "한국어" else "Scanning...")):
         opportunities = scan_market_opportunities(watchlist)
         
     if not opportunities.empty:
-        st.success(f"Found {len(opportunities)} opportunities!")
-        st.dataframe(opportunities, use_container_width=True)
+        st.success(t["discovery_found"].format(len(opportunities)))
+        st.dataframe(opportunities, use_container_width=True, hide_index=True)
     else:
-        st.info("No oversold opportunities found in the watchlist at the moment. Market is healthy.")
+        st.info(t["discovery_none"])
+
+    st.markdown("---")
 
     # Section 5: News
     st.header(t["news_header"])
     
-    # Create tabs for each ticker
     tabs = st.tabs(list(portfolio_input.keys()))
     
     for i, ticker in enumerate(portfolio_input.keys()):
@@ -489,22 +766,20 @@ if not df.empty:
                     with st.expander(f"{source_badge} {news['title']}"):
                         st.caption(f"Published: {news['published']}")
                         
-                        # Fetch summary only when expanded to save time
                         summary = get_article_summary(news['link'])
                         
-                        # Fallback to RSS summary if scraping fails
                         if "요약 정보를 가져올 수 없습니다" in summary and news.get('rss_summary'):
-                            st.warning("🔒 원문 접근이 제한되어 뉴스 피드 요약본을 표시합니다.")
+                            st.warning("🔒 " + ("원문 접근이 제한되어 뉴스 피드 요약본을 표시합니다." if lang == "한국어" else "Original article restricted. Showing RSS summary."))
                             st.write(news['rss_summary'])
                         else:
                             st.write(summary)
                             
-                        st.markdown(f"[Read Full Article]({news['link']})")
+                        st.markdown(f"[{'원문 보기' if lang == '한국어' else 'Read Full Article'}]({news['link']})")
             else:
                 st.info(t["no_news"])
 
 else:
-    st.error("Failed to load stock data. Please try again later.")
+    st.error("❌ " + ("주식 데이터를 불러오지 못했습니다. 잠시 후 다시 시도해주세요." if lang == "한국어" else "Failed to load stock data. Please try again later."))
 
 # Footer
 st.markdown("---")
