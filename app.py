@@ -242,8 +242,8 @@ company_info = {
         "category": "crypto",
         "tam": "$16T",
         "cagr": "63%",
-        "detail_kr": "₿ 2030년 시총 16조 달러(2.2경원), 1 BTC = 약 10억원 전망! 금 시장의 40%를 대체하고, 기관/국가들이 보유하기 시작했어요. ETF 승인으로 접근성도 좋아졌어요.",
-        "detail_en": "₿ 2030 market cap $16T, 1 BTC = ~$760K! Replacing 40% of gold market, institutions & nations now holding. ETF approval made access easier."
+        "detail_kr": "[BTC] 2030년 시총 16조 달러(2.2경원), 1 BTC = 약 10억원 전망. 금 시장의 40%를 대체하고, 기관/국가들이 보유하기 시작했어요. ETF 승인으로 접근성도 좋아졌어요.",
+        "detail_en": "[BTC] 2030 market cap $16T, 1 BTC = ~$760K. Replacing 40% of gold market, institutions & nations now holding. ETF approval made access easier."
     },
     "TSLA": {
         "name": "Tesla",
@@ -252,8 +252,8 @@ company_info = {
         "category": "robot",
         "tam": "$34T",
         "cagr": "50%+",
-        "detail_kr": "🚗 전기차만 만드는 게 아니에요! 2030년까지 로보택시 시장이 34조 달러(4.7경원)로 성장하는데, Tesla의 자율주행(FSD) 기술이 1등이에요. 휴머노이드 로봇(Optimus)도 개발 중이고, 에너지 저장장치(Megapack) 매출도 급성장해요.",
-        "detail_en": "🚗 Not just EVs! Robotaxi market to reach $34T by 2030. Tesla leads in self-driving (FSD) and is building humanoid robots (Optimus). Energy storage (Megapack) revenue growing fast too."
+        "detail_kr": "[EV/Robot] 전기차만 만드는 게 아니에요. 2030년까지 로보택시 시장이 34조 달러(4.7경원)로 성장하는데, Tesla의 자율주행(FSD) 기술이 1등이에요. 휴머노이드 로봇(Optimus)도 개발 중이고, 에너지 저장장치(Megapack) 매출도 급성장해요.",
+        "detail_en": "[EV/Robot] Not just EVs. Robotaxi market to reach $34T by 2030. Tesla leads in self-driving (FSD) and is building humanoid robots (Optimus). Energy storage (Megapack) revenue growing fast too."
     },
     "NVDA": {
         "name": "NVIDIA",
@@ -262,8 +262,8 @@ company_info = {
         "category": "ai",
         "tam": "$1.4T",
         "cagr": "29%",
-        "detail_kr": "🧠 AI의 두뇌를 만드는 회사예요. AI 칩 시장 점유율 85%, 마진 75%로 '독점'에 가까워요. 2030년까지 AI 인프라 투자가 1.4조 달러(1,900조원)로 성장하는데, 그 핵심 수혜자예요.",
-        "detail_en": "🧠 Makes the 'brain' of AI. 85% market share, 75% margins - near monopoly. AI infrastructure to reach $1.4T by 2030, and NVIDIA is the core beneficiary."
+        "detail_kr": "[AI Chip] AI의 두뇌를 만드는 회사예요. AI 칩 시장 점유율 85%, 마진 75%로 '독점'에 가까워요. 2030년까지 AI 인프라 투자가 1.4조 달러(1,900조원)로 성장하는데, 그 핵심 수혜자예요.",
+        "detail_en": "[AI Chip] Makes the 'brain' of AI. 85% market share, 75% margins - near monopoly. AI infrastructure to reach $1.4T by 2030, and NVIDIA is the core beneficiary."
     },
     "COIN": {
         "name": "Coinbase",
@@ -272,8 +272,8 @@ company_info = {
         "category": "crypto",
         "tam": "$11T",
         "cagr": "100%+",
-        "detail_kr": "💰 미국 최대 암호화폐 거래소예요. 비트코인 ETF 수탁도 맡고, 자체 블록체인(Base)으로 DeFi 생태계도 구축 중이에요. 비트코인이 2030년 760만원→10억원 간다면 가장 큰 수혜주 중 하나예요.",
-        "detail_en": "💰 Largest US crypto exchange. Custody for Bitcoin ETFs + building Base chain for DeFi. If Bitcoin reaches $760K by 2030, COIN is a major beneficiary."
+        "detail_kr": "[Crypto] 미국 최대 암호화폐 거래소예요. 비트코인 ETF 수탁도 맡고, 자체 블록체인(Base)으로 DeFi 생태계도 구축 중이에요. 비트코인이 2030년 760만원에서 10억원 간다면 가장 큰 수혜주 중 하나예요.",
+        "detail_en": "[Crypto] Largest US crypto exchange. Custody for Bitcoin ETFs + building Base chain for DeFi. If Bitcoin reaches $760K by 2030, COIN is a major beneficiary."
     },
     "PLTR": {
         "name": "Palantir",
@@ -282,8 +282,8 @@ company_info = {
         "category": "ai",
         "tam": "$13T",
         "cagr": "56%",
-        "detail_kr": "📊 정부와 대기업을 위한 AI 데이터 분석 플랫폼(AIP)을 만들어요. '지능의 비용'이 99% 하락하면서 소프트웨어 시장이 2030년 3.4조~13조 달러로 성장하는데, Palantir가 핵심 기업이에요.",
-        "detail_en": "📊 AI data platform for governments & enterprises. As 'cost of intelligence' drops 99%, software market grows to $3.4-13T by 2030. Palantir is a key player."
+        "detail_kr": "[AI SW] 정부와 대기업을 위한 AI 데이터 분석 플랫폼(AIP)을 만들어요. '지능의 비용'이 99% 하락하면서 소프트웨어 시장이 2030년 3.4조~13조 달러로 성장하는데, Palantir가 핵심 기업이에요.",
+        "detail_en": "[AI SW] AI data platform for governments & enterprises. As 'cost of intelligence' drops 99%, software market grows to $3.4-13T by 2030. Palantir is a key player."
     },
     "ISRG": {
         "name": "Intuitive",
@@ -292,8 +292,8 @@ company_info = {
         "category": "health",
         "tam": "$26T",
         "cagr": "25%",
-        "detail_kr": "🏥 다빈치 수술 로봇의 제조사예요. 로봇 시장이 26조 달러(3.6경원) 규모인데, 의료 분야는 가장 빠르게 자동화되는 영역 중 하나예요. AI로 수술 정밀도가 계속 높아지고 있어요.",
-        "detail_en": "🏥 Makes da Vinci surgical robots. Robotics TAM is $26T, and healthcare is one of the fastest automating sectors. AI is continuously improving surgical precision."
+        "detail_kr": "[Med Robot] 다빈치 수술 로봇의 제조사예요. 로봇 시장이 26조 달러(3.6경원) 규모인데, 의료 분야는 가장 빠르게 자동화되는 영역 중 하나예요. AI로 수술 정밀도가 계속 높아지고 있어요.",
+        "detail_en": "[Med Robot] Makes da Vinci surgical robots. Robotics TAM is $26T, and healthcare is one of the fastest automating sectors. AI is continuously improving surgical precision."
     },
     "AMD": {
         "name": "AMD",
@@ -302,8 +302,8 @@ company_info = {
         "category": "ai",
         "tam": "$1.4T",
         "cagr": "29%",
-        "detail_kr": "💻 NVIDIA의 유일한 경쟁자예요! 새 칩(MI355X)이 메모리 288GB로 NVIDIA보다 크고, 가격 대비 성능도 더 좋아요. 특히 'AI 추론' 시장에서 점유율이 빠르게 올라가고 있어요.",
-        "detail_en": "💻 NVIDIA's only real competitor! New MI355X has 288GB memory (more than NVIDIA) with better price-performance. Growing share in AI inference market."
+        "detail_kr": "[AI Chip] NVIDIA의 유일한 경쟁자예요. 새 칩(MI355X)이 메모리 288GB로 NVIDIA보다 크고, 가격 대비 성능도 더 좋아요. 특히 'AI 추론' 시장에서 점유율이 빠르게 올라가고 있어요.",
+        "detail_en": "[AI Chip] NVIDIA's only real competitor. New MI355X has 288GB memory (more than NVIDIA) with better price-performance. Growing share in AI inference market."
     },
     "AMZN": {
         "name": "Amazon",
@@ -312,8 +312,8 @@ company_info = {
         "category": "ai",
         "tam": "$900B",
         "cagr": "105%",
-        "detail_kr": "📦 세계 최대 온라인 쇼핑몰이자 클라우드(AWS) 1위예요. AI 쇼핑 에이전트(Rufus), 창고 로봇(직원 1만명당 1,279대!), 드론 배송(Prime Air)까지 미래 기술을 모두 갖고 있어요.",
-        "detail_en": "📦 World's largest e-commerce + #1 cloud (AWS). Has AI shopping agent (Rufus), warehouse robots (1,279 per 10K employees!), and drone delivery (Prime Air)."
+        "detail_kr": "[Cloud/Robot] 세계 최대 온라인 쇼핑몰이자 클라우드(AWS) 1위예요. AI 쇼핑 에이전트(Rufus), 창고 로봇(직원 1만명당 1,279대), 드론 배송(Prime Air)까지 미래 기술을 모두 갖고 있어요.",
+        "detail_en": "[Cloud/Robot] World's largest e-commerce + #1 cloud (AWS). Has AI shopping agent (Rufus), warehouse robots (1,279 per 10K employees), and drone delivery (Prime Air)."
     },
     "GOOGL": {
         "name": "Google",
@@ -322,8 +322,8 @@ company_info = {
         "category": "ai",
         "tam": "$34T",
         "cagr": "40%",
-        "detail_kr": "🔍 검색의 왕이지만, AI 검색(ChatGPT 등)에 위협받고 있어요. 하지만! 자율주행(Waymo)에서 기술 1등이고, 자체 AI 칩(TPU)도 있어요. 성공적으로 전환하면 더 커질 수 있어요.",
-        "detail_en": "🔍 Search king but threatened by AI search. However! Leads in self-driving (Waymo) and has own AI chips (TPU). Could grow bigger with successful transition."
+        "detail_kr": "[Search/AV] 검색의 왕이지만, AI 검색(ChatGPT 등)에 위협받고 있어요. 하지만 자율주행(Waymo)에서 기술 1등이고, 자체 AI 칩(TPU)도 있어요. 성공적으로 전환하면 더 커질 수 있어요.",
+        "detail_en": "[Search/AV] Search king but threatened by AI search. However, leads in self-driving (Waymo) and has own AI chips (TPU). Could grow bigger with successful transition."
     },
     "MSFT": {
         "name": "Microsoft",
@@ -332,8 +332,8 @@ company_info = {
         "category": "ai",
         "tam": "$13T",
         "cagr": "56%",
-        "detail_kr": "🖥️ OpenAI와 독점 파트너십으로 AI 시대를 선도해요. 모든 오피스 제품에 AI(Copilot)를 넣고, 기업용 AI 시장을 장악 중이에요. 안정적이면서도 AI 성장의 수혜를 받는 종목이에요.",
-        "detail_en": "🖥️ Exclusive OpenAI partnership leads AI era. Adding Copilot AI to all Office products, dominating enterprise AI. Stable yet benefits from AI growth."
+        "detail_kr": "[AI SW] OpenAI와 독점 파트너십으로 AI 시대를 선도해요. 모든 오피스 제품에 AI(Copilot)를 넣고, 기업용 AI 시장을 장악 중이에요. 안정적이면서도 AI 성장의 수혜를 받는 종목이에요.",
+        "detail_en": "[AI SW] Exclusive OpenAI partnership leads AI era. Adding Copilot AI to all Office products, dominating enterprise AI. Stable yet benefits from AI growth."
     },
     "META": {
         "name": "Meta",
@@ -342,8 +342,8 @@ company_info = {
         "category": "ai",
         "tam": "$900B",
         "cagr": "105%",
-        "detail_kr": "👓 페이스북, 인스타그램의 30억 사용자 데이터로 AI를 학습시켜요. Meta AI가 개인 맞춤 추천을 하고, Ray-Ban 스마트 안경도 인기예요. AI 소비자 시장(2030년 9000억 달러)의 핵심 주자예요.",
-        "detail_en": "👓 Trains AI on 3B users' data from FB/IG. Meta AI does personalized recommendations, Ray-Ban smart glasses popular. Key player in AI consumer market ($900B by 2030)."
+        "detail_kr": "[AI Consumer] 페이스북, 인스타그램의 30억 사용자 데이터로 AI를 학습시켜요. Meta AI가 개인 맞춤 추천을 하고, Ray-Ban 스마트 안경도 인기예요. AI 소비자 시장(2030년 9000억 달러)의 핵심 주자예요.",
+        "detail_en": "[AI Consumer] Trains AI on 3B users' data from FB/IG. Meta AI does personalized recommendations, Ray-Ban smart glasses popular. Key player in AI consumer market ($900B by 2030)."
     },
     "SHOP": {
         "name": "Shopify",
@@ -352,8 +352,8 @@ company_info = {
         "category": "commerce",
         "tam": "$8T",
         "cagr": "50%",
-        "detail_kr": "🛒 수백만 온라인 상점을 운영하게 해주는 플랫폼이에요. Google과 함께 'AI 커머스 프로토콜(UCP)'을 만들고 있어요. AI가 대신 쇼핑하는 시대(2030년 8조 달러 거래)의 핵심 인프라예요.",
-        "detail_en": "🛒 Platform powering millions of online stores. Building 'Universal Commerce Protocol' with Google. Core infrastructure for AI shopping era ($8T transactions by 2030)."
+        "detail_kr": "[Commerce] 수백만 온라인 상점을 운영하게 해주는 플랫폼이에요. Google과 함께 'AI 커머스 프로토콜(UCP)'을 만들고 있어요. AI가 대신 쇼핑하는 시대(2030년 8조 달러 거래)의 핵심 인프라예요.",
+        "detail_en": "[Commerce] Platform powering millions of online stores. Building 'Universal Commerce Protocol' with Google. Core infrastructure for AI shopping era ($8T transactions by 2030)."
     },
     "UBER": {
         "name": "Uber",
@@ -362,8 +362,8 @@ company_info = {
         "category": "robot",
         "tam": "$34T",
         "cagr": "40%",
-        "detail_kr": "🚕 차량 호출/배달 앱 1위예요. 자율주행은 직접 못 만들지만, Waymo 같은 로보택시 회사와 협력해요. 로보택시 시대에도 '앱'으로 살아남을 수 있는지가 관건이에요.",
-        "detail_en": "🚕 #1 ride-hail/delivery app. Can't build self-driving but partners with Waymo. Key question: can they survive as 'the app' in robotaxi era?"
+        "detail_kr": "[Mobility] 차량 호출/배달 앱 1위예요. 자율주행은 직접 못 만들지만, Waymo 같은 로보택시 회사와 협력해요. 로보택시 시대에도 '앱'으로 살아남을 수 있는지가 관건이에요.",
+        "detail_en": "[Mobility] #1 ride-hail/delivery app. Can't build self-driving but partners with Waymo. Key question: can they survive as 'the app' in robotaxi era?"
     },
     "SQ": {
         "name": "Block",
@@ -372,8 +372,8 @@ company_info = {
         "category": "crypto",
         "tam": "$16T",
         "cagr": "63%",
-        "detail_kr": "💳 Cash App으로 비트코인 매매도 가능하고, 비트코인 지갑(Bitkey)도 만들어요. 비트코인 결제 인프라의 핵심 회사예요. 비트코인이 오르면 같이 오르는 구조예요.",
-        "detail_en": "💳 Cash App enables Bitcoin trading, also makes Bitkey wallet. Core Bitcoin payment infrastructure. Benefits directly from Bitcoin price increases."
+        "detail_kr": "[BTC Payment] Cash App으로 비트코인 매매도 가능하고, 비트코인 지갑(Bitkey)도 만들어요. 비트코인 결제 인프라의 핵심 회사예요. 비트코인이 오르면 같이 오르는 구조예요.",
+        "detail_en": "[BTC Payment] Cash App enables Bitcoin trading, also makes Bitkey wallet. Core Bitcoin payment infrastructure. Benefits directly from Bitcoin price increases."
     },
     "PYPL": {
         "name": "PayPal",
@@ -382,8 +382,8 @@ company_info = {
         "category": "crypto",
         "tam": "$11T",
         "cagr": "100%+",
-        "detail_kr": "💵 온라인 결제의 원조예요. 자체 스테이블코인(PYUSD)이 1년만에 6배 성장했어요. 토큰화 자산 시장(2030년 11조 달러)에서 결제 인프라로 자리잡을 수 있어요.",
-        "detail_en": "💵 Pioneer of online payments. Own stablecoin (PYUSD) grew 6x in one year. Could become payment infrastructure for tokenized assets ($11T by 2030)."
+        "detail_kr": "[Stablecoin] 온라인 결제의 원조예요. 자체 스테이블코인(PYUSD)이 1년만에 6배 성장했어요. 토큰화 자산 시장(2030년 11조 달러)에서 결제 인프라로 자리잡을 수 있어요.",
+        "detail_en": "[Stablecoin] Pioneer of online payments. Own stablecoin (PYUSD) grew 6x in one year. Could become payment infrastructure for tokenized assets ($11T by 2030)."
     },
     "RKLB": {
         "name": "Rocket Lab",
@@ -392,8 +392,8 @@ company_info = {
         "category": "space",
         "tam": "$160B",
         "cagr": "30%",
-        "detail_kr": "🚀 SpaceX 다음가는 민간 로켓 회사예요. 소형 위성 발사에 특화되어 있어요. 위성 통신 시장이 2030년 1600억 달러(210조원)로 성장하는데, 발사 비용은 계속 떨어지고 있어요.",
-        "detail_en": "🚀 Second largest private rocket company after SpaceX. Specializes in small satellite launches. Satellite market to reach $160B by 2030, launch costs keep dropping."
+        "detail_kr": "[Space] SpaceX 다음가는 민간 로켓 회사예요. 소형 위성 발사에 특화되어 있어요. 위성 통신 시장이 2030년 1600억 달러(210조원)로 성장하는데, 발사 비용은 계속 떨어지고 있어요.",
+        "detail_en": "[Space] Second largest private rocket company after SpaceX. Specializes in small satellite launches. Satellite market to reach $160B by 2030, launch costs keep dropping."
     },
     "NET": {
         "name": "Cloudflare",
@@ -402,8 +402,8 @@ company_info = {
         "category": "ai",
         "tam": "$1.4T",
         "cagr": "29%",
-        "detail_kr": "🌐 전 세계 인터넷 트래픽의 상당 부분을 처리하는 보안/가속 서비스예요. AI가 더 많이 쓰일수록 인터넷 인프라도 더 중요해져요. AI 시대의 숨은 수혜주예요.",
-        "detail_en": "🌐 Security/acceleration for major portion of internet traffic. As AI usage grows, internet infrastructure becomes more critical. Hidden beneficiary of AI era."
+        "detail_kr": "[Infra] 전 세계 인터넷 트래픽의 상당 부분을 처리하는 보안/가속 서비스예요. AI가 더 많이 쓰일수록 인터넷 인프라도 더 중요해져요. AI 시대의 숨은 수혜주예요.",
+        "detail_en": "[Infra] Security/acceleration for major portion of internet traffic. As AI usage grows, internet infrastructure becomes more critical. Hidden beneficiary of AI era."
     },
     "OKLO": {
         "name": "Oklo",
@@ -412,8 +412,8 @@ company_info = {
         "category": "energy",
         "tam": "$10T",
         "cagr": "40%",
-        "detail_kr": "⚛️ Sam Altman(OpenAI CEO)이 이사회 의장인 소형 원전(SMR) 회사예요. AI 데이터센터는 엄청난 전력이 필요한데, Oklo가 그 전력을 공급해요. AI 시대의 필수 인프라!",
-        "detail_en": "⚛️ SMR company with Sam Altman (OpenAI CEO) as chairman. AI data centers need massive power, Oklo supplies it. Essential infrastructure for AI era!"
+        "detail_kr": "[Nuclear] Sam Altman(OpenAI CEO)이 이사회 의장인 소형 원전(SMR) 회사예요. AI 데이터센터는 엄청난 전력이 필요한데, Oklo가 그 전력을 공급해요. AI 시대의 필수 인프라.",
+        "detail_en": "[Nuclear] SMR company with Sam Altman (OpenAI CEO) as chairman. AI data centers need massive power, Oklo supplies it. Essential infrastructure for AI era."
     },
     "CRSP": {
         "name": "CRISPR Tx",
@@ -422,8 +422,8 @@ company_info = {
         "category": "health",
         "tam": "$2.8T",
         "cagr": "50%+",
-        "detail_kr": "🧬 세계 최초로 유전자 편집 치료제를 승인받았어요! 겸상적혈구 빈혈증을 '완치'해요. 심혈관 질환까지 확장하면 시장이 2.8조 달러(3,800조원)예요. 한 번 치료로 평생 효과!",
-        "detail_en": "🧬 First approved gene editing therapy! Cures sickle cell disease. Expanding to cardiovascular = $2.8T market. One treatment, lifetime effect!"
+        "detail_kr": "[Gene Edit] 세계 최초로 유전자 편집 치료제를 승인받았어요. 겸상적혈구 빈혈증을 '완치'해요. 심혈관 질환까지 확장하면 시장이 2.8조 달러(3,800조원)예요. 한 번 치료로 평생 효과.",
+        "detail_en": "[Gene Edit] First approved gene editing therapy. Cures sickle cell disease. Expanding to cardiovascular = $2.8T market. One treatment, lifetime effect."
     },
 }
 
@@ -673,14 +673,14 @@ is_kr = lang == "한국어"
 
 # 카테고리 정보
 CATEGORIES = {
-    "all": {"kr": "전체", "en": "All", "icon": "📊"},
-    "ai": {"kr": "AI", "en": "AI", "icon": "🤖"},
-    "crypto": {"kr": "암호화폐", "en": "Crypto", "icon": "₿"},
-    "robot": {"kr": "로봇/자율주행", "en": "Robotics", "icon": "🦾"},
-    "energy": {"kr": "에너지", "en": "Energy", "icon": "⚡"},
-    "space": {"kr": "우주", "en": "Space", "icon": "🚀"},
-    "health": {"kr": "헬스케어", "en": "Healthcare", "icon": "🧬"},
-    "commerce": {"kr": "커머스", "en": "Commerce", "icon": "🛒"},
+    "all": {"kr": "전체", "en": "All", "icon": "ALL"},
+    "ai": {"kr": "AI", "en": "AI", "icon": "AI"},
+    "crypto": {"kr": "암호화폐", "en": "Crypto", "icon": "BTC"},
+    "robot": {"kr": "로봇/자율주행", "en": "Robotics", "icon": "BOT"},
+    "energy": {"kr": "에너지", "en": "Energy", "icon": "PWR"},
+    "space": {"kr": "우주", "en": "Space", "icon": "SPC"},
+    "health": {"kr": "헬스케어", "en": "Healthcare", "icon": "BIO"},
+    "commerce": {"kr": "커머스", "en": "Commerce", "icon": "COM"},
 }
 
 # 테마 필터 (Quick buttons)
@@ -924,12 +924,12 @@ if recommendations:
         cagr = rec.get('cagr', '')
         category = rec.get('category', '')
         
-        # 카테고리 아이콘
-        category_icons = {
-            'ai': '🤖', 'crypto': '₿', 'robot': '🦾', 
-            'energy': '⚡', 'space': '🚀', 'health': '🧬', 'commerce': '🛒'
+        # 카테고리 태그
+        category_tags = {
+            'ai': 'AI', 'crypto': 'BTC', 'robot': 'BOT', 
+            'energy': 'PWR', 'space': 'SPC', 'health': 'BIO', 'commerce': 'COM'
         }
-        cat_icon = category_icons.get(category, '')
+        cat_icon = category_tags.get(category, '')
         
         st.markdown(f"""
         <div class="stock-item">
@@ -977,11 +977,11 @@ if recommendations:
         # 경고 표시
         if warnings:
             warning_html = " | ".join(warnings[:2])
-            st.markdown(f'<div class="warning-badge">⚠️ {warning_html}</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="warning-badge">[!] {warning_html}</div>', unsafe_allow_html=True)
         
         # 투자 포인트 상세 설명 (펼치기)
         if detail_text:
-            with st.expander(f"{'왜 투자해야 할까요?' if is_kr else 'Why invest?'} 💡", expanded=False):
+            with st.expander(f"{'왜 투자해야 할까요?' if is_kr else 'Why invest?'}", expanded=False):
                 st.markdown(f"""
                 <div style="font-size: 0.9rem; line-height: 1.6; color: #e2e8f0; padding: 0.5rem 0;">
                     {detail_text}
