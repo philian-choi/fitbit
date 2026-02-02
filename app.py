@@ -5,6 +5,7 @@ from fredapi import Fred
 from datetime import datetime
 import os
 import feedparser
+from technical_analysis import ComprehensiveAnalyzer, TechnicalAnalyzer, FundamentalAnalyzer, MarketRegimeAnalyzer, SignalStrength
 
 # --- Page Config (NO SIDEBAR) ---
 st.set_page_config(
@@ -113,32 +114,66 @@ st.markdown("""
         border-top: 1px solid rgba(255,255,255,0.05);
     }
     
-    /* RSI mini bar */
-    .rsi-mini {
+    /* Score bar (new comprehensive) */
+    .score-container {
         display: flex;
         align-items: center;
         gap: 0.5rem;
     }
-    .rsi-bar-mini {
-        width: 60px;
-        height: 6px;
-        border-radius: 3px;
-        background: linear-gradient(to right, #10b981 0%, #10b981 30%, #fbbf24 30%, #fbbf24 70%, #ef4444 70%, #ef4444 100%);
+    .score-bar {
+        width: 80px;
+        height: 8px;
+        border-radius: 4px;
+        background: linear-gradient(to right, #ef4444 0%, #fbbf24 50%, #10b981 100%);
         position: relative;
     }
-    .rsi-dot {
+    .score-dot {
         position: absolute;
-        top: -3px;
-        width: 12px;
-        height: 12px;
+        top: -4px;
+        width: 16px;
+        height: 16px;
         background: white;
         border-radius: 50%;
         border: 2px solid #1d4ed8;
         transform: translateX(-50%);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
     }
-    .rsi-text {
-        font-size: 0.8rem;
+    .score-text {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #e2e8f0 !important;
+    }
+    .confidence-text {
+        font-size: 0.7rem;
+        color: #64748b !important;
+    }
+    
+    /* Score breakdown */
+    .score-breakdown {
+        display: flex;
+        gap: 0.5rem;
+        margin-top: 0.4rem;
+        flex-wrap: wrap;
+    }
+    .score-chip {
+        font-size: 0.65rem;
+        padding: 0.15rem 0.4rem;
+        border-radius: 4px;
+        background: rgba(255,255,255,0.08);
         color: #94a3b8 !important;
+    }
+    .score-chip-positive { color: #34d399 !important; }
+    .score-chip-negative { color: #f87171 !important; }
+    
+    /* Warning badge */
+    .warning-badge {
+        font-size: 0.7rem;
+        color: #fbbf24 !important;
+        background: rgba(251, 191, 36, 0.15);
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+        margin-top: 0.3rem;
+        display: inline-block;
     }
     
     /* Action badge */
@@ -198,11 +233,25 @@ st.markdown("""
 
 # --- Company Data ---
 # 각 종목에 대한 상세 설명 (초보자를 위한 투자 포인트)
+# category: ai, crypto, robot, energy, space, health, commerce
 company_info = {
+    "BTC-USD": {
+        "name": "Bitcoin",
+        "kr": "디지털 금, 가치 저장 수단",
+        "en": "Digital gold, store of value",
+        "category": "crypto",
+        "tam": "$16T",
+        "cagr": "63%",
+        "detail_kr": "₿ 2030년 시총 16조 달러(2.2경원), 1 BTC = 약 10억원 전망! 금 시장의 40%를 대체하고, 기관/국가들이 보유하기 시작했어요. ETF 승인으로 접근성도 좋아졌어요.",
+        "detail_en": "₿ 2030 market cap $16T, 1 BTC = ~$760K! Replacing 40% of gold market, institutions & nations now holding. ETF approval made access easier."
+    },
     "TSLA": {
         "name": "Tesla",
         "kr": "전기차 1위 + 로보택시 + 로봇",
         "en": "#1 EV + Robotaxi + Robots",
+        "category": "robot",
+        "tam": "$34T",
+        "cagr": "50%+",
         "detail_kr": "🚗 전기차만 만드는 게 아니에요! 2030년까지 로보택시 시장이 34조 달러(4.7경원)로 성장하는데, Tesla의 자율주행(FSD) 기술이 1등이에요. 휴머노이드 로봇(Optimus)도 개발 중이고, 에너지 저장장치(Megapack) 매출도 급성장해요.",
         "detail_en": "🚗 Not just EVs! Robotaxi market to reach $34T by 2030. Tesla leads in self-driving (FSD) and is building humanoid robots (Optimus). Energy storage (Megapack) revenue growing fast too."
     },
@@ -210,6 +259,9 @@ company_info = {
         "name": "NVIDIA",
         "kr": "AI 반도체 독보적 1위",
         "en": "#1 AI chips dominant",
+        "category": "ai",
+        "tam": "$1.4T",
+        "cagr": "29%",
         "detail_kr": "🧠 AI의 두뇌를 만드는 회사예요. AI 칩 시장 점유율 85%, 마진 75%로 '독점'에 가까워요. 2030년까지 AI 인프라 투자가 1.4조 달러(1,900조원)로 성장하는데, 그 핵심 수혜자예요.",
         "detail_en": "🧠 Makes the 'brain' of AI. 85% market share, 75% margins - near monopoly. AI infrastructure to reach $1.4T by 2030, and NVIDIA is the core beneficiary."
     },
@@ -217,6 +269,9 @@ company_info = {
         "name": "Coinbase",
         "kr": "암호화폐 거래소 + Base 체인",
         "en": "Crypto exchange + Base chain",
+        "category": "crypto",
+        "tam": "$11T",
+        "cagr": "100%+",
         "detail_kr": "💰 미국 최대 암호화폐 거래소예요. 비트코인 ETF 수탁도 맡고, 자체 블록체인(Base)으로 DeFi 생태계도 구축 중이에요. 비트코인이 2030년 760만원→10억원 간다면 가장 큰 수혜주 중 하나예요.",
         "detail_en": "💰 Largest US crypto exchange. Custody for Bitcoin ETFs + building Base chain for DeFi. If Bitcoin reaches $760K by 2030, COIN is a major beneficiary."
     },
@@ -224,6 +279,9 @@ company_info = {
         "name": "Palantir",
         "kr": "기업용 AI 플랫폼",
         "en": "Enterprise AI platform",
+        "category": "ai",
+        "tam": "$13T",
+        "cagr": "56%",
         "detail_kr": "📊 정부와 대기업을 위한 AI 데이터 분석 플랫폼(AIP)을 만들어요. '지능의 비용'이 99% 하락하면서 소프트웨어 시장이 2030년 3.4조~13조 달러로 성장하는데, Palantir가 핵심 기업이에요.",
         "detail_en": "📊 AI data platform for governments & enterprises. As 'cost of intelligence' drops 99%, software market grows to $3.4-13T by 2030. Palantir is a key player."
     },
@@ -231,6 +289,9 @@ company_info = {
         "name": "Intuitive",
         "kr": "수술 로봇 세계 1위",
         "en": "World #1 surgical robots",
+        "category": "health",
+        "tam": "$26T",
+        "cagr": "25%",
         "detail_kr": "🏥 다빈치 수술 로봇의 제조사예요. 로봇 시장이 26조 달러(3.6경원) 규모인데, 의료 분야는 가장 빠르게 자동화되는 영역 중 하나예요. AI로 수술 정밀도가 계속 높아지고 있어요.",
         "detail_en": "🏥 Makes da Vinci surgical robots. Robotics TAM is $26T, and healthcare is one of the fastest automating sectors. AI is continuously improving surgical precision."
     },
@@ -238,6 +299,9 @@ company_info = {
         "name": "AMD",
         "kr": "AI 칩 가성비 도전자",
         "en": "AI chip value challenger",
+        "category": "ai",
+        "tam": "$1.4T",
+        "cagr": "29%",
         "detail_kr": "💻 NVIDIA의 유일한 경쟁자예요! 새 칩(MI355X)이 메모리 288GB로 NVIDIA보다 크고, 가격 대비 성능도 더 좋아요. 특히 'AI 추론' 시장에서 점유율이 빠르게 올라가고 있어요.",
         "detail_en": "💻 NVIDIA's only real competitor! New MI355X has 288GB memory (more than NVIDIA) with better price-performance. Growing share in AI inference market."
     },
@@ -245,6 +309,9 @@ company_info = {
         "name": "Amazon",
         "kr": "AI 쇼핑 + 클라우드 + 로봇",
         "en": "AI shopping + Cloud + Robots",
+        "category": "ai",
+        "tam": "$900B",
+        "cagr": "105%",
         "detail_kr": "📦 세계 최대 온라인 쇼핑몰이자 클라우드(AWS) 1위예요. AI 쇼핑 에이전트(Rufus), 창고 로봇(직원 1만명당 1,279대!), 드론 배송(Prime Air)까지 미래 기술을 모두 갖고 있어요.",
         "detail_en": "📦 World's largest e-commerce + #1 cloud (AWS). Has AI shopping agent (Rufus), warehouse robots (1,279 per 10K employees!), and drone delivery (Prime Air)."
     },
@@ -252,6 +319,9 @@ company_info = {
         "name": "Google",
         "kr": "AI 검색 + 자율주행 + 클라우드",
         "en": "AI search + Self-driving + Cloud",
+        "category": "ai",
+        "tam": "$34T",
+        "cagr": "40%",
         "detail_kr": "🔍 검색의 왕이지만, AI 검색(ChatGPT 등)에 위협받고 있어요. 하지만! 자율주행(Waymo)에서 기술 1등이고, 자체 AI 칩(TPU)도 있어요. 성공적으로 전환하면 더 커질 수 있어요.",
         "detail_en": "🔍 Search king but threatened by AI search. However! Leads in self-driving (Waymo) and has own AI chips (TPU). Could grow bigger with successful transition."
     },
@@ -259,6 +329,9 @@ company_info = {
         "name": "Microsoft",
         "kr": "Copilot AI + Azure 클라우드",
         "en": "Copilot AI + Azure Cloud",
+        "category": "ai",
+        "tam": "$13T",
+        "cagr": "56%",
         "detail_kr": "🖥️ OpenAI와 독점 파트너십으로 AI 시대를 선도해요. 모든 오피스 제품에 AI(Copilot)를 넣고, 기업용 AI 시장을 장악 중이에요. 안정적이면서도 AI 성장의 수혜를 받는 종목이에요.",
         "detail_en": "🖥️ Exclusive OpenAI partnership leads AI era. Adding Copilot AI to all Office products, dominating enterprise AI. Stable yet benefits from AI growth."
     },
@@ -266,6 +339,9 @@ company_info = {
         "name": "Meta",
         "kr": "SNS AI + 스마트 안경",
         "en": "Social AI + Smart glasses",
+        "category": "ai",
+        "tam": "$900B",
+        "cagr": "105%",
         "detail_kr": "👓 페이스북, 인스타그램의 30억 사용자 데이터로 AI를 학습시켜요. Meta AI가 개인 맞춤 추천을 하고, Ray-Ban 스마트 안경도 인기예요. AI 소비자 시장(2030년 9000억 달러)의 핵심 주자예요.",
         "detail_en": "👓 Trains AI on 3B users' data from FB/IG. Meta AI does personalized recommendations, Ray-Ban smart glasses popular. Key player in AI consumer market ($900B by 2030)."
     },
@@ -273,6 +349,9 @@ company_info = {
         "name": "Shopify",
         "kr": "AI 커머스 플랫폼의 허브",
         "en": "AI commerce platform hub",
+        "category": "commerce",
+        "tam": "$8T",
+        "cagr": "50%",
         "detail_kr": "🛒 수백만 온라인 상점을 운영하게 해주는 플랫폼이에요. Google과 함께 'AI 커머스 프로토콜(UCP)'을 만들고 있어요. AI가 대신 쇼핑하는 시대(2030년 8조 달러 거래)의 핵심 인프라예요.",
         "detail_en": "🛒 Platform powering millions of online stores. Building 'Universal Commerce Protocol' with Google. Core infrastructure for AI shopping era ($8T transactions by 2030)."
     },
@@ -280,6 +359,9 @@ company_info = {
         "name": "Uber",
         "kr": "라이드쉐어 + 로보택시 연결",
         "en": "Ride-share + Robotaxi network",
+        "category": "robot",
+        "tam": "$34T",
+        "cagr": "40%",
         "detail_kr": "🚕 차량 호출/배달 앱 1위예요. 자율주행은 직접 못 만들지만, Waymo 같은 로보택시 회사와 협력해요. 로보택시 시대에도 '앱'으로 살아남을 수 있는지가 관건이에요.",
         "detail_en": "🚕 #1 ride-hail/delivery app. Can't build self-driving but partners with Waymo. Key question: can they survive as 'the app' in robotaxi era?"
     },
@@ -287,6 +369,9 @@ company_info = {
         "name": "Block",
         "kr": "비트코인 + 결제 서비스",
         "en": "Bitcoin + Payment services",
+        "category": "crypto",
+        "tam": "$16T",
+        "cagr": "63%",
         "detail_kr": "💳 Cash App으로 비트코인 매매도 가능하고, 비트코인 지갑(Bitkey)도 만들어요. 비트코인 결제 인프라의 핵심 회사예요. 비트코인이 오르면 같이 오르는 구조예요.",
         "detail_en": "💳 Cash App enables Bitcoin trading, also makes Bitkey wallet. Core Bitcoin payment infrastructure. Benefits directly from Bitcoin price increases."
     },
@@ -294,6 +379,9 @@ company_info = {
         "name": "PayPal",
         "kr": "스테이블코인 + 온라인 결제",
         "en": "Stablecoin + Online payments",
+        "category": "crypto",
+        "tam": "$11T",
+        "cagr": "100%+",
         "detail_kr": "💵 온라인 결제의 원조예요. 자체 스테이블코인(PYUSD)이 1년만에 6배 성장했어요. 토큰화 자산 시장(2030년 11조 달러)에서 결제 인프라로 자리잡을 수 있어요.",
         "detail_en": "💵 Pioneer of online payments. Own stablecoin (PYUSD) grew 6x in one year. Could become payment infrastructure for tokenized assets ($11T by 2030)."
     },
@@ -301,6 +389,9 @@ company_info = {
         "name": "Rocket Lab",
         "kr": "소형 로켓 + 우주 시스템",
         "en": "Small rockets + Space systems",
+        "category": "space",
+        "tam": "$160B",
+        "cagr": "30%",
         "detail_kr": "🚀 SpaceX 다음가는 민간 로켓 회사예요. 소형 위성 발사에 특화되어 있어요. 위성 통신 시장이 2030년 1600억 달러(210조원)로 성장하는데, 발사 비용은 계속 떨어지고 있어요.",
         "detail_en": "🚀 Second largest private rocket company after SpaceX. Specializes in small satellite launches. Satellite market to reach $160B by 2030, launch costs keep dropping."
     },
@@ -308,8 +399,31 @@ company_info = {
         "name": "Cloudflare",
         "kr": "인터넷 인프라 + AI 엣지",
         "en": "Internet infra + AI edge",
+        "category": "ai",
+        "tam": "$1.4T",
+        "cagr": "29%",
         "detail_kr": "🌐 전 세계 인터넷 트래픽의 상당 부분을 처리하는 보안/가속 서비스예요. AI가 더 많이 쓰일수록 인터넷 인프라도 더 중요해져요. AI 시대의 숨은 수혜주예요.",
         "detail_en": "🌐 Security/acceleration for major portion of internet traffic. As AI usage grows, internet infrastructure becomes more critical. Hidden beneficiary of AI era."
+    },
+    "OKLO": {
+        "name": "Oklo",
+        "kr": "소형 원전 (AI 데이터센터용)",
+        "en": "Small nuclear (AI data centers)",
+        "category": "energy",
+        "tam": "$10T",
+        "cagr": "40%",
+        "detail_kr": "⚛️ Sam Altman(OpenAI CEO)이 이사회 의장인 소형 원전(SMR) 회사예요. AI 데이터센터는 엄청난 전력이 필요한데, Oklo가 그 전력을 공급해요. AI 시대의 필수 인프라!",
+        "detail_en": "⚛️ SMR company with Sam Altman (OpenAI CEO) as chairman. AI data centers need massive power, Oklo supplies it. Essential infrastructure for AI era!"
+    },
+    "CRSP": {
+        "name": "CRISPR Tx",
+        "kr": "유전자 가위 치료제 1호",
+        "en": "Gene editing therapeutics #1",
+        "category": "health",
+        "tam": "$2.8T",
+        "cagr": "50%+",
+        "detail_kr": "🧬 세계 최초로 유전자 편집 치료제를 승인받았어요! 겸상적혈구 빈혈증을 '완치'해요. 심혈관 질환까지 확장하면 시장이 2.8조 달러(3,800조원)예요. 한 번 치료로 평생 효과!",
+        "detail_en": "🧬 First approved gene editing therapy! Cures sickle cell disease. Expanding to cardiovascular = $2.8T market. One treatment, lifetime effect!"
     },
 }
 
@@ -329,42 +443,149 @@ def get_macro_data():
     except:
         return 4.33
 
+@st.cache_data(ttl=1800, show_spinner=False)
+def get_market_analysis():
+    """시장 환경 분석 (한 번만 실행)"""
+    try:
+        market_analyzer = MarketRegimeAnalyzer()
+        return market_analyzer.analyze()
+    except Exception as e:
+        return {'market_score': 0, 'max_market_score': 15, 'warnings': [], 'indicator_results': {}}
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def get_comprehensive_analysis(ticker):
+    """종목별 종합 분석"""
+    try:
+        # 기술적 분석
+        tech_analyzer = TechnicalAnalyzer(ticker)
+        tech_result = tech_analyzer.analyze()
+        
+        if 'error' in tech_result:
+            return None
+        
+        # 펀더멘털 분석
+        fund_analyzer = FundamentalAnalyzer(ticker)
+        fund_result = fund_analyzer.analyze()
+        
+        return {
+            'technical': tech_result,
+            'fundamental': fund_result if 'error' not in fund_result else None
+        }
+    except Exception as e:
+        return None
+
 @st.cache_data(ttl=1800)
 def get_stock_data(tickers, lang="한국어"):
     is_kr = lang == "한국어"
     data = []
+    
+    # 시장 환경 분석 (공유)
+    market_result = get_market_analysis()
+    market_score = market_result.get('market_score', 0)
+    
     for ticker in tickers:
         try:
-            stock = yf.Ticker(ticker)
-            try:
-                price = stock.fast_info.last_price
-            except:
-                hist = stock.history(period="5d")
-                price = hist['Close'].iloc[-1] if len(hist) > 0 else 0
-                if price == 0:
-                    continue
+            # 종합 분석 가져오기
+            analysis = get_comprehensive_analysis(ticker)
             
-            hist = stock.history(period="2mo")
-            if len(hist) > 14:
-                delta = hist['Close'].diff()
-                gain = (delta.where(delta > 0, 0)).rolling(window=14).mean()
-                loss = (-delta.where(delta < 0, 0)).rolling(window=14).mean()
-                rs = gain / loss
-                rsi = 100 - (100 / (1 + rs)).iloc[-1]
+            if analysis is None:
+                continue
+            
+            tech = analysis['technical']
+            fund = analysis['fundamental']
+            
+            price = tech.get('price', 0)
+            if price == 0:
+                continue
+            
+            # 점수 계산
+            tech_score = tech.get('technical_score', 0)
+            fund_score = fund.get('fundamental_score', 0) if fund else 0
+            total_score = tech_score + fund_score + market_score
+            max_score = 100
+            
+            # 신뢰도 계산 (지표 일치도)
+            scores = tech.get('scores', {})
+            indicators = tech.get('indicators', {})
+            
+            momentum_scores = [scores.get('RSI', 0), scores.get('Stochastic', 0), scores.get('MACD', 0)]
+            positive_count = sum(1 for s in momentum_scores if s > 0)
+            negative_count = sum(1 for s in momentum_scores if s < 0)
+            
+            if positive_count == 3 or negative_count == 3:
+                confidence = 0.9
+            elif positive_count == 2 or negative_count == 2:
+                confidence = 0.7
             else:
-                rsi = 50
+                confidence = 0.5
             
-            company = company_info.get(ticker, {"name": ticker, "kr": "", "en": "", "detail_kr": "", "detail_en": ""})
+            # 거래량 확인 반영
+            volume_conf = indicators.get('Volume_Confirmation', 0.7)
+            confidence = confidence * 0.7 + volume_conf * 0.3
+            
+            # 신호 결정
+            if total_score >= 40:
+                action = "strong_buy"
+                signal_text = "강력 매수" if is_kr else "STRONG BUY"
+            elif total_score >= 20:
+                action = "buy"
+                signal_text = "매수" if is_kr else "BUY"
+            elif total_score >= 5:
+                action = "weak_buy"
+                signal_text = "약한 매수" if is_kr else "WEAK BUY"
+            elif total_score <= -40:
+                action = "strong_sell"
+                signal_text = "강력 매도" if is_kr else "STRONG SELL"
+            elif total_score <= -20:
+                action = "sell"
+                signal_text = "매도" if is_kr else "SELL"
+            elif total_score <= -5:
+                action = "weak_sell"
+                signal_text = "약한 매도" if is_kr else "WEAK SELL"
+            else:
+                action = "hold"
+                signal_text = "중립" if is_kr else "NEUTRAL"
+            
+            # 경고 수집
+            warnings = []
+            warnings.extend(tech.get('warnings', []))
+            if fund:
+                warnings.extend(fund.get('warnings', []))
+            
+            # RSI (레거시 호환)
+            rsi = indicators.get('RSI', 50)
+            
+            company = company_info.get(ticker, {"name": ticker, "kr": "", "en": "", "detail_kr": "", "detail_en": "", "category": "", "tam": "", "cagr": ""})
+            
+            # 일등락률 계산
+            prev_close = tech.get('prev_close', price)
+            change_pct = ((price - prev_close) / prev_close * 100) if prev_close else 0
+            
             data.append({
                 "ticker": ticker,
                 "name": company["name"],
                 "desc": company["kr"] if is_kr else company["en"],
                 "detail": company.get("detail_kr", "") if is_kr else company.get("detail_en", ""),
+                "category": company.get("category", ""),
+                "tam": company.get("tam", ""),
+                "cagr": company.get("cagr", ""),
                 "price": price,
+                "change_pct": round(change_pct, 2),
                 "rsi": round(rsi, 1),
+                "total_score": total_score,
+                "max_score": max_score,
+                "tech_score": tech_score,
+                "fund_score": fund_score,
+                "market_score": market_score,
+                "confidence": confidence,
+                "action": action,
+                "signal_text": signal_text,
+                "warnings": warnings[:2],  # 최대 2개 경고만
+                "scores": scores,
             })
-        except:
+        except Exception as e:
             continue
+    
     return data
 
 @st.cache_data(ttl=3600)
@@ -508,40 +729,47 @@ for stock in stock_data:
     ticker_weight = weights.get(stock["ticker"], 0)
     base = monthly_budget * (ticker_weight / 100)
     
-    if stock["rsi"] < 35:
-        mult, action = 1.3, "buy"
-    elif stock["rsi"] > 70:
-        mult, action = 0.7, "sell"
+    # 종합 점수 기반 매수 금액 조정
+    total_score = stock.get("total_score", 0)
+    
+    if total_score >= 30:
+        mult = 1.4  # 강한 매수 신호 -> 40% 더 매수
+    elif total_score >= 15:
+        mult = 1.2  # 매수 신호 -> 20% 더 매수
+    elif total_score <= -30:
+        mult = 0.5  # 강한 매도 신호 -> 50% 덜 매수
+    elif total_score <= -15:
+        mult = 0.7  # 매도 신호 -> 30% 덜 매수
     else:
-        mult, action = 1.0, "hold"
+        mult = 1.0  # 중립 -> 기본 금액
     
     suggested = base * mult
     total_suggested += suggested
     recommendations.append({
         **stock, 
         "suggested": suggested, 
-        "action": action, 
         "weight": ticker_weight,
         "detail": stock.get("detail", "")
     })
 
-oversold = len([s for s in stock_data if s["rsi"] < 35])
-overbought = len([s for s in stock_data if s["rsi"] > 70])
+# 통계 계산 (새로운 기준)
+buy_signals = len([s for s in stock_data if s.get("total_score", 0) >= 15])
+sell_signals = len([s for s in stock_data if s.get("total_score", 0) <= -15])
 
 # === STATS (compact) ===
 st.markdown(f"""
 <div class="stats-row">
     <div class="stat-box">
-        <div class="stat-value">{len(stock_data)}</div>
-        <div class="stat-label">{"종목" if is_kr else "Stocks"}</div>
+        <div class="stat-value" style="color: #60a5fa;">${total_suggested:,.0f}</div>
+        <div class="stat-label">{"이번 달 투자" if is_kr else "This Month"}</div>
     </div>
     <div class="stat-box">
-        <div class="stat-value stat-green">{oversold}</div>
-        <div class="stat-label">{"세일" if is_kr else "Sale"}</div>
+        <div class="stat-value stat-green">{buy_signals}</div>
+        <div class="stat-label">{"매수 신호" if is_kr else "Buy"}</div>
     </div>
     <div class="stat-box">
-        <div class="stat-value stat-red">{overbought}</div>
-        <div class="stat-label">{"비쌈" if is_kr else "High"}</div>
+        <div class="stat-value stat-red">{sell_signals}</div>
+        <div class="stat-label">{"매도 신호" if is_kr else "Sell"}</div>
     </div>
     <div class="stat-box">
         <div class="stat-value">{fed_rate:.1f}%</div>
@@ -552,19 +780,56 @@ st.markdown(f"""
 
 # === STOCK LIST ===
 if recommendations:
-    st.markdown(f'<div class="section-title">{"매수 계획" if is_kr else "Buy Plan"}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="section-title">{"투자 계획" if is_kr else "Investment Plan"}</div>', unsafe_allow_html=True)
     
-    # Sort: buy first, then hold, then sell
-    sorted_recs = sorted(recommendations, key=lambda x: (x["action"] != "buy", x["action"] != "hold"))
+    # Sort by total score (best first)
+    sorted_recs = sorted(recommendations, key=lambda x: x.get("total_score", 0), reverse=True)
     
     for rec in sorted_recs:
-        action_class = f"action-{rec['action']}"
-        action_icon = ICONS["check"] if rec["action"] == "buy" else (ICONS["x"] if rec["action"] == "sell" else ICONS["minus"])
-        action_text = {"buy": "더 사기" if is_kr else "BUY+", "sell": "덜 사기" if is_kr else "BUY-", "hold": "유지" if is_kr else "HOLD"}[rec["action"]]
+        action = rec.get("action", "hold")
+        total_score = rec.get("total_score", 0)
+        confidence = rec.get("confidence", 0.5)
+        signal_text = rec.get("signal_text", "중립" if is_kr else "NEUTRAL")
+        
+        # Action styling
+        if action in ["strong_buy", "buy", "weak_buy"]:
+            action_class = "action-buy"
+            action_icon = ICONS["check"]
+            action_display = "더 사기" if is_kr else "BUY+"
+        elif action in ["strong_sell", "sell", "weak_sell"]:
+            action_class = "action-sell"
+            action_icon = ICONS["x"]
+            action_display = "덜 사기" if is_kr else "BUY-"
+        else:
+            action_class = "action-hold"
+            action_icon = ICONS["minus"]
+            action_display = "유지" if is_kr else "HOLD"
+        
         weight_text = f"{rec['weight']}%"
+        
+        # Score bar position (0-100 scale, where -100 to +100 maps to 0% to 100%)
+        score_position = max(0, min(100, (total_score + 100) / 2))
+        
+        # Score color
+        if total_score >= 20:
+            score_color = "#34d399"  # green
+        elif total_score <= -20:
+            score_color = "#f87171"  # red
+        else:
+            score_color = "#fbbf24"  # yellow
+        
+        # Score breakdown chips
+        tech_score = rec.get("tech_score", 0)
+        fund_score = rec.get("fund_score", 0)
+        market_score = rec.get("market_score", 0)
+        
+        tech_class = "score-chip-positive" if tech_score > 0 else ("score-chip-negative" if tech_score < 0 else "")
+        fund_class = "score-chip-positive" if fund_score > 0 else ("score-chip-negative" if fund_score < 0 else "")
+        market_class = "score-chip-positive" if market_score > 0 else ("score-chip-negative" if market_score < 0 else "")
         
         # 상세 설명 가져오기
         detail_text = rec.get('detail', '')
+        warnings = rec.get('warnings', [])
         
         st.markdown(f"""
         <div class="stock-item">
@@ -578,16 +843,27 @@ if recommendations:
             </div>
             <div class="stock-desc">{rec['desc']}</div>
             <div class="stock-meta">
-                <div class="rsi-mini">
-                    <div class="rsi-bar-mini">
-                        <div class="rsi-dot" style="left: {rec['rsi']}%;"></div>
+                <div class="score-container">
+                    <div class="score-bar">
+                        <div class="score-dot" style="left: {score_position}%;"></div>
                     </div>
-                    <span class="rsi-text">RSI {rec['rsi']:.0f}</span>
+                    <span class="score-text" style="color: {score_color};">{total_score:+d}점</span>
+                    <span class="confidence-text">({confidence:.0%})</span>
                 </div>
-                <span class="action {action_class}">{action_icon} {action_text}</span>
+                <span class="action {action_class}">{action_icon} {action_display}</span>
+            </div>
+            <div class="score-breakdown">
+                <span class="score-chip {tech_class}">{"기술" if is_kr else "Tech"} {tech_score:+d}</span>
+                <span class="score-chip {fund_class}">{"펀더" if is_kr else "Fund"} {fund_score:+d}</span>
+                <span class="score-chip {market_class}">{"시장" if is_kr else "Mkt"} {market_score:+d}</span>
             </div>
         </div>
         """, unsafe_allow_html=True)
+        
+        # 경고 표시
+        if warnings:
+            warning_html = " | ".join(warnings[:2])
+            st.markdown(f'<div class="warning-badge">⚠️ {warning_html}</div>', unsafe_allow_html=True)
         
         # 투자 포인트 상세 설명 (펼치기)
         if detail_text:
@@ -625,16 +901,28 @@ if recommendations:
                     st.caption("뉴스 없음" if is_kr else "No news")
 
 # === HELP ===
-with st.expander("RSI란?" if is_kr else "What is RSI?"):
+with st.expander("점수 시스템 설명" if is_kr else "Score System Explained"):
     st.markdown(f"""
     <div class="info-box">
-    <strong>RSI</strong>{"는 주식이 세일 중인지 비싼지 알려주는 지표예요." if is_kr else " tells you if a stock is on sale or expensive."}
+    <strong>{"종합 점수 (-100 ~ +100)" if is_kr else "Total Score (-100 to +100)"}</strong>
     <br><br>
-    <span style="color: #34d399;">30 이하</span>: {"세일! 더 사세요" if is_kr else "Sale! Buy more"}
-    <br>
-    <span>30-70</span>: {"적정가" if is_kr else "Fair price"}
-    <br>
-    <span style="color: #f87171;">70 이상</span>: {"비쌈! 덜 사세요" if is_kr else "Expensive! Buy less"}
+    {"이 시스템은 3가지 요소를 종합해서 매수/매도 신호를 판단해요:" if is_kr else "This system combines 3 factors to determine buy/sell signals:"}
+    <br><br>
+    <strong>{"🔧 기술적 분석 (60점)" if is_kr else "🔧 Technical Analysis (60 pts)"}</strong><br>
+    {"RSI, MACD, 이동평균선, Stochastic, ADX 등 5가지 지표" if is_kr else "RSI, MACD, Moving Averages, Stochastic, ADX - 5 indicators"}
+    <br><br>
+    <strong>{"📊 펀더멘털 (25점)" if is_kr else "📊 Fundamentals (25 pts)"}</strong><br>
+    {"PER/PBR 밸류에이션, 매출/이익 성장률" if is_kr else "PER/PBR valuation, Revenue/Earnings growth"}
+    <br><br>
+    <strong>{"🌍 시장 환경 (15점)" if is_kr else "🌍 Market Environment (15 pts)"}</strong><br>
+    {"VIX 공포지수, S&P 500 추세" if is_kr else "VIX fear index, S&P 500 trend"}
+    <br><br>
+    <hr style="border-color: rgba(255,255,255,0.1);">
+    <span style="color: #34d399;">+20 이상</span>: {"매수 신호" if is_kr else "Buy signal"}<br>
+    <span>-20 ~ +20</span>: {"중립" if is_kr else "Neutral"}<br>
+    <span style="color: #f87171;">-20 이하</span>: {"매도 신호" if is_kr else "Sell signal"}
+    <br><br>
+    <strong>{"신뢰도" if is_kr else "Confidence"}</strong>: {"지표들이 같은 방향을 가리킬수록 신뢰도가 높아요." if is_kr else "Higher when indicators agree on direction."}
     </div>
     """, unsafe_allow_html=True)
 
