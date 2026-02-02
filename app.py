@@ -197,23 +197,120 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # --- Company Data ---
+# 각 종목에 대한 상세 설명 (초보자를 위한 투자 포인트)
 company_info = {
-    "TSLA": {"name": "Tesla", "kr": "전기차 1위", "en": "#1 EV maker"},
-    "NVDA": {"name": "NVIDIA", "kr": "AI 반도체 1위", "en": "#1 AI chips"},
-    "COIN": {"name": "Coinbase", "kr": "암호화폐 거래소", "en": "Crypto exchange"},
-    "PLTR": {"name": "Palantir", "kr": "빅데이터 분석", "en": "Big data analytics"},
-    "ISRG": {"name": "Intuitive", "kr": "수술 로봇", "en": "Surgical robotics"},
-    "AMD": {"name": "AMD", "kr": "CPU/GPU 제조", "en": "CPU/GPU maker"},
-    "AMZN": {"name": "Amazon", "kr": "이커머스+AWS", "en": "E-commerce+AWS"},
-    "GOOGL": {"name": "Google", "kr": "검색/광고", "en": "Search/Ads"},
-    "MSFT": {"name": "Microsoft", "kr": "윈도우/Azure", "en": "Windows/Azure"},
-    "META": {"name": "Meta", "kr": "SNS 플랫폼", "en": "Social media"},
-    "SHOP": {"name": "Shopify", "kr": "이커머스 플랫폼", "en": "E-commerce platform"},
-    "UBER": {"name": "Uber", "kr": "차량공유/배달", "en": "Ride-share/Delivery"},
-    "SQ": {"name": "Block", "kr": "결제 서비스", "en": "Payment services"},
-    "PYPL": {"name": "PayPal", "kr": "온라인 결제", "en": "Online payments"},
-    "RKLB": {"name": "Rocket Lab", "kr": "로켓 발사", "en": "Rocket launches"},
-    "NET": {"name": "Cloudflare", "kr": "인터넷 보안", "en": "Internet security"},
+    "TSLA": {
+        "name": "Tesla",
+        "kr": "전기차 1위 + 로보택시 + 로봇",
+        "en": "#1 EV + Robotaxi + Robots",
+        "detail_kr": "🚗 전기차만 만드는 게 아니에요! 2030년까지 로보택시 시장이 34조 달러(4.7경원)로 성장하는데, Tesla의 자율주행(FSD) 기술이 1등이에요. 휴머노이드 로봇(Optimus)도 개발 중이고, 에너지 저장장치(Megapack) 매출도 급성장해요.",
+        "detail_en": "🚗 Not just EVs! Robotaxi market to reach $34T by 2030. Tesla leads in self-driving (FSD) and is building humanoid robots (Optimus). Energy storage (Megapack) revenue growing fast too."
+    },
+    "NVDA": {
+        "name": "NVIDIA",
+        "kr": "AI 반도체 독보적 1위",
+        "en": "#1 AI chips dominant",
+        "detail_kr": "🧠 AI의 두뇌를 만드는 회사예요. AI 칩 시장 점유율 85%, 마진 75%로 '독점'에 가까워요. 2030년까지 AI 인프라 투자가 1.4조 달러(1,900조원)로 성장하는데, 그 핵심 수혜자예요.",
+        "detail_en": "🧠 Makes the 'brain' of AI. 85% market share, 75% margins - near monopoly. AI infrastructure to reach $1.4T by 2030, and NVIDIA is the core beneficiary."
+    },
+    "COIN": {
+        "name": "Coinbase",
+        "kr": "암호화폐 거래소 + Base 체인",
+        "en": "Crypto exchange + Base chain",
+        "detail_kr": "💰 미국 최대 암호화폐 거래소예요. 비트코인 ETF 수탁도 맡고, 자체 블록체인(Base)으로 DeFi 생태계도 구축 중이에요. 비트코인이 2030년 760만원→10억원 간다면 가장 큰 수혜주 중 하나예요.",
+        "detail_en": "💰 Largest US crypto exchange. Custody for Bitcoin ETFs + building Base chain for DeFi. If Bitcoin reaches $760K by 2030, COIN is a major beneficiary."
+    },
+    "PLTR": {
+        "name": "Palantir",
+        "kr": "기업용 AI 플랫폼",
+        "en": "Enterprise AI platform",
+        "detail_kr": "📊 정부와 대기업을 위한 AI 데이터 분석 플랫폼(AIP)을 만들어요. '지능의 비용'이 99% 하락하면서 소프트웨어 시장이 2030년 3.4조~13조 달러로 성장하는데, Palantir가 핵심 기업이에요.",
+        "detail_en": "📊 AI data platform for governments & enterprises. As 'cost of intelligence' drops 99%, software market grows to $3.4-13T by 2030. Palantir is a key player."
+    },
+    "ISRG": {
+        "name": "Intuitive",
+        "kr": "수술 로봇 세계 1위",
+        "en": "World #1 surgical robots",
+        "detail_kr": "🏥 다빈치 수술 로봇의 제조사예요. 로봇 시장이 26조 달러(3.6경원) 규모인데, 의료 분야는 가장 빠르게 자동화되는 영역 중 하나예요. AI로 수술 정밀도가 계속 높아지고 있어요.",
+        "detail_en": "🏥 Makes da Vinci surgical robots. Robotics TAM is $26T, and healthcare is one of the fastest automating sectors. AI is continuously improving surgical precision."
+    },
+    "AMD": {
+        "name": "AMD",
+        "kr": "AI 칩 가성비 도전자",
+        "en": "AI chip value challenger",
+        "detail_kr": "💻 NVIDIA의 유일한 경쟁자예요! 새 칩(MI355X)이 메모리 288GB로 NVIDIA보다 크고, 가격 대비 성능도 더 좋아요. 특히 'AI 추론' 시장에서 점유율이 빠르게 올라가고 있어요.",
+        "detail_en": "💻 NVIDIA's only real competitor! New MI355X has 288GB memory (more than NVIDIA) with better price-performance. Growing share in AI inference market."
+    },
+    "AMZN": {
+        "name": "Amazon",
+        "kr": "AI 쇼핑 + 클라우드 + 로봇",
+        "en": "AI shopping + Cloud + Robots",
+        "detail_kr": "📦 세계 최대 온라인 쇼핑몰이자 클라우드(AWS) 1위예요. AI 쇼핑 에이전트(Rufus), 창고 로봇(직원 1만명당 1,279대!), 드론 배송(Prime Air)까지 미래 기술을 모두 갖고 있어요.",
+        "detail_en": "📦 World's largest e-commerce + #1 cloud (AWS). Has AI shopping agent (Rufus), warehouse robots (1,279 per 10K employees!), and drone delivery (Prime Air)."
+    },
+    "GOOGL": {
+        "name": "Google",
+        "kr": "AI 검색 + 자율주행 + 클라우드",
+        "en": "AI search + Self-driving + Cloud",
+        "detail_kr": "🔍 검색의 왕이지만, AI 검색(ChatGPT 등)에 위협받고 있어요. 하지만! 자율주행(Waymo)에서 기술 1등이고, 자체 AI 칩(TPU)도 있어요. 성공적으로 전환하면 더 커질 수 있어요.",
+        "detail_en": "🔍 Search king but threatened by AI search. However! Leads in self-driving (Waymo) and has own AI chips (TPU). Could grow bigger with successful transition."
+    },
+    "MSFT": {
+        "name": "Microsoft",
+        "kr": "Copilot AI + Azure 클라우드",
+        "en": "Copilot AI + Azure Cloud",
+        "detail_kr": "🖥️ OpenAI와 독점 파트너십으로 AI 시대를 선도해요. 모든 오피스 제품에 AI(Copilot)를 넣고, 기업용 AI 시장을 장악 중이에요. 안정적이면서도 AI 성장의 수혜를 받는 종목이에요.",
+        "detail_en": "🖥️ Exclusive OpenAI partnership leads AI era. Adding Copilot AI to all Office products, dominating enterprise AI. Stable yet benefits from AI growth."
+    },
+    "META": {
+        "name": "Meta",
+        "kr": "SNS AI + 스마트 안경",
+        "en": "Social AI + Smart glasses",
+        "detail_kr": "👓 페이스북, 인스타그램의 30억 사용자 데이터로 AI를 학습시켜요. Meta AI가 개인 맞춤 추천을 하고, Ray-Ban 스마트 안경도 인기예요. AI 소비자 시장(2030년 9000억 달러)의 핵심 주자예요.",
+        "detail_en": "👓 Trains AI on 3B users' data from FB/IG. Meta AI does personalized recommendations, Ray-Ban smart glasses popular. Key player in AI consumer market ($900B by 2030)."
+    },
+    "SHOP": {
+        "name": "Shopify",
+        "kr": "AI 커머스 플랫폼의 허브",
+        "en": "AI commerce platform hub",
+        "detail_kr": "🛒 수백만 온라인 상점을 운영하게 해주는 플랫폼이에요. Google과 함께 'AI 커머스 프로토콜(UCP)'을 만들고 있어요. AI가 대신 쇼핑하는 시대(2030년 8조 달러 거래)의 핵심 인프라예요.",
+        "detail_en": "🛒 Platform powering millions of online stores. Building 'Universal Commerce Protocol' with Google. Core infrastructure for AI shopping era ($8T transactions by 2030)."
+    },
+    "UBER": {
+        "name": "Uber",
+        "kr": "라이드쉐어 + 로보택시 연결",
+        "en": "Ride-share + Robotaxi network",
+        "detail_kr": "🚕 차량 호출/배달 앱 1위예요. 자율주행은 직접 못 만들지만, Waymo 같은 로보택시 회사와 협력해요. 로보택시 시대에도 '앱'으로 살아남을 수 있는지가 관건이에요.",
+        "detail_en": "🚕 #1 ride-hail/delivery app. Can't build self-driving but partners with Waymo. Key question: can they survive as 'the app' in robotaxi era?"
+    },
+    "SQ": {
+        "name": "Block",
+        "kr": "비트코인 + 결제 서비스",
+        "en": "Bitcoin + Payment services",
+        "detail_kr": "💳 Cash App으로 비트코인 매매도 가능하고, 비트코인 지갑(Bitkey)도 만들어요. 비트코인 결제 인프라의 핵심 회사예요. 비트코인이 오르면 같이 오르는 구조예요.",
+        "detail_en": "💳 Cash App enables Bitcoin trading, also makes Bitkey wallet. Core Bitcoin payment infrastructure. Benefits directly from Bitcoin price increases."
+    },
+    "PYPL": {
+        "name": "PayPal",
+        "kr": "스테이블코인 + 온라인 결제",
+        "en": "Stablecoin + Online payments",
+        "detail_kr": "💵 온라인 결제의 원조예요. 자체 스테이블코인(PYUSD)이 1년만에 6배 성장했어요. 토큰화 자산 시장(2030년 11조 달러)에서 결제 인프라로 자리잡을 수 있어요.",
+        "detail_en": "💵 Pioneer of online payments. Own stablecoin (PYUSD) grew 6x in one year. Could become payment infrastructure for tokenized assets ($11T by 2030)."
+    },
+    "RKLB": {
+        "name": "Rocket Lab",
+        "kr": "소형 로켓 + 우주 시스템",
+        "en": "Small rockets + Space systems",
+        "detail_kr": "🚀 SpaceX 다음가는 민간 로켓 회사예요. 소형 위성 발사에 특화되어 있어요. 위성 통신 시장이 2030년 1600억 달러(210조원)로 성장하는데, 발사 비용은 계속 떨어지고 있어요.",
+        "detail_en": "🚀 Second largest private rocket company after SpaceX. Specializes in small satellite launches. Satellite market to reach $160B by 2030, launch costs keep dropping."
+    },
+    "NET": {
+        "name": "Cloudflare",
+        "kr": "인터넷 인프라 + AI 엣지",
+        "en": "Internet infra + AI edge",
+        "detail_kr": "🌐 전 세계 인터넷 트래픽의 상당 부분을 처리하는 보안/가속 서비스예요. AI가 더 많이 쓰일수록 인터넷 인프라도 더 중요해져요. AI 시대의 숨은 수혜주예요.",
+        "detail_en": "🌐 Security/acceleration for major portion of internet traffic. As AI usage grows, internet infrastructure becomes more critical. Hidden beneficiary of AI era."
+    },
 }
 
 default_tickers = ["TSLA", "NVDA", "COIN"]  # 기본 3종목
@@ -257,11 +354,12 @@ def get_stock_data(tickers, lang="한국어"):
             else:
                 rsi = 50
             
-            company = company_info.get(ticker, {"name": ticker, "kr": "", "en": ""})
+            company = company_info.get(ticker, {"name": ticker, "kr": "", "en": "", "detail_kr": "", "detail_en": ""})
             data.append({
                 "ticker": ticker,
                 "name": company["name"],
                 "desc": company["kr"] if is_kr else company["en"],
+                "detail": company.get("detail_kr", "") if is_kr else company.get("detail_en", ""),
                 "price": price,
                 "rsi": round(rsi, 1),
             })
@@ -419,7 +517,13 @@ for stock in stock_data:
     
     suggested = base * mult
     total_suggested += suggested
-    recommendations.append({**stock, "suggested": suggested, "action": action, "weight": ticker_weight})
+    recommendations.append({
+        **stock, 
+        "suggested": suggested, 
+        "action": action, 
+        "weight": ticker_weight,
+        "detail": stock.get("detail", "")
+    })
 
 oversold = len([s for s in stock_data if s["rsi"] < 35])
 overbought = len([s for s in stock_data if s["rsi"] > 70])
@@ -459,6 +563,9 @@ if recommendations:
         action_text = {"buy": "더 사기" if is_kr else "BUY+", "sell": "덜 사기" if is_kr else "BUY-", "hold": "유지" if is_kr else "HOLD"}[rec["action"]]
         weight_text = f"{rec['weight']}%"
         
+        # 상세 설명 가져오기
+        detail_text = rec.get('detail', '')
+        
         st.markdown(f"""
         <div class="stock-item">
             <div class="stock-row">
@@ -481,6 +588,15 @@ if recommendations:
             </div>
         </div>
         """, unsafe_allow_html=True)
+        
+        # 투자 포인트 상세 설명 (펼치기)
+        if detail_text:
+            with st.expander(f"{'왜 투자해야 할까요?' if is_kr else 'Why invest?'} 💡", expanded=False):
+                st.markdown(f"""
+                <div style="font-size: 0.9rem; line-height: 1.6; color: #e2e8f0; padding: 0.5rem 0;">
+                    {detail_text}
+                </div>
+                """, unsafe_allow_html=True)
 else:
     st.info("설정에서 종목을 선택하세요." if is_kr else "Select stocks in Settings.")
 
