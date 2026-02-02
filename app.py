@@ -427,7 +427,7 @@ company_info = {
     },
 }
 
-default_tickers = ["TSLA", "NVDA", "COIN"]  # 기본 3종목
+default_tickers = ["BTC-USD", "TSLA", "NVDA", "COIN"]  # 기본 4종목 (비트코인 포함)
 all_tickers = list(company_info.keys())
 
 # --- API ---
@@ -605,6 +605,45 @@ def get_news(ticker):
     except:
         return []
 
+@st.cache_data(ttl=3600)
+def get_sparkline_data(ticker, days=30):
+    """최근 30일 종가 데이터 (스파크라인용)"""
+    try:
+        stock = yf.Ticker(ticker)
+        hist = stock.history(period=f"{days}d")
+        if len(hist) > 0:
+            prices = hist['Close'].tolist()
+            return prices
+        return []
+    except:
+        return []
+
+def generate_sparkline_svg(prices, width=80, height=24):
+    """SVG 스파크라인 생성"""
+    if not prices or len(prices) < 2:
+        return ""
+    
+    min_price = min(prices)
+    max_price = max(prices)
+    price_range = max_price - min_price if max_price != min_price else 1
+    
+    # 포인트 생성
+    points = []
+    for i, price in enumerate(prices):
+        x = (i / (len(prices) - 1)) * width
+        y = height - ((price - min_price) / price_range) * (height - 4) - 2
+        points.append(f"{x:.1f},{y:.1f}")
+    
+    # 시작과 끝 가격 비교
+    is_up = prices[-1] >= prices[0]
+    color = "#34d399" if is_up else "#f87171"
+    
+    path_d = "M " + " L ".join(points)
+    
+    return f'''<svg width="{width}" height="{height}" viewBox="0 0 {width} {height}" style="display: inline-block; vertical-align: middle;">
+        <path d="{path_d}" fill="none" stroke="{color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>'''
+
 # --- Session State ---
 if "lang" not in st.session_state:
     st.session_state["lang"] = "한국어"
@@ -631,6 +670,49 @@ with col_lang2:
 
 lang = st.session_state["lang"]
 is_kr = lang == "한국어"
+
+# 카테고리 정보
+CATEGORIES = {
+    "all": {"kr": "전체", "en": "All", "icon": "📊"},
+    "ai": {"kr": "AI", "en": "AI", "icon": "🤖"},
+    "crypto": {"kr": "암호화폐", "en": "Crypto", "icon": "₿"},
+    "robot": {"kr": "로봇/자율주행", "en": "Robotics", "icon": "🦾"},
+    "energy": {"kr": "에너지", "en": "Energy", "icon": "⚡"},
+    "space": {"kr": "우주", "en": "Space", "icon": "🚀"},
+    "health": {"kr": "헬스케어", "en": "Healthcare", "icon": "🧬"},
+    "commerce": {"kr": "커머스", "en": "Commerce", "icon": "🛒"},
+}
+
+# 테마 필터 (Quick buttons)
+st.markdown(f"<div style='margin-bottom: 0.5rem; font-size: 0.85rem; color: #94a3b8;'>{'테마별 보기' if is_kr else 'Filter by Theme'}</div>", unsafe_allow_html=True)
+
+if "category_filter" not in st.session_state:
+    st.session_state["category_filter"] = "all"
+
+cat_cols = st.columns(len(CATEGORIES))
+for i, (cat_key, cat_info) in enumerate(CATEGORIES.items()):
+    with cat_cols[i]:
+        cat_label = f"{cat_info['icon']}"
+        is_selected = st.session_state["category_filter"] == cat_key
+        if st.button(cat_label, key=f"cat_{cat_key}", use_container_width=True, 
+                     type="primary" if is_selected else "secondary"):
+            st.session_state["category_filter"] = cat_key
+            # 카테고리에 맞는 종목 자동 선택
+            if cat_key == "all":
+                filtered_tickers = default_tickers
+            else:
+                filtered_tickers = [t for t, info in company_info.items() if info.get("category") == cat_key]
+            if filtered_tickers:
+                st.session_state["selected"] = filtered_tickers[:5]  # 최대 5개
+                # 비중 재설정
+                equal_weight = 100 // len(st.session_state["selected"])
+                st.session_state["weights"] = {t: equal_weight for t in st.session_state["selected"]}
+            st.rerun()
+
+# 현재 필터 표시
+current_cat = st.session_state.get("category_filter", "all")
+cat_display = CATEGORIES.get(current_cat, {})
+st.caption(f"{cat_display.get('icon', '')} {cat_display.get('kr' if is_kr else 'en', '')}")
 
 # Settings in main area (collapsible)
 with st.expander("설정" if is_kr else "Settings", expanded=False):
@@ -831,6 +913,24 @@ if recommendations:
         detail_text = rec.get('detail', '')
         warnings = rec.get('warnings', [])
         
+        # 주가와 등락률
+        price = rec.get('price', 0)
+        change_pct = rec.get('change_pct', 0)
+        change_color = "#34d399" if change_pct >= 0 else "#f87171"
+        change_sign = "+" if change_pct >= 0 else ""
+        
+        # TAM/CAGR
+        tam = rec.get('tam', '')
+        cagr = rec.get('cagr', '')
+        category = rec.get('category', '')
+        
+        # 카테고리 아이콘
+        category_icons = {
+            'ai': '🤖', 'crypto': '₿', 'robot': '🦾', 
+            'energy': '⚡', 'space': '🚀', 'health': '🧬', 'commerce': '🛒'
+        }
+        cat_icon = category_icons.get(category, '')
+        
         st.markdown(f"""
         <div class="stock-item">
             <div class="stock-row">
@@ -838,16 +938,30 @@ if recommendations:
                     <span class="stock-name">{rec['name']}</span>
                     <span class="stock-ticker">{rec['ticker']}</span>
                     <span class="stock-ticker">{weight_text}</span>
+                    {f'<span class="stock-ticker">{cat_icon}</span>' if cat_icon else ''}
                 </div>
-                <span class="buy-amount">${rec['suggested']:.0f}</span>
+                <div style="text-align: right;">
+                    <div class="buy-amount">${rec['suggested']:.0f}</div>
+                    <div style="font-size: 0.75rem; color: #94a3b8;">{"이번달" if is_kr else "this mo."}</div>
+                </div>
             </div>
-            <div class="stock-desc">{rec['desc']}</div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.3rem 0;">
+                <div class="stock-desc">{rec['desc']}</div>
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    {generate_sparkline_svg(get_sparkline_data(rec['ticker']))}
+                    <div style="text-align: right;">
+                        <span style="font-size: 1rem; font-weight: 600; color: #e2e8f0;">${price:,.2f}</span>
+                        <span style="font-size: 0.8rem; color: {change_color}; margin-left: 0.3rem;">{change_sign}{change_pct:.1f}%</span>
+                    </div>
+                </div>
+            </div>
+            {f'<div style="display: flex; gap: 0.5rem; margin-bottom: 0.4rem;"><span class="stock-ticker" style="background: rgba(96, 165, 250, 0.2); color: #60a5fa;">2030 TAM {tam}</span><span class="stock-ticker" style="background: rgba(52, 211, 153, 0.2); color: #34d399;">CAGR {cagr}</span></div>' if tam and cagr else ''}
             <div class="stock-meta">
                 <div class="score-container">
                     <div class="score-bar">
                         <div class="score-dot" style="left: {score_position}%;"></div>
                     </div>
-                    <span class="score-text" style="color: {score_color};">{total_score:+d}점</span>
+                    <span class="score-text" style="color: {score_color};">{total_score:+d}{"점" if is_kr else "pt"}</span>
                     <span class="confidence-text">({confidence:.0%})</span>
                 </div>
                 <span class="action {action_class}">{action_icon} {action_display}</span>
